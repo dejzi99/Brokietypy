@@ -7,39 +7,52 @@ async function run() {
     process.exit(1);
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // Używamy stabilnego adresu v1 i modelu gemini-1.5-flash (lub nowszego 2.0 jeśli dostępny)
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Podaj 5 meczów piłkarskich na dziś w formacie JSON: {\"mecze\": [\"drużyna1 vs drużyna2\"]}" }] }],
-        safetySettings: [
-          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-        ]
+        contents: [{ 
+          parts: [{ 
+            text: "Znajdź 5 meczów piłkarskich na dziś (11 marca 2026) i podaj typy bukmacherskie jako JSON. Format: {\"mecze\": [{\"mecz\": \"A vs B\", \"typ\": \"1\", \"kurs\": \"1.50\"}]}. Podaj TYLKO czysty JSON." 
+          }] 
+        }]
       })
     });
 
     const data = await response.json();
-    console.log("--- ODPOWIEDŹ GOOGLE ---");
-    console.log(JSON.stringify(data, null, 2));
+
+    if (data.error) {
+      console.error("--- BŁĄD GOOGLE ---");
+      console.error(JSON.stringify(data.error, null, 2));
+      process.exit(1);
+    }
 
     if (data.candidates && data.candidates[0].content) {
       let tekst = data.candidates[0].content.parts[0].text;
       
-      // Czyścimy tekst z ewentualnych znaczników ```json i ```
+      // Usuwamy markdownowe ```json ... ``` jeśli AI je dodało
       const oczyszczonyJson = tekst.replace(/```json|```/g, "").trim();
       
-      if (!fs.existsSync('./public')) fs.mkdirSync('./public');
-      fs.writeFileSync('./public/raport.json', oczyszczonyJson);
-      console.log("✅ SUKCES! Plik public/raport.json został zapisany.");
+      // Sprawdzamy czy to poprawny JSON zanim zapiszemy
+      try {
+        JSON.parse(oczyszczonyJson);
+        if (!fs.existsSync('./public')) fs.mkdirSync('./public');
+        fs.writeFileSync('./public/raport.json', oczyszczonyJson);
+        console.log("✅ SUKCES! Plik public/raport.json został zapisany.");
+      } catch (jsonErr) {
+        console.error("❌ Otrzymany tekst nie jest poprawnym JSON-em:", tekst);
+        process.exit(1);
+      }
     } else {
-      console.error("❌ Google nie przysłało danych. Sprawdź logi powyżej.");
+      console.error("❌ Google nie zwróciło spodziewanej struktury danych:", JSON.stringify(data));
       process.exit(1);
     }
   } catch (e) {
-    console.error("❌ Błąd krytyczny:", e.message);
+    console.error("❌ Błąd krytyczny skryptu:", e.message);
     process.exit(1);
   }
 }
