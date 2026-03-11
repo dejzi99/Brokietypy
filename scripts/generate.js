@@ -3,42 +3,39 @@ const fs = require('fs');
 async function run() {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.error("❌ BŁĄD: Brak klucza GEMINI_API_KEY w Secrets na GitHubie!");
+    console.error("❌ BŁĄD: Nie widzę klucza w Secrets!");
     process.exit(1);
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-  
+  // Używamy modelu 1.5-flash (najbardziej stabilny dla darmowych kont)
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Znajdź 5 meczów piłkarskich na dziś i podaj je w formacie JSON." }] }],
-        generationConfig: { responseMimeType: "application/json" }
+        contents: [{ parts: [{ text: "Podaj 3 mecze piłkarskie na dziś jako prosty tekst." }] }]
       })
     });
 
     const data = await response.json();
 
-    // Jeśli nie ma 'candidates', to znaczy, że Google zwróciło błąd
-    if (!data.candidates) {
-      console.log("--- PEŁNY KOMUNIKAT BŁĘDU OD GOOGLE ---");
-      console.log(JSON.stringify(data, null, 2));
-      console.log("---------------------------------------");
-      process.exit(1);
+    // TO JEST KLUCZOWE: Pokaż nam wszystko, co przysłało Google
+    console.log("--- START ODPOWIEDZI ---");
+    console.log(JSON.stringify(data, null, 2));
+    console.log("--- KONIEC ODPOWIEDZI ---");
+
+    if (data.candidates && data.candidates[0].content) {
+      const tekst = data.candidates[0].content.parts[0].text;
+      if (!fs.existsSync('./public')) fs.mkdirSync('./public');
+      fs.writeFileSync('./public/raport.json', JSON.stringify({ data: tekst }));
+      console.log("✅ Sukces!");
+    } else {
+      console.log("❌ API nie zwróciło meczów. Sprawdź komunikat powyżej.");
     }
-
-    const tekst = data.candidates[0].content.parts[0].text;
-    
-    if (!fs.existsSync('./public')) fs.mkdirSync('./public');
-    fs.writeFileSync('./public/raport.json', tekst);
-    console.log("✅ SUKCES! Raport zapisany.");
-
   } catch (e) {
-    console.error("❌ KRYTYCZNY BŁĄD SKRYPTU:", e.message);
-    process.exit(1);
+    console.error("❌ Błąd krytyczny:", e.message);
   }
 }
-
 run();
