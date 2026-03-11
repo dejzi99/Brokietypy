@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Pobierz kod
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Pobiera całą historię zmian
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -25,27 +27,19 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          # Tworzymy folder i plik ZANIM odpali się Node
           mkdir -p public
-          touch public/raport.json
-          # Odpalamy skrypt
           node scripts/generate.js
-          # Diagnostyka: pokaże nam czy plik tam jest
-          ls -l public/raport.json
 
-      - name: Zapisz zmiany
+      - name: Zapisz i Wymuś (Force Push)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Dodajemy WSZYSTKO co się zmieniło
-          git add .
+          git add public/raport.json
           
-          # Sprawdzamy czy jest co wysłać
-          if git diff --staged --quiet; then
-            echo "Brak zmian do zapisu."
-          else
-            git commit -m "Automatyczna aktualizacja raportu [skip ci]"
-            git pull --rebase origin main
-            git push origin main
-          fi
+          # Zrób commit, a jeśli plik się nie zmienił, po prostu zakończ
+          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
+          
+          # KLUCZOWA ZMIANA: Pobieramy zmiany i WYMUSZAMY wysłanie naszego raportu
+          git pull --rebase origin main
+          git push origin main --force
