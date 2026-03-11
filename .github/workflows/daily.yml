@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Pobierz kod
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -27,28 +25,27 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          # 1. Tworzymy folder siłowo w systemie operacyjnym
+          # Tworzymy folder i plik ZANIM odpali się Node
           mkdir -p public
-          # 2. Odpalamy skrypt
+          touch public/raport.json
+          # Odpalamy skrypt
           node scripts/generate.js
-          # 3. Sprawdzamy co się stało (pokaże się w logach)
-          echo "Zawartość folderu public:"
-          ls -la public/
+          # Diagnostyka: pokaże nam czy plik tam jest
+          ls -l public/raport.json
 
       - name: Zapisz zmiany
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Dodajemy wszystko co jest w public (najbezpieczniej)
-          git add public/
+          # Dodajemy WSZYSTKO co się zmieniło
+          git add .
           
-          # Sprawdzamy czy coś się zmieniło
+          # Sprawdzamy czy jest co wysłać
           if git diff --staged --quiet; then
             echo "Brak zmian do zapisu."
           else
             git commit -m "Automatyczna aktualizacja raportu [skip ci]"
-            # Pull żeby uniknąć rejected i Push na siłę
             git pull --rebase origin main
             git push origin main
           fi
