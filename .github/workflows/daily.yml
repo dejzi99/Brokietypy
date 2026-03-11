@@ -1,51 +1,46 @@
 name: Codzienna Analiza
 on:
   schedule:
-    # Uruchamia się codziennie o 15:30 UTC (czyli 16:30 lub 17:30 czasu polskiego)
     - cron: '30 15 * * *' 
-  workflow_dispatch: # Pozwala na ręczne kliknięcie "Run workflow"
+  workflow_dispatch: 
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    # Dodatkowe zabezpieczenie uprawnień zapisu w kodzie
     permissions:
       contents: write
-
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - name: Pobierz kod repozytorium
+      - name: Pobierz kod
         uses: actions/checkout@v4
         with:
-          # Pobiera całą historię, co jest ważne przy 'git pull --rebase'
           fetch-depth: 0 
 
-      - name: Ustawienie Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
 
-      - name: Generuj raport przez Gemini AI
+      - name: Generuj raport
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate.js
 
-      - name: Zapisz raport w repozytorium
+      - name: Zapisz i wyslij zmiany
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Dodaj nowo wygenerowany plik
+          # 1. Dodajemy plik
           git add public/raport.json
           
-          # Pobierz ewentualne zmiany, które zrobiłeś ręcznie w międzyczasie
+          # 2. Tworzymy commit LOKALNIE
+          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
+          
+          # 3. Pobieramy Twoje zmiany z serwera i doklejamy nasz commit na koniec
           git pull --rebase origin main
           
-          # Jeśli są zmiany (nowy raport), to je zatwierdź
-          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || echo "Brak zmian do zapisania"
-          
-          # Wyślij plik na serwer
+          # 4. Wysyłamy gotowy zestaw
           git push origin main
