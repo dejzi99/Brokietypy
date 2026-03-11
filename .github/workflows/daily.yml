@@ -21,18 +21,23 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Generuj raport
+      - name: Przygotuj folder i generuj raport
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          # Wymuszamy stworzenie folderu public, żeby skrypt miał gdzie zapisać plik
           mkdir -p public
+          # Odpalamy skrypt
           node scripts/generate.js
+          # Sprawdzamy dla pewności, czy plik fizycznie istnieje przed kolejnym krokiem
+          ls -l public/
 
       - name: Automatyczny zapis raportu
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automatyczna aktualizacja raportu [skip ci]"
-          # Usunąłem file_pattern, żeby bot sam znalazł nowe pliki
-          # Dodałem opcję, by nie wywalał błędu jeśli nic się nie zmieniło
-          skip_dirty_check: false 
+          # Ustawiamy, aby bot szukał WSZYSTKICH zmian w folderze public
+          file_pattern: 'public/*.json'
+          # Nie wywalaj błędu, jeśli pliku nie ma - po prostu zakończ
+          skip_dirty_check: false
           push_options: '--force'
