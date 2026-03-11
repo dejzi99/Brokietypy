@@ -28,8 +28,8 @@ async function run() {
   }`;
 
   try {
-    // Wracamy do modelu, który u Ciebie działo poprawnie (flash)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // KLUCZOWA ZMIANA: Przechodzimy na najnowszy model gemini-2.5-flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: 'POST',
@@ -51,16 +51,14 @@ async function run() {
       let rawText = resData.candidates[0].content.parts[0].text;
       
       try {
-        // Próbujemy wyciągnąć JSON
         const start = rawText.indexOf('{');
         const end = rawText.lastIndexOf('}') + 1;
         const cleanJson = rawText.substring(start, end);
-        JSON.parse(cleanJson); // Sprawdzamy czy to poprawny format
+        JSON.parse(cleanJson); 
         
         fs.writeFileSync(filePath, cleanJson);
-        console.log("✅ SUKCES! Analizy wygenerowane poprawnie.");
+        console.log("✅ SUKCES! Analizy wygenerowane poprawnie przez Gemini 2.5.");
       } catch (parseError) {
-        // Jeśli AI nie dało JSON-a (np. gada zwykłym tekstem), wysyłamy to na Twoją stronę!
         fs.writeFileSync(filePath, JSON.stringify({
           mecze: [{ 
             godzina: "INFO", 
