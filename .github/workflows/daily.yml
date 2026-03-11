@@ -14,7 +14,7 @@ jobs:
       - name: Pobierz kod
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Ważne: pobiera całą historię zmian
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -25,22 +25,20 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          mkdir -p public
           node scripts/generate.js
+          # To nam powie czy plik istnieje przed zapisem
+          ls -R public/
 
-      - name: Zapisz raport z obsługą konfliktów
+      - name: Zapisz raport
         run: |
-          # Konfiguracja bota
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Dodajemy plik raportu
-          git add public/raport.json
+          # -f wymusza dodanie pliku nawet jeśli jest w .gitignore
+          git add -f public/raport.json
           
-          # Tworzymy commit (tylko jeśli plik się zmienił)
           git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
           
-          # KLUCZOWY MOMENT: Próbujemy wysłać do 5 razy, jeśli ktoś inny (TY) zrobił zmiany w międzyczasie
-          for i in {1..5}; do
-            git pull --rebase origin main && git push origin main && break || sleep 5
-          done
+          # Próba wysłania z pobraniem zmian
+          git pull --rebase origin main
+          git push origin main
