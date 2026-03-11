@@ -3,57 +3,47 @@ const path = require('path');
 
 async function run() {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    console.error("❌ BŁĄD: Brak klucza GEMINI_API_KEY!");
-    process.exit(1);
-  }
+  if (!apiKey) { console.error("❌ Brak klucza!"); process.exit(1); }
 
-  // Używamy najnowszego modelu Gemini 2.0 Flash
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  // Używamy wersji v1 i modelu gemini-1.5-flash (najstabilniejszy w 2026)
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
   try {
-    // 1. GWARANTUJEMY ISTNIENIE FOLDERU
-    const dir = path.join(process.cwd(), 'public');
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-      console.log("📁 Stworzono folder public");
+    // 1. Sprawdź, gdzie jesteśmy
+    const rootDir = process.cwd();
+    const publicDir = path.join(rootDir, 'public');
+    
+    if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir, { recursive: true });
+      console.log("📁 Folder public stworzony ręcznie.");
     }
 
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Znajdź 5 najciekawszych meczów piłkarskich na dziś i podaj typy jako JSON. Format: {\"mecze\": [{\"mecz\": \"A vs B\", \"typ\": \"1\"}]}" }] }],
-        // Wyłączamy filtry, żeby nie blokowało "hazardu/sportu"
-        safetySettings: [{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }]
+        contents: [{ parts: [{ text: "Dzisiaj jest 11 marca 2026. Znajdź 3 mecze piłkarskie na dziś i podaj JSON: {\"mecze\": [\"drużyna A vs B\"]}" }] }]
       })
     });
 
     const data = await response.json();
 
-    if (data.error) {
-      console.error("❌ Błąd z Google API:", JSON.stringify(data.error, null, 2));
-      process.exit(1);
-    }
-
     if (data.candidates && data.candidates[0].content) {
-      let tekst = data.candidates[0].content.parts[0].text;
+      const tekst = data.candidates[0].content.parts[0].text;
       const oczyszczonyJson = tekst.replace(/```json|```/g, "").trim();
       
-      // ZAPIS PLIKU
-      const filePath = path.join(dir, 'raport.json');
-      fs.writeFileSync(filePath, oczyszczonyJson);
+      // 2. Zapisz bezpośrednio
+      const finalPath = path.join(publicDir, 'raport.json');
+      fs.writeFileSync(finalPath, oczyszczonyJson);
       
-      console.log("✅ SUKCES: Plik raport.json został zapisany w folderze public!");
-      console.log("Zawartość folderu public:", fs.readdirSync(dir));
+      console.log(`✅ SUKCES! Plik zapisany w: ${finalPath}`);
     } else {
-      console.error("❌ Google nie zwróciło treści. Pełna odpowiedź:", JSON.stringify(data, null, 2));
+      console.error("❌ Google nie wysłało meczów. Odpowiedź:", JSON.stringify(data));
       process.exit(1);
     }
   } catch (e) {
-    console.error("❌ Błąd krytyczny:", e.message);
+    console.error("❌ Krytyczny błąd:", e.message);
     process.exit(1);
   }
 }
-
 run();
