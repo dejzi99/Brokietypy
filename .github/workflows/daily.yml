@@ -8,11 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Pobierz kod
+        uses: actions/checkout@v4 # Zaktualizowane z v3 na v4
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # Zaktualizowane z v3 na v4
         with:
-          node-version: '20'
+          node-version: '22' # Zaktualizowane z 20 na 22
       - name: Generuj raport
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
