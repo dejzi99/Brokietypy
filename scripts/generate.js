@@ -8,27 +8,20 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  const prompt = `
-    Jesteś analitykiem finansowym i sportowym. Dzisiaj jest 11 marca 2026.
-    Przygotuj raport JSON zawierający:
-    1. 5 typów bukmacherskich na dziś (mecz, typ, kurs).
-    2. Aktualna cena Bitcoina (BTC) w USD.
-    3. Aktualna cena akcji UEC.us oraz kurs USD/PLN.
-    4. Aktualna cena srebra za uncję w USD.
-    5. Oblicz aktualną wartość inwestycji w UEC: użytkownik zainwestował 1000 PLN przy cenie zakupu 19.31 USD za akcję.
-    
-    Format wyjściowy (TYLKO CZYSTY JSON):
-    {
-      "mecze": [{"mecz": "...", "typ": "...", "kurs": "..."}],
-      "krypto": {"btc_usd": "..."},
-      "portfel": {
-        "uec_price": "...",
-        "usd_pln": "...",
-        "srebro_usd": "...",
-        "uec_wynik_pln": "zysk/strata w PLN"
+  const prompt = `Jesteś profesjonalnym analitykiem sportowym. 
+  Znajdź 5 najciekawszych meczów piłkarskich na dziś (${new Date().toLocaleDateString()}).
+  Podaj dane w formacie JSON (tylko czysty JSON):
+  {
+    "mecze": [
+      {
+        "godzina": "18:00",
+        "mecz": "Drużyna A vs Drużyna B",
+        "typ": "1 (lub X lub 2)",
+        "kurs": "1.85",
+        "analiza": "Krótkie uzasadnienie jednym zdaniem"
       }
-    }
-  `;
+    ]
+  }`;
 
   try {
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
@@ -42,11 +35,10 @@ async function run() {
     if (data.candidates && data.candidates[0].content) {
       const tekst = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "").trim();
       fs.writeFileSync(filePath, tekst);
-      console.log("✅ Raport wygenerowany pomyślnie.");
+      console.log("✅ Typy wygenerowane.");
     }
   } catch (e) {
     console.error("❌ Błąd:", e.message);
-    process.exit(1);
   }
 }
 run();
