@@ -2,123 +2,54 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Value Bets AI - Codzienne Typy</title>
     <style>
-        :root { --green: #00ff66; --dark: #0d0f12; --card: #161a1e; }
-        body { background-color: var(--dark); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; text-align: center; }
-        
-        .badge { background: rgba(0,255,102,0.1); color: var(--green); padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 20px; display: inline-block; }
-        
-        h1 { font-size: 80px; font-weight: 900; line-height: 0.9; margin: 10px 0; text-transform: uppercase; }
-        h1 span { color: var(--green); text-shadow: 0 0 20px rgba(0,255,102,0.4); }
-        
-        .subtitle { color: #888; font-size: 18px; margin-bottom: 40px; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 8px; border-top: 3px solid var(--green); text-align: left; }
-        .stat-label { color: #555; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        .stat-value { font-size: 20px; font-weight: bold; margin-top: 5px; }
-
-        .analysis-container { background: var(--card); border-radius: 12px; padding: 30px; border: 1px solid #222; text-align: left; }
-        .match-card { border-bottom: 1px solid #222; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
-        .match-card:last-child { border-bottom: none; }
-        .match-name { font-size: 18px; font-weight: bold; }
-        .match-meta { color: var(--green); font-size: 14px; margin-bottom: 5px; }
-        .pick-box { background: var(--green); color: black; padding: 10px 20px; border-radius: 8px; font-weight: 900; font-size: 18px; }
-        .odds { color: #888; margin-left: 10px; }
-        .reasoning { color: #666; font-size: 13px; margin-top: 10px; font-style: italic; }
-
-        footer { margin-top: 50px; color: #444; font-size: 12px; line-height: 1.6; }
+        body { background: #0d0f12; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .green { color: #00ff66; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 60px; text-transform: uppercase; margin-bottom: 0; }
+        .card { background: #161a1e; border-radius: 12px; padding: 20px; margin-top: 20px; text-align: left; border: 1px solid #222; }
+        .match { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 15px 0; }
+        .pick { background: #00ff66; color: black; padding: 8px 15px; border-radius: 5px; font-weight: bold; }
+        .reason { color: #888; font-size: 13px; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="badge">⚽ Codzienne Typy — Powered by Gemini AI</div>
-        <h1>Dziś gramy<br><span>Mądrze</span></h1>
-        <p class="subtitle">Automatyczna analiza rynków przez AI. Anomalie kursowe i value bety.</p>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Typów dziś</div>
-                <div id="count" class="stat-value">—</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Analiza</div>
-                <div class="stat-value">AI Model 1.5</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Data raportu</div>
-                <div id="date" class="stat-value">—</div>
-            </div>
-        </div>
-
-        <div class="analysis-container" id="results">
-            <p style="text-align:center; color:#555;">Ładowanie analizy...</p>
-        </div>
-
-        <footer>
-            ⚠️ WAŻNE: Zakłady bukmacherskie wiążą się z ryzykiem. Treści mają charakter wyłącznie informacyjny.
-        </footer>
+        <h1>DZIŚ GRAMY <span class="green">MĄDRZE</span></h1>
+        <p style="color: #666;">Automatyczna analiza przez Gemini AI</p>
+        <div id="results">Ładowanie analizy...</div>
     </div>
 
     <script>
-        fetch('/raport.json?t=' + Date.now())
-            .then(res => res.json())
-            .then(data => {
-    // 1. STRAŻNIK: Jeśli nie ma meczów w pliku, pokaż info i przerwij
-    if (!data.mecze || !Array.isArray(data.mecze) || data.mecze.length === 0) {
-        document.getElementById('results').innerHTML = `
-            <div style="text-align:center; padding: 40px; color: #555;">
-                <p>🤖 AI właśnie analizuje dzisiejszą ofertę...</p>
-                <small>Status: ${data.status || 'Oczekiwanie'}</small><br>
-                <button onclick="location.reload()" style="margin-top:10px; background:#222; color:white; border:1px solid #444; padding:5px 15px; border-radius:5px; cursor:pointer;">Odśwież stronę</button>
-            </div>`;
-        return; // Nie idź dalej, bo nie ma czego wyświetlać
-    }
-
-    // 2. Jeśli mecze SĄ, wyświetl je normalnie:
-    document.getElementById('count').innerText = data.mecze.length;
-    document.getElementById('date').innerText = new Date().toLocaleDateString();
-
-    let html = '';
-    data.mecze.forEach(m => {
-        html += `
-            <div class="match-card">
-                <div>
-                    <div class="match-meta">${m.godzina || 'Dziś'} • Piłka Nożna</div>
-                    <div class="match-name">${m.mecz}</div>
-                    <div class="reasoning">${m.analiza}</div>
-                </div>
-                <div style="display:flex; align-items:center;">
-                    <div class="pick-box">${m.typ}</div>
-                    <div class="odds">@${m.kurs}</div>
-                </div>
-            </div>`;
-    });
-    document.getElementById('results').innerHTML = html;
-})
+        async function loadTypy() {
+            try {
+                const res = await fetch('/raport.json?t=' + Date.now());
+                const data = await res.json();
+                if (!data.mecze || data.mecze.length === 0) {
+                    document.getElementById('results').innerHTML = "Brak dostępnych typów na tę chwilę.";
+                    return;
+                }
                 let html = '';
                 data.mecze.forEach(m => {
-                    html += `
-                        <div class="match-card">
-                            <div>
-                                <div class="match-meta">${m.godzina || 'Dziś'} • Piłka Nożna</div>
-                                <div class="match-name">${m.mecz}</div>
-                                <div class="reasoning">${m.analiza}</div>
-                            </div>
-                            <div style="display:flex; align-items:center;">
-                                <div class="pick-box">${m.typ}</div>
-                                <div class="odds">@${m.kurs}</div>
-                            </div>
-                        </div>`;
+                    html += `<div class="match">
+                        <div>
+                            <div class="green" style="font-size: 12px;">${m.godzina || 'Dziś'}</div>
+                            <div style="font-weight: bold;">${m.mecz}</div>
+                            <div class="reason">${m.analiza}</div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div class="pick">${m.typ}</div>
+                            <div style="margin-left: 10px; color: #888;">@${m.kurs}</div>
+                        </div>
+                    </div>`;
                 });
                 document.getElementById('results').innerHTML = html;
-            })
-            .catch(() => {
-                document.getElementById('results').innerHTML = "<p style='color:red; text-align:center;'>Raport nie jest jeszcze gotowy. Odpal workflow na GitHubie!</p>";
-            });
+            } catch (e) {
+                document.getElementById('results').innerHTML = "Raport w drodze... Odśwież za minutę.";
+            }
+        }
+        loadTypy();
     </script>
 </body>
 </html>
