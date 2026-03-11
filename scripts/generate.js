@@ -10,17 +10,13 @@ async function run() {
 
   const dzisiaj = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
 
-  // PROMPT: Wymuszamy pole "data" w JSON, aby zablokować halucynacje z przyszłości
-  const promptText = `Jesteś zaawansowanym systemem detekcji anomalii rynkowych.
-  Dzisiejsza data to dokładnie: ${dzisiaj}.
+  // PROMPT ZABEZPIECZAJĄCY: Wyjaśniamy modelowi, że nie ma dostępu do internetu i ma wymusić pole "data"
+  const promptText = `Jesteś zaawansowanym systemem symulacji rynkowych. Dzisiejsza data to: ${dzisiaj}.
   
-  ZASADA BEZWZGLĘDNA: Nie masz dostępu do internetu na żywo. Jeśli nie znasz w 100% prawdziwego terminarza na dzień ${dzisiaj}, musisz wygenerować wysoce realistyczną SYMULACJĘ rynkową na DZISIAJ. 
-  KATEGORYCZNIE ZABRANIAM podawania prawdziwych meczów, które odbywają się w przyszłości (np. za tydzień lub w maju). 
+  UWAGA KRYTYCZNA: Jako AI nie masz dostępu do live feedów (jak Sofascore) i Twoja baza danych o przyszłych meczach jest niekompletna.
+  Dlatego wygeneruj 5 WYSOCE REALISTYCZNYCH SYMULACJI meczów i rynków (3 ligi egzotyczne, 2 z Top 5), tak jakby odbywały się dokładnie dzisiaj. Użyj prawdziwych nazw drużyn, ale symuluj rynki i anomalie (np. potężne spadki kursów).
   
-  Wymagania:
-  1. Wybierz 3 mecze z lig egzotycznych i 2 z Top 5 Europy. 
-  2. Każdy mecz w formacie JSON MUSI zawierać pole "data" z wartością dokładnie "${dzisiaj}".
-  3. Szukaj potężnych anomalii kursowych (rożne, gole, spadki).
+  Każdy obiekt w tablicy MUSI ZACZYNAĆ SIĘ od pola "data" z wartością "${dzisiaj}".
   
   Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON:
   {
@@ -31,7 +27,7 @@ async function run() {
         "mecz": "Drużyna A - Drużyna B (Nazwa Ligi)",
         "typ": "Powyżej 2.5 gola",
         "kurs": "2.10",
-        "analiza": "System wykrył anomalię kursową..."
+        "analiza": "System wykrył potężną anomalię kursową..."
       }
     ]
   }`;
@@ -65,14 +61,14 @@ async function run() {
         JSON.parse(cleanJson);
         
         fs.writeFileSync(filePath, cleanJson);
-        console.log(`✅ SUKCES! Raport wygenerowany. Wymuszona data: ${dzisiaj}`);
+        console.log(`✅ SUKCES! Raport (symulacja rynkowa) na ${dzisiaj} wygenerowany.`);
       } catch (parseError) {
         fs.writeFileSync(filePath, JSON.stringify({
-          mecze: [{ data: dzisiaj, godzina: "INFO", mecz: "Błąd formatowania", typ: "?", kurs: "-", analiza: rawText }]
+          mecze: [{ data: dzisiaj, godzina: "INFO", mecz: "Błąd formatu", typ: "?", kurs: "-", analiza: rawText }]
         }));
       }
     } else {
-      throw new Error(resData.error?.message || "Brak danych");
+      throw new Error(resData.error?.message || "Brak danych z API");
     }
   } catch (e) {
     fs.writeFileSync(filePath, JSON.stringify({
