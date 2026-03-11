@@ -10,24 +10,27 @@ async function run() {
 
   const dzisiaj = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
 
-  // PROMPT ZABEZPIECZAJĄCY: Wyjaśniamy modelowi, że nie ma dostępu do internetu i ma wymusić pole "data"
-  const promptText = `Jesteś zaawansowanym systemem symulacji rynkowych. Dzisiejsza data to: ${dzisiaj}.
+  // PROMPT TOP 5 LIG: Ograniczamy AI tylko do najlepszych rozgrywek europejskich
+  const promptText = `Jesteś elitarnym analitykiem piłkarskim. Dzisiejsza data to dokładnie: ${dzisiaj}.
   
-  UWAGA KRYTYCZNA: Jako AI nie masz dostępu do live feedów (jak Sofascore) i Twoja baza danych o przyszłych meczach jest niekompletna.
-  Dlatego wygeneruj 5 WYSOCE REALISTYCZNYCH SYMULACJI meczów i rynków (3 ligi egzotyczne, 2 z Top 5), tak jakby odbywały się dokładnie dzisiaj. Użyj prawdziwych nazw drużyn, ale symuluj rynki i anomalie (np. potężne spadki kursów).
+  Twoim zadaniem jest wygenerowanie zestawienia 5 meczów o najwyższym prawdopodobieństwie trafienia.
   
-  Każdy obiekt w tablicy MUSI ZACZYNAĆ SIĘ od pola "data" z wartością "${dzisiaj}".
+  ZASADA 1: Skup się WYŁĄCZNIE na najpopularniejszych rozgrywkach. Dozwolone ligi to TYLKO: Top 5 lig europejskich (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) oraz europejskie puchary (Liga Mistrzów, Liga Europy, Liga Konferencji).
+  ZASADA 2: Wybierz mecze, które z największym prawdopodobieństwem odbywają się w okolicach tej daty w rzeczywistości (np. we wtorki i środy gra Liga Mistrzów, w czwartki Liga Europy, w weekendy ligi krajowe).
+  ZASADA 3: Każdy obiekt MUSI zawierać pole "data" z wartością dokładnie "${dzisiaj}".
+  ZASADA 4: Zamiast prostych wygranych (1X2), szukaj rynków pobocznych: Rzuty rożne (np. Powyżej 9.5), Liczba goli (Powyżej 2.5, Poniżej 3.5), Obie drużyny strzelą (BTTS) lub Faule.
+  ZASADA 5: Analiza (3-4 zdania) musi być merytoryczna, oparta na ogólnie znanych stylach gry tych drużyn, taktyce i trendach.
   
   Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON:
   {
     "mecze": [
       {
         "data": "${dzisiaj}",
-        "godzina": "15:30",
-        "mecz": "Drużyna A - Drużyna B (Nazwa Ligi)",
-        "typ": "Powyżej 2.5 gola",
-        "kurs": "2.10",
-        "analiza": "System wykrył potężną anomalię kursową..."
+        "godzina": "21:00",
+        "mecz": "Real Madryt - Manchester City (Liga Mistrzów)",
+        "typ": "Powyżej 10.5 rzutów rożnych",
+        "kurs": "1.85",
+        "analiza": "Obie drużyny preferują ofensywny styl z dużą ilością dośrodkowań. Statystyki pokazują..."
       }
     ]
   }`;
@@ -61,18 +64,26 @@ async function run() {
         JSON.parse(cleanJson);
         
         fs.writeFileSync(filePath, cleanJson);
-        console.log(`✅ SUKCES! Raport (symulacja rynkowa) na ${dzisiaj} wygenerowany.`);
+        console.log(`✅ SUKCES! Raport Top 5 na ${dzisiaj} wygenerowany.`);
       } catch (parseError) {
         fs.writeFileSync(filePath, JSON.stringify({
-          mecze: [{ data: dzisiaj, godzina: "INFO", mecz: "Błąd formatu", typ: "?", kurs: "-", analiza: rawText }]
+          mecze: [{ data: dzisiaj, godzina: "INFO", mecz: "Błąd formatu", typ: "?", kurs: "-", analiza: "AI zwróciło tekst zamiast kodu." }]
         }));
       }
     } else {
       throw new Error(resData.error?.message || "Brak danych z API");
     }
   } catch (e) {
+    const errorMsg = e.message.toLowerCase();
+    let userFriendlyMessage = e.message;
+
+    // Przechwytujemy limit darmowych zapytań (np. "quota exceeded")
+    if (errorMsg.includes('quota') || errorMsg.includes('limit') || errorMsg.includes('429')) {
+      userFriendlyMessage = "Wyczerpano darmowy limit zapytań do sztucznej inteligencji. Trwa resetowanie serwerów. Zapraszamy po nowe analizy jutro!";
+    }
+
     fs.writeFileSync(filePath, JSON.stringify({
-      mecze: [{ data: dzisiaj, godzina: "BŁĄD", mecz: "Błąd skryptu", typ: "!", kurs: "0.00", analiza: e.message }]
+      mecze: [{ data: dzisiaj, godzina: "PRZERWA", mecz: "Osiągnięto limit zapytań AI", typ: "-", kurs: "0.00", analiza: userFriendlyMessage }]
     }));
   }
 }
