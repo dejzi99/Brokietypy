@@ -19,26 +19,29 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '22'
 
       - name: Generuj raport
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          mkdir -p public
           node scripts/generate.js
-          # To nam powie czy plik istnieje przed zapisem
-          ls -R public/
+          echo "Lista plików w folderze public:"
+          ls -la public/
 
       - name: Zapisz raport
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # -f wymusza dodanie pliku nawet jeśli jest w .gitignore
-          git add -f public/raport.json
-          
-          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
-          
-          # Próba wysłania z pobraniem zmian
-          git pull --rebase origin main
-          git push origin main
+          # Sprawdzamy, czy folder public istnieje i czy coś w nim jest
+          if [ -d "public" ]; then
+            git add public/
+            git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "❌ Folder public nie istnieje!"
+            exit 1
+          fi
