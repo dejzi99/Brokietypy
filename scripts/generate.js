@@ -8,23 +8,31 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  // TEST: Prosimy o zwykłe, historyczne mecze, żeby sprawdzić czy AI w ogóle chce z nami gadać
-  const promptText = `Wymień 5 historycznych meczów piłkarskich z Ligi Mistrzów.
-  Odpowiedz tylko jako JSON:
+  // Nowy PROMPT PRO: Skupiony na zyskownych rynkach (rożne, gole, egzotyka)
+  const promptText = `Wciel się w rolę Głównego Analityka Danych Sportowych. 
+  Przygotuj zaawansowany raport 5 najbardziej prawdopodobnych zdarzeń piłkarskich na dziś (${new Date().toLocaleDateString()}).
+  
+  Wymagania:
+  1. Wybierz 3 mecze z Top 5 lig europejskich oraz 2 mecze z lig egzotycznych/niszowych.
+  2. Typy nie mogą być banalne. Szukaj wartościowych zdarzeń: rzuty rożne (np. Powyżej 9.5), liczba goli (Powyżej/Poniżej), rzuty karne, faule, lub "Obie drużyny strzelą".
+  3. Analiza musi być bardzo rozbudowana (3-4 zdania). Opisz formę obu drużyn, braki w kadrach, motywację i statystyki H2H. Uzasadnij, dlaczego ten typ ma największe szanse matematyczne.
+  
+  Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON:
   {
     "mecze": [
       {
         "godzina": "20:45",
-        "mecz": "Real Madryt - Bayern",
-        "typ": "1",
-        "kurs": "Historyczny test",
-        "analiza": "Krótki opis tego historycznego meczu."
+        "mecz": "Nazwa Drużyny A - Nazwa B (Nazwa Ligi)",
+        "typ": "Powyżej 10.5 rzutów rożnych",
+        "kurs": "1.85",
+        "analiza": "Szczegółowa, głęboka analiza w 3-4 zdaniach na podstawie formy obu zespołów..."
       }
     ]
   }`;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Używamy gemini-1.5-pro (inteligentniejszy, naprawia błąd "not found")
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: 'POST',
@@ -41,6 +49,7 @@ async function run() {
     });
 
     const resData = await response.json();
+    console.log("LOG Z AI:", JSON.stringify(resData));
 
     if (resData.candidates && resData.candidates[0].content) {
       let rawText = resData.candidates[0].content.parts[0].text;
@@ -49,29 +58,18 @@ async function run() {
       const cleanJson = rawText.substring(start, end);
       
       fs.writeFileSync(filePath, cleanJson);
-      console.log("✅ SUKCES! AI odpowiedziało.");
+      console.log("✅ SUKCES! Wersja PRO wygenerowała analizy.");
     } else {
-      // Wyciągamy DOKŁADNY błąd z Google
-      let exactError = "Nieznany błąd zablokowania.";
-      if (resData.error) exactError = resData.error.message;
-      else if (resData.promptFeedback) exactError = "Blokada filtrów (Safety): " + JSON.stringify(resData.promptFeedback);
-      
-      throw new Error(exactError);
+      const errMsg = resData.error?.message || "Nieoczekiwany błąd od Google";
+      throw new Error(errMsg);
     }
   } catch (e) {
-    // POKAZUJEMY BŁĄD BEZPOŚREDNIO NA TWOJEJ STRONIE
-    const diagnosticData = {
+    console.error("❌ BŁĄD:", e.message);
+    fs.writeFileSync(filePath, JSON.stringify({
       mecze: [
-        { 
-          godzina: "BŁĄD", 
-          mecz: "Odpowiedź od Google:", 
-          typ: "!", 
-          kurs: "0.00", 
-          analiza: e.message // Tu wyświetli się prawdziwy powód!
-        }
+        { godzina: "BŁĄD", mecz: "Błąd API", typ: "!", kurs: "0.00", analiza: e.message }
       ]
-    };
-    fs.writeFileSync(filePath, JSON.stringify(diagnosticData));
+    }));
   }
 }
 run();
