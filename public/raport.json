@@ -1,39 +1,39 @@
 {
   "mecze": [
     {
-      "godzina": "12:00",
-      "mecz": "Hoang Anh Gia Lai - Binh Dinh FC (V.League 1, Wietnam)",
+      "godzina": "19:00",
+      "mecz": "Al Ahly - Pyramids FC (Egyptian Premier League)",
       "typ": "Powyżej 2.5 gola",
-      "kurs": "2.05",
-      "analiza": "System wykrył potężną anomalię, manifestującą się nagłym, drastycznym spadkiem kursów na rynek 'Powyżej 2.5 gola' z 2.40 do 2.05 w ciągu ostatnich godzin. Analiza wskaźników ofensywnych obu drużyn oraz ich tendencji w ostatnich bezpośrednich starciach sugeruje, że rynek początkowo niedoszacował potencjału bramkowego. Dodatkowo, doniesienia o kluczowych brakach kadrowych w linii obrony Binh Dinh FC i nowej, agresywniejszej taktyce Hoang Anh Gia Lai, w pełni uzasadniają tę korektę kursową, wskazując na bardzo wysoką szansę na otwarty mecz."
-    },
-    {
-      "godzina": "19:30",
-      "mecz": "Mushuc Runa - C.D. Macará (Liga Pro Serie A, Ekwador)",
-      "typ": "Macará wygra",
-      "kurs": "2.30",
-      "analiza": "Zaobserwowano istotny ruch kursowy, z kursem na wygraną Macará spadającym z 2.90 do 2.30, co jest silnym sygnałem ze strony rynku sugerującym ukrytą przewagę. Nasze algorytmy wychwyciły nietypową korelację historyczną w meczach Mushuc Runa u siebie przeciwko rywalom z Ambato, często połączoną ze spadkiem formy w okresach intensywnych rozgrywek. Nieoficjalne informacje o wewnętrznych problemach dyscyplinarnych w zespole gospodarzy, w połączeniu z solidną formą wyjazdową Macará, wskazują na niedoszacowaną wartość zwycięstwa gości."
-    },
-    {
-      "godzina": "17:00",
-      "mecz": "Hassania Agadir - Youssoufia Berrechid (Botola Pro, Maroko)",
-      "typ": "Poniżej 1.5 gola (w 1. połowie)",
-      "kurs": "1.80",
-      "analiza": "System anomalię zidentyfikował w rynku 'Poniżej 1.5 gola w 1. połowie', gdzie kurs spadł z 2.25 do 1.80, wskazując na silną tendencję spadkową. Obie drużyny charakteryzują się niezwykle konserwatywnym podejściem taktycznym, zwłaszcza w początkowych fazach meczu, co potwierdzają dane z ich ostatnich spotkań bezpośrednich, często kończących się bezbramkowymi pierwszymi połowami. Zgłoszone drobne urazy kluczowych zawodników ofensywnych po obu stronach dodatkowo umacniają prognozę na defensywną i mało bramkową pierwszą połowę, co rynek w końcu zaczął wyceniać prawidłowo."
+      "kurs": "2.15",
+      "analiza": "System wykrył anomalię kursową w kierunku 'Powyżej 2.5 gola'. Mimo historycznej tendencji do zaciętych spotkań, ostatnie analizy taktyczne pokazują, że obie drużyny przyjęły bardziej otwarty styl gry, co prowadzi do większej liczby szans. Spadek kursu jest reakcją rynku na informacje o osłabieniach w defensywie i zwiększoną ofensywność, która nie była początkowo wliczona w kursy bukmacherskie."
     },
     {
       "godzina": "20:30",
-      "mecz": "Everton - Fulham (Premier League, Anglia)",
-      "typ": "Powyżej 9.5 rzutów rożnych",
-      "kurs": "1.90",
-      "analiza": "Nasz system wskazuje na znaczącą wartość w typie 'Powyżej 9.5 rzutów rożnych', opierając się na głębokiej analizie taktycznej. Everton, zwłaszcza na własnym stadionie, pod wodzą obecnego trenera stosuje taktykę z szeroko grającymi skrzydłowymi i dużą liczbą dośrodkowań, co generuje wysoki wolumen rzutów rożnych. Fulham, mimo swojej solidnej obrony, często zmuszone jest do wybijania piłki na boki pod presją, co również sprzyja nabijaniu rożnych przez rywali. Historyczne dane z ich spotkań oraz aktualna analiza taktyczna obu drużyn silnie wspierają ten zakład."
+      "mecz": "Al-Hilal - Al-Nassr (Saudi Pro League)",
+      "typ": "Powyżej 9.5 rożnych",
+      "kurs": "1.95",
+      "analiza": "W Rijadzkich Derbach często panuje intensywność, która przekłada się na liczne akcje skrzydłowe. Nasz system zidentyfikował niedoszacowanie linii rożnych; pomimo typowego skupienia na strzelcach, dane historyczne i analiza taktyki obu zespołów wskazują na agresywne ataki z flank. Początkowe kursy nie odzwierciedlały wysokiego potencjału na rzuty rożne, co jest korygowane przez napływ inteligentnego kapitału."
     },
     {
-      "godzina": "21:00",
-      "mecz": "Villarreal - Real Sociedad (La Liga, Hiszpania)",
-      "typ": "Powyżej 4.5 żółtych kartek",
-      "kurs": "2.15",
-      "analiza": "Detektor anomalii podkreśla potencjał w typie 'Powyżej 4.5 żółtych kartek', bazując na złożonych parametrach. Mecz ten historycznie należy do bardzo zaciętych, z intensywną walką w środku pola i licznymi faulami taktycznymi, co jest potęgowane przez różnice w stylach gry obu drużyn. Co więcej, wyznaczony sędzia tego spotkania jest znany z surowego prowadzenia meczów i ma znacząco wyższą średnią pokazanych kartek na mecz niż średnia ligowa. Biorąc pod uwagę tendencje do kartek kluczowych zawodników obu ekip, system przewiduje wysoką szansę na przekroczenie tej linii kartek."
+      "godzina": "11:00",
+      "mecz": "Urawa Red Diamonds - Kawasaki Frontale (J1 League)",
+      "typ": "Kawasaki Frontale Powyżej 1.5 gola",
+      "kurs": "2.20",
+      "analiza": "Anomalia kursowa wskazuje na zawyżony kurs dla 'Kawasaki Frontale Powyżej 1.5 gola'. Pomimo ostatniej niestabilności formy Urawy, rynek początkowo przecenił ich zdolności defensywne. Analiza statystyk xG oraz niedawnych występów Kawasaki sugeruje, że ich siła ofensywna jest niedoszacowana i są w stanie dwukrotnie pokonać bramkarza Urawy."
+    },
+    {
+      "godzina": "20:30",
+      "mecz": "Fulham - Nottingham Forest (Premier League)",
+      "typ": "Fulham wygra mecz",
+      "kurs": "2.05",
+      "analiza": "Kurs na zwycięstwo Fulham uległ znaczącemu spadkowi, co jest sygnałem anomalii. Fulham, choć nieregularne na wyjazdach, jest wyjątkowo mocne u siebie, zwłaszcza przeciwko zespołom z dolnej połowy tabeli, takim jak Nottingham Forest. Nasze algorytmy wykryły, że początkowy kurs nie uwzględniał w pełni przewagi własnego boiska oraz słabości Forest na wyjazdach, gdzie często tracą bramki w drugiej połowie."
+    },
+    {
+      "godzina": "20:45",
+      "mecz": "Bologna - Atalanta (Serie A)",
+      "typ": "Obie drużyny strzelą gola - Tak",
+      "kurs": "1.80",
+      "analiza": "Wykryto anomalię w kursie na 'Obie drużyny strzelą gola - Tak'. Bologna prezentuje ostatnio bardzo ofensywny futbol na swoim stadionie, jednocześnie czasami dopuszczając do sytuacji bramkowych rywali. Atalanta z kolei zawsze gra ofensywnie i rzadko kończy mecz bez zdobycia bramki. Rynek początkowo niedoszacował ofensywnego potencjału obu ekip w bezpośrednim starciu, co skutkuje korektą kursów w stronę wysokiej prawdopodobieństwa goli z obu stron."
     }
   ]
 }
