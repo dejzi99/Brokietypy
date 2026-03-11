@@ -8,13 +8,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Dajemy prawo do zapisu
+      contents: write
 
     steps:
       - name: Pobierz kod
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Pobieramy całą historię, by uniknąć konfliktów
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,11 +24,15 @@ jobs:
       - name: Generuj raport
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/generate.js
+        run: |
+          mkdir -p public
+          node scripts/generate.js
 
       - name: Automatyczny zapis raportu
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automatyczna aktualizacja raportu [skip ci]"
-          file_pattern: 'public/raport.json' # Zapisujemy tylko ten jeden plik
-          push_options: '--force' # Opcja atomowa: wymuś zapis, jeśli są konflikty
+          # Usunąłem file_pattern, żeby bot sam znalazł nowe pliki
+          # Dodałem opcję, by nie wywalał błędu jeśli nic się nie zmieniło
+          skip_dirty_check: false 
+          push_options: '--force'
