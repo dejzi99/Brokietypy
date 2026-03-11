@@ -8,27 +8,34 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  const promptText = `Przeanalizuj dzisiejsze mecze piłkarskie i wybierz 5 zdarzeń o najwyższym prawdopodobieństwie.
-  Wymagania:
-  1. Wybierz 3 mecze z Top 5 lig europejskich oraz 2 z lig niszowych.
-  2. Typuj zdarzenia takie jak: Rzuty rożne (np. Powyżej 9.5), Liczba goli (Powyżej 2.5), Obie strzelą lub Faule.
-  3. Uzasadnienie musi mieć 3-4 zdania i opierać się na formie, statystykach i brakach kadrowych.
+  // Ustawiamy sztywną datę dla polskiej strefy czasowej, żeby AI się nie gubiło
+  const today = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
+
+  // PROMPT "ŁOWCA ANOMALII": Skupiony na dzisiejszym dniu i dziwnych ruchach kursów
+  const promptText = `Jesteś zaawansowanym systemem detekcji anomalii rynkowych i sportowych.
+  Dzisiejsza data to dokładnie: ${today}.
   
-  Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON, bez formatowania markdown:
+  Twoim zadaniem jest znalezienie 5 meczów, które odbywają się DOKŁADNIE DZISIAJ (${today}). Bezwzględnie zignoruj mecze z wczoraj i z jutra.
+  
+  Wymagania:
+  1. Znajdź 3 mecze z bardzo egzotycznych lub niszowych lig (np. Azja, Afryka, Ameryka Południowa, niższe klasy rozgrywkowe). Szukaj w nich potężnych "anomalii kursowych", nagłych spadków kursów lub podejrzanych trendów statystycznych, które mogą sugerować ukrytą przewagę.
+  2. Znajdź 2 mecze z Top 5 lig europejskich z wartościowymi zdarzeniami (np. rzuty rożne, faule, żółte kartki).
+  3. Analiza (3-4 zdania) musi brzmieć wysoce analitycznie: opisz dlaczego system wykrył tu anomalię, wspomnij o dziwnych ruchach na rynku, brakach kadrowych lub ukrytych statystykach.
+  
+  Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON, bez żadnych znaczników markdown:
   {
     "mecze": [
       {
-        "godzina": "20:45",
-        "mecz": "Drużyna A - Drużyna B (Liga)",
-        "typ": "Powyżej 10.5 rzutów rożnych",
-        "kurs": "1.85",
-        "analiza": "Twoja szczegółowa analiza..."
+        "godzina": "15:30",
+        "mecz": "Nazwa Drużyny A - Drużyna B (Nazwa Ligi Egzotycznej)",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "2.10",
+        "analiza": "System wykrył potężną anomalię i nagły spadek kursów na ten rynek. Wynika to prawdopodobnie z..."
       }
     ]
   }`;
 
   try {
-    // KLUCZOWA ZMIANA: Przechodzimy na najnowszy model gemini-2.5-flash
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
@@ -54,23 +61,17 @@ async function run() {
         const start = rawText.indexOf('{');
         const end = rawText.lastIndexOf('}') + 1;
         const cleanJson = rawText.substring(start, end);
-        JSON.parse(cleanJson); 
+        JSON.parse(cleanJson); // Weryfikacja formatu
         
         fs.writeFileSync(filePath, cleanJson);
-        console.log("✅ SUKCES! Analizy wygenerowane poprawnie przez Gemini 2.5.");
+        console.log(`✅ SUKCES! Analiza na dzień ${today} wygenerowana (w tym egzotyka).`);
       } catch (parseError) {
         fs.writeFileSync(filePath, JSON.stringify({
-          mecze: [{ 
-            godzina: "INFO", 
-            mecz: "Odpowiedź AI (Bez formatu JSON):", 
-            typ: "?", 
-            kurs: "-", 
-            analiza: rawText 
-          }]
+          mecze: [{ godzina: "INFO", mecz: "Problem z formatem danych", typ: "?", kurs: "-", analiza: rawText }]
         }));
       }
     } else {
-      throw new Error(resData.error?.message || "Brak danych");
+      throw new Error(resData.error?.message || "Brak danych z Google");
     }
   } catch (e) {
     fs.writeFileSync(filePath, JSON.stringify({
