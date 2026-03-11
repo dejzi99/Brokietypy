@@ -8,37 +8,33 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  const prompt = `Jesteś profesjonalnym analitykiem sportowym. 
-  Znajdź 5 najciekawszych meczów piłkarskich na dziś (${new Date().toLocaleDateString()}).
-  Podaj dane w formacie JSON (tylko czysty JSON):
-  {
-    "mecze": [
-      {
-        "godzina": "18:00",
-        "mecz": "Drużyna A vs Drużyna B",
-        "typ": "1 (lub X lub 2)",
-        "kurs": "1.85",
-        "analiza": "Krótkie uzasadnienie jednym zdaniem"
-      }
-    ]
-  }`;
+  // 1. Starter - to widziałeś przed chwilą
+  fs.writeFileSync(filePath, JSON.stringify({ status: "Inicjalizacja...", mecze: [] }));
 
   try {
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: "Podaj 5 meczów na dziś. Format JSON: {\"mecze\": [{\"godzina\":\"12:00\",\"mecz\":\"A vs B\",\"typ\":\"1\",\"kurs\":\"1.50\",\"analiza\":\"...\"}]}" }] }]
+      })
     });
 
-    const data = await response.json();
-    if (data.candidates && data.candidates[0].content) {
-      const tekst = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "").trim();
+    const resData = await response.json();
+    
+    // DEBUG: To pokaże nam błąd w logach Actions
+    console.log("Odpowiedź z AI:", JSON.stringify(resData));
+
+    if (resData.candidates && resData.candidates[0].content) {
+      let tekst = resData.candidates[0].content.parts[0].text.replace(/```json|```/g, "").trim();
       fs.writeFileSync(filePath, tekst);
-      console.log("✅ Typy wygenerowane.");
+      console.log("✅ Sukces! Dane zapisane.");
+    } else {
+      console.log("⚠️ AI zwróciło pustą odpowiedź. Sprawdź logi powyżej.");
     }
   } catch (e) {
-    console.error("❌ Błąd:", e.message);
+    console.error("❌ Błąd krytyczny:", e.message);
   }
 }
 run();
