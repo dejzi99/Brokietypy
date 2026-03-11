@@ -18,10 +18,13 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate.js
-      - name: Zapisz zmiany w kodzie
+     - name: Zapisz zmiany w kodzie
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add public/raport.json
+          # Pobieramy Twoje ostatnie zmiany, żeby nie było konfliktu
+          git pull --rebase origin main
+          # Zapisujemy raport i wysyłamy
           git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
-          git push
+          git push origin main
