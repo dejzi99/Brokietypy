@@ -1,9 +1,4 @@
 {
   "version": 2,
-  "crons": [
-    {
-      "path": "/api/generate",
-      "schedule": "30 16 * * *"
-    }
-  ]
+  
 }
