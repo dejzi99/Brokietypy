@@ -8,24 +8,25 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  const today = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
+  const dzisiaj = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
 
-  // PROMPT Z BLOKADĄ CZASOWĄ: Kategoryczny zakaz podawania innych dat.
+  // PROMPT: Wymuszamy pole "data" w JSON, aby zablokować halucynacje z przyszłości
   const promptText = `Jesteś zaawansowanym systemem detekcji anomalii rynkowych.
-  Dzisiejsza data to dokładnie: ${today}.
+  Dzisiejsza data to dokładnie: ${dzisiaj}.
   
-  ZASADA NUMER 1: KATEGORYCZNIE ZABRANIAM podawania meczów, które odbywają się w inne dni. WSZYSTKIE 5 meczów musi dotyczyć wyłącznie dzisiejszego dnia (${today}). Jeśli podasz mecz z przyszłości (z jutra, z przyszłego tygodnia lub miesiąca), system ulegnie awarii.
+  ZASADA BEZWZGLĘDNA: Nie masz dostępu do internetu na żywo. Jeśli nie znasz w 100% prawdziwego terminarza na dzień ${dzisiaj}, musisz wygenerować wysoce realistyczną SYMULACJĘ rynkową na DZISIAJ. 
+  KATEGORYCZNIE ZABRANIAM podawania prawdziwych meczów, które odbywają się w przyszłości (np. za tydzień lub w maju). 
   
   Wymagania:
-  1. Wybierz 3 mecze z lig egzotycznych (Afryka, Azja) oraz 2 mecze z Top 5 lig europejskich na DZISIAJ.
-  2. Szukaj potężnych anomalii kursowych i wartościowych zdarzeń (rożne, gole, spadki kursów).
-  3. Jeśli nie masz w swojej bazie dokładnego terminarza niszowych lig na dzień ${today}, wygeneruj wysoce prawdopodobną, analityczną SYMULACJĘ rynkową dla prawdziwych drużyn z tych lig, ale ZAWSZE przypisuj ją do dnia dzisiejszego.
-  4. Analiza (3-4 zdania) musi profesjonalnie opisywać powód wykrycia anomalii.
+  1. Wybierz 3 mecze z lig egzotycznych i 2 z Top 5 Europy. 
+  2. Każdy mecz w formacie JSON MUSI zawierać pole "data" z wartością dokładnie "${dzisiaj}".
+  3. Szukaj potężnych anomalii kursowych (rożne, gole, spadki).
   
-  Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON, bez znaczników markdown:
+  Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON:
   {
     "mecze": [
       {
+        "data": "${dzisiaj}",
         "godzina": "15:30",
         "mecz": "Drużyna A - Drużyna B (Nazwa Ligi)",
         "typ": "Powyżej 2.5 gola",
@@ -64,10 +65,10 @@ async function run() {
         JSON.parse(cleanJson);
         
         fs.writeFileSync(filePath, cleanJson);
-        console.log(`✅ SUKCES! Raport na ${today} zapisany. Blokada czasowa aktywna.`);
+        console.log(`✅ SUKCES! Raport wygenerowany. Wymuszona data: ${dzisiaj}`);
       } catch (parseError) {
         fs.writeFileSync(filePath, JSON.stringify({
-          mecze: [{ godzina: "INFO", mecz: "Błąd formatowania AI", typ: "?", kurs: "-", analiza: rawText }]
+          mecze: [{ data: dzisiaj, godzina: "INFO", mecz: "Błąd formatowania", typ: "?", kurs: "-", analiza: rawText }]
         }));
       }
     } else {
@@ -75,7 +76,7 @@ async function run() {
     }
   } catch (e) {
     fs.writeFileSync(filePath, JSON.stringify({
-      mecze: [{ godzina: "BŁĄD", mecz: "Błąd skryptu", typ: "!", kurs: "0.00", analiza: e.message }]
+      mecze: [{ data: dzisiaj, godzina: "BŁĄD", mecz: "Błąd skryptu", typ: "!", kurs: "0.00", analiza: e.message }]
     }));
   }
 }
