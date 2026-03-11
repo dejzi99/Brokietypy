@@ -2,54 +2,65 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Value Bets AI - Codzienne Typy</title>
     <style>
-        body { background: #0d0f12; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .green { color: #00ff66; }
+        body { background: #0d0f12; color: white; font-family: -apple-system, sans-serif; text-align: center; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; }
-        h1 { font-size: 60px; text-transform: uppercase; margin-bottom: 0; }
-        .card { background: #161a1e; border-radius: 12px; padding: 20px; margin-top: 20px; text-align: left; border: 1px solid #222; }
-        .match { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 15px 0; }
-        .pick { background: #00ff66; color: black; padding: 8px 15px; border-radius: 5px; font-weight: bold; }
-        .reason { color: #888; font-size: 13px; margin-top: 5px; }
+        .green { color: #00ff66; text-transform: uppercase; }
+        h1 { font-size: 50px; font-weight: 900; letter-spacing: -2px; }
+        .card { background: #161a1e; border-radius: 12px; padding: 25px; margin-top: 20px; text-align: left; border: 1px solid #222; }
+        .match-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding: 15px 0; }
+        .match-row:last-child { border-bottom: none; }
+        .pick-box { background: #00ff66; color: black; padding: 10px 18px; border-radius: 6px; font-weight: 900; font-size: 18px; }
+        .meta { color: #555; font-size: 12px; margin-bottom: 4px; font-weight: bold; }
+        .reason { color: #777; font-size: 13px; margin-top: 8px; font-style: italic; }
+        #error-info { color: #ff4444; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
+        <p style="color: #444; font-size: 12px; font-weight: bold; margin-bottom: 0;">CODZIENNIE O 13:00 — POWERED BY GEMINI AI</p>
         <h1>DZIŚ GRAMY <span class="green">MĄDRZE</span></h1>
-        <p style="color: #666;">Automatyczna analiza przez Gemini AI</p>
-        <div id="results">Ładowanie analizy...</div>
+        
+        <div id="results">Ładowanie analizy AI...</div>
+        <div id="error-info"></div>
     </div>
 
     <script>
-        async function loadTypy() {
+        async function fetchTypy() {
             try {
-                const res = await fetch('/raport.json?t=' + Date.now());
-                const data = await res.json();
+                const response = await fetch('/raport.json?t=' + Date.now());
+                const data = await response.json();
+                
                 if (!data.mecze || data.mecze.length === 0) {
-                    document.getElementById('results').innerHTML = "Brak dostępnych typów na tę chwilę.";
+                    document.getElementById('results').innerHTML = "Brak typów na dzisiaj. Sprawdź logi Actions.";
+                    if(data.error) document.getElementById('error-info').innerText = "Szczegóły: " + data.error;
                     return;
                 }
-                let html = '';
+
+                let html = '<div class="card">';
                 data.mecze.forEach(m => {
-                    html += `<div class="match">
-                        <div>
-                            <div class="green" style="font-size: 12px;">${m.godzina || 'Dziś'}</div>
-                            <div style="font-weight: bold;">${m.mecz}</div>
-                            <div class="reason">${m.analiza}</div>
-                        </div>
-                        <div style="display: flex; align-items: center;">
-                            <div class="pick">${m.typ}</div>
-                            <div style="margin-left: 10px; color: #888;">@${m.kurs}</div>
-                        </div>
-                    </div>`;
+                    html += `
+                        <div class="match-row">
+                            <div style="flex: 1;">
+                                <div class="meta"><span style="color: #00ff66;">${m.data || 'Brak daty'}</span> | ${m.godzina || 'DZIŚ'} • PIŁKA NOŻNA</div>
+                                <div style="font-size: 18px; font-weight: bold;">${m.mecz}</div>
+                                <div class="reason">${m.analiza || ''}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-left: 20px;">
+                                <div class="pick-box">${m.typ}</div>
+                                <div style="color: #666; margin-left: 12px; font-weight: bold;">@${m.kurs}</div>
+                            </div>
+                        </div>`;
                 });
+                html += '</div>';
                 document.getElementById('results').innerHTML = html;
             } catch (e) {
-                document.getElementById('results').innerHTML = "Raport w drodze... Odśwież za minutę.";
+                document.getElementById('results').innerHTML = "Błąd połączenia. Odśwież za chwilę.";
             }
         }
-        loadTypy();
+        fetchTypy();
     </script>
 </body>
 </html>
