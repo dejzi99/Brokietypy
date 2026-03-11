@@ -1,1 +1,39 @@
-{"mecze":[{"godzina":"BŁĄD","mecz":"Błąd skryptu","typ":"!","kurs":"0.00","analiza":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."}]}
+{
+  "mecze": [
+    {
+      "godzina": "20:30",
+      "mecz": "Arsenal - Brighton (Premier League)",
+      "typ": "Powyżej 2.5 goli",
+      "kurs": "1.70",
+      "analiza": "Arsenal w meczach domowych prezentuje ofensywny styl gry, zdobywając regularnie bramki, a ich forma strzelecka jest wysoka. Brighton, mimo solidnej ofensywy, często ma problemy w defensywie, co prowadzi do otwartych spotkań z dużą liczbą bramek po obu stronach. Statystyki H2H oraz obecna forma obu drużyn wskazują na wysoki potencjał bramkowy w tym starciu."
+    },
+    {
+      "godzina": "15:30",
+      "mecz": "Bayern Monachium - Augsburg (Bundesliga)",
+      "typ": "Powyżej 9.5 rzutów rożnych",
+      "kurs": "1.65",
+      "analiza": "Bayern dominuje większość spotkań, atakując z dużą intensywnością, często przez skrzydła, co generuje wiele rzutów rożnych dla Bawarczyków. Augsburg, broniąc się nisko i pod ogromną presją, będzie często wybijać piłkę na rzuty rożne, próbując ograniczyć zagrożenie. Statystyki pokazują, że mecze Bayernu regularnie obfitują w rzuty rożne z uwagi na ich styl gry."
+    },
+    {
+      "godzina": "21:00",
+      "mecz": "Real Madryt - Getafe (La Liga)",
+      "typ": "Obie drużyny strzelą gola (BTTS)",
+      "kurs": "1.90",
+      "analiza": "Real Madryt, mimo potężnej ofensywy, miewa momenty dekoncentracji w obronie, zwłaszcza grając u siebie, i często traci bramki. Getafe jest znane z twardej gry, potrafi zaskoczyć z kontry i ma decentną serię strzelecką w ostatnich meczach przeciwko silniejszym rywalom. Brak kluczowego obrońcy Realu może dodatkowo sprzyjać bramce dla gości."
+    },
+    {
+      "godzina": "20:00",
+      "mecz": "PSV Eindhoven - Heracles (Eredivisie)",
+      "typ": "Powyżej 3.5 goli",
+      "kurs": "1.80",
+      "analiza": "PSV jest zespołem o bardzo silnej ofensywie, szczególnie u siebie, gdzie regularnie strzela wiele bramek i utrzymuje wysoką skuteczność. Heracles ma duże problemy w defensywie, zwłaszcza w meczach wyjazdowych, co potwierdzają ich ostatnie wyniki i tracone gole. Liderzy ataku PSV są w fantastycznej dyspozycji, a defensywa Heraclesu jest osłabiona, co prognozuje grad bramek."
+    },
+    {
+      "godzina": "19:00",
+      "mecz": "FC Porto - Casa Pia (Primeira Liga)",
+      "typ": "Powyżej 9.5 rzutów rożnych",
+      "kurs": "1.75",
+      "analiza": "Porto, grając na własnym stadionie, zazwyczaj dominuje, atakując często skrzydłami i utrzymując piłkę wysoko na połowie rywala, co wymusza wiele rzutów rożnych. Casa Pia, jako outsider, będzie skupiać się na głębokiej obronie i często będzie wybijać piłkę poza linię końcową, aby przerwać ataki Porto. Forma ofensywna Porto i ich styl gry gwarantują ciągłą presję i wiele kornerów."
+    }
+  ]
+}
