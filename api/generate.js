@@ -37,7 +37,7 @@ Dla pola "value" używaj wyłącznie: "wysokie", "umiarkowane" lub "spekulatywne
 `;
 
 export default async function handler(req, res) {
-  // 1. Zabezpieczenie przed nieautoryzowanym wywołaniem z zewnątrz
+  // 1. Zabezpieczenie przed nieautoryzowanym wywołaniem
   const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Brak autoryzacji' });
@@ -49,45 +49,43 @@ export default async function handler(req, res) {
       timeZone: 'Europe/Warsaw'
     });
 
-    // 2. Wywołanie sztucznej inteligencji
-    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+    // 2. Sprawdzenie, czy dodałeś nowy klucz do Vercela
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("Brak klucza GEMINI_API_KEY w ustawieniach Vercel");
+    }
+
+    // 3. Wywołanie darmowego API Gemini (model 2.5 Pro z dostępem do sieci)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
+    
+    const geminiRes = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'interleaved-thinking-2025-05-14'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 4096,
-        system: SYSTEM_PROMPT,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [{
-          role: 'user',
-          content: `Dzisiaj jest ${dzisiaj}. Przeszukaj internet, znajdź mecze piłkarskie na dziś i wygeneruj raport bukmacherski jako JSON.`
-        }]
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: [{
+          role: "user",
+          parts: [{ text: `Dzisiaj jest ${dzisiaj}. Przeszukaj internet, znajdź mecze piłkarskie na dziś i wygeneruj raport bukmacherski jako JSON.` }]
+        }],
+        // Włączamy narzędzie do przeszukiwania Google
+        tools: [{ googleSearch: {} }],
+        generationConfig: {
+          responseMimeType: "application/json", // Wymuszamy idealny format JSON
+          temperature: 0.7
+        }
       })
     });
 
-    if (!claudeRes.ok) {
-      const err = await claudeRes.text();
-      throw new Error(`Claude API error: ${claudeRes.status} — ${err}`);
+    if (!geminiRes.ok) {
+      const err = await geminiRes.text();
+      throw new Error(`Gemini API error: ${geminiRes.status} — ${err}`);
     }
 
-    const claudeData = await claudeRes.json();
+    const geminiData = await geminiRes.json();
 
-    // 3. Wyciągnięcie tekstu z odpowiedzi
-    const teksty = claudeData.content
-      .filter(b => b.type === 'text')
-      .map(b => b.text)
-      .join('');
-
-    // 4. Parsowanie JSON z odpowiedzi Claude
-    const jsonMatch = teksty.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('Brak JSON w odpowiedzi Claude');
-
-    const raport = JSON.parse(jsonMatch[0]);
+    // 4. Parsowanie odpowiedzi
+    const odpowiedzTekst = geminiData.candidates[0].content.parts[0].text;
+    const raport = JSON.parse(odpowiedzTekst);
     raport.wygenerowano = new Date().toISOString();
 
     // 5. Zapis do bazy danych Vercel KV
