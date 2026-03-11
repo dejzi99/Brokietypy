@@ -1,0 +1,26 @@
+name: Codzienna Analiza
+on:
+  schedule:
+    - cron: '30 15 * * *' # 16:30 czasu polskiego
+  workflow_dispatch: # Pozwala odpalić ręcznie guzikiem
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Generuj raport
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate.js
+      - name: Zapisz zmiany w kodzie
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add public/raport.json
+          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
+          git push
