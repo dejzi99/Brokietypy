@@ -1,5 +1,7 @@
 // api/generate.js
 
+// api/generate.js
+
 export const config = { maxDuration: 60 };
 
 const SYSTEM_PROMPT = `
@@ -13,6 +15,7 @@ SZUKAJ anomalii:
 • Gwałtowne spadki kursów (dropping odds)
 • Rozbieżności H2H vs aktualne kursy
 • Niszowe ligi gdzie rynek się myli
+- Analizuj także ligi top 5 
 
 Odpowiedz w formacie JSON (TYLKO JSON, bez żadnego tekstu przed ani po):
 {
@@ -37,7 +40,6 @@ Dla pola "value" używaj wyłącznie: "wysokie", "umiarkowane" lub "spekulatywne
 `;
 
 export default async function handler(req, res) {
-  // 1. Zabezpieczenie przed nieautoryzowanym wywołaniem
   const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Brak autoryzacji' });
@@ -49,13 +51,12 @@ export default async function handler(req, res) {
       timeZone: 'Europe/Warsaw'
     });
 
-    // 2. Sprawdzenie, czy dodałeś nowy klucz do Vercela
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       throw new Error("Brak klucza GEMINI_API_KEY w ustawieniach Vercel");
     }
 
-    // 3. Wywołanie darmowego API Gemini (model 2.5 Pro z dostępem do sieci)
+    // Używamy darmowego modelu Flash
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const geminiRes = await fetch(url, {
@@ -67,10 +68,9 @@ export default async function handler(req, res) {
           role: "user",
           parts: [{ text: `Dzisiaj jest ${dzisiaj}. Przeszukaj internet, znajdź mecze piłkarskie na dziś i wygeneruj raport bukmacherski jako JSON.` }]
         }],
-        // Włączamy narzędzie do przeszukiwania Google
+        // Zostawiamy wyszukiwarkę, ale usuwamy konfliktujący responseMimeType
         tools: [{ googleSearch: {} }],
         generationConfig: {
-          responseMimeType: "application/json", // Wymuszamy idealny format JSON
           temperature: 0.7
         }
       })
@@ -82,13 +82,15 @@ export default async function handler(req, res) {
     }
 
     const geminiData = await geminiRes.json();
-
-    // 4. Parsowanie odpowiedzi
     const odpowiedzTekst = geminiData.candidates[0].content.parts[0].text;
-    const raport = JSON.parse(odpowiedzTekst);
+
+    // Parsujemy odpowiedź ręcznie, wycinając sam JSON
+    const jsonMatch = odpowiedzTekst.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Brak JSON w odpowiedzi Gemini');
+
+    const raport = JSON.parse(jsonMatch[0]);
     raport.wygenerowano = new Date().toISOString();
 
-    // 5. Zapis do bazy danych Vercel KV
     const { kv } = await import('@vercel/kv');
     await kv.set('raport:latest', JSON.stringify(raport));
     await kv.set(`raport:${new Date().toISOString().split('T')[0]}`, JSON.stringify(raport));
