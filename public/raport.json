@@ -1,39 +1,44 @@
 {
   "mecze": [
     {
-      "godzina": "19:00",
-      "mecz": "Al Ahly - Pyramids FC (Egyptian Premier League)",
+      "data": "11.03.2026",
+      "godzina": "13:00",
+      "mecz": "Persib Bandung - Arema FC (Liga 1 Indonezja)",
       "typ": "Powyżej 2.5 gola",
-      "kurs": "2.15",
-      "analiza": "System wykrył anomalię kursową w kierunku 'Powyżej 2.5 gola'. Mimo historycznej tendencji do zaciętych spotkań, ostatnie analizy taktyczne pokazują, że obie drużyny przyjęły bardziej otwarty styl gry, co prowadzi do większej liczby szans. Spadek kursu jest reakcją rynku na informacje o osłabieniach w defensywie i zwiększoną ofensywność, która nie była początkowo wliczona w kursy bukmacherskie."
-    },
-    {
-      "godzina": "20:30",
-      "mecz": "Al-Hilal - Al-Nassr (Saudi Pro League)",
-      "typ": "Powyżej 9.5 rożnych",
-      "kurs": "1.95",
-      "analiza": "W Rijadzkich Derbach często panuje intensywność, która przekłada się na liczne akcje skrzydłowe. Nasz system zidentyfikował niedoszacowanie linii rożnych; pomimo typowego skupienia na strzelcach, dane historyczne i analiza taktyki obu zespołów wskazują na agresywne ataki z flank. Początkowe kursy nie odzwierciedlały wysokiego potencjału na rzuty rożne, co jest korygowane przez napływ inteligentnego kapitału."
-    },
-    {
-      "godzina": "11:00",
-      "mecz": "Urawa Red Diamonds - Kawasaki Frontale (J1 League)",
-      "typ": "Kawasaki Frontale Powyżej 1.5 gola",
-      "kurs": "2.20",
-      "analiza": "Anomalia kursowa wskazuje na zawyżony kurs dla 'Kawasaki Frontale Powyżej 1.5 gola'. Pomimo ostatniej niestabilności formy Urawy, rynek początkowo przecenił ich zdolności defensywne. Analiza statystyk xG oraz niedawnych występów Kawasaki sugeruje, że ich siła ofensywna jest niedoszacowana i są w stanie dwukrotnie pokonać bramkarza Urawy."
-    },
-    {
-      "godzina": "20:30",
-      "mecz": "Fulham - Nottingham Forest (Premier League)",
-      "typ": "Fulham wygra mecz",
       "kurs": "2.05",
-      "analiza": "Kurs na zwycięstwo Fulham uległ znaczącemu spadkowi, co jest sygnałem anomalii. Fulham, choć nieregularne na wyjazdach, jest wyjątkowo mocne u siebie, zwłaszcza przeciwko zespołom z dolnej połowy tabeli, takim jak Nottingham Forest. Nasze algorytmy wykryły, że początkowy kurs nie uwzględniał w pełni przewagi własnego boiska oraz słabości Forest na wyjazdach, gdzie często tracą bramki w drugiej połowie."
+      "analiza": "System wykrył nietypowo wysoki przepływ kapitału na powyżej 2.5 gola, pomimo początkowo ostrożnych kursów bukmacherów. Dane historyczne z ostatnich spotkań obu drużyn wskazują na tendencję do ofensywnej gry i dużą liczbę bramek, co jest niedoszacowane w obecnym kursie. Dodatkowo, analiza wskaźników oczekiwanych goli (xG) z ostatnich 5 meczów obu zespołów przewyższa średnią ligową, sugerując wysoki potencjał bramkowy."
     },
     {
+      "data": "11.03.2026",
+      "godzina": "15:30",
+      "mecz": "Al Ain FC - Sharjah FC (UAE Pro League)",
+      "typ": "Al Ain FC Handicap Azjatycki -1.5",
+      "kurs": "2.20",
+      "analiza": "Zarejestrowano nagły spadek kursu na zwycięstwo Al Ain z handicapem. Analiza formy wskazuje na dominację Al Ain w ostatnich meczach domowych, często wygrywających z przewagą 2 lub więcej bramek. Dodatkowo, raporty o kluczowych absencjach w drużynie Sharjah (dwóch podstawowych obrońców), zdają się być niewystarczająco uwzględnione w początkowych kursach, co wywołało korektę rynku przez smart money."
+    },
+    {
+      "data": "11.03.2026",
+      "godzina": "18:00",
+      "mecz": "Club América - Pumas UNAM (Liga MX Clausura Meksyk)",
+      "typ": "Obie drużyny strzelą gola (BTTS)",
+      "kurs": "1.90",
+      "analiza": "System wykrył stabilny, ale rosnący trend zakładów na 'obie drużyny strzelą gola', co doprowadziło do lekkiego wzrostu kursu na BTTS. Historycznie, mecze pomiędzy tymi zespołami są znane z otwartej gry i wzajemnych bramek. Pomimo defensywnego nastawienia, które sugerowały początkowe linie, dane xG wskazują na wysoką szansę na strzelenie bramki przez obie strony, co zostało odzwierciedlone przez anomalię w przepływie kapitału w ostatnich godzinach."
+    },
+    {
+      "data": "11.03.2026",
       "godzina": "20:45",
-      "mecz": "Bologna - Atalanta (Serie A)",
-      "typ": "Obie drużyny strzelą gola - Tak",
-      "kurs": "1.80",
-      "analiza": "Wykryto anomalię w kursie na 'Obie drużyny strzelą gola - Tak'. Bologna prezentuje ostatnio bardzo ofensywny futbol na swoim stadionie, jednocześnie czasami dopuszczając do sytuacji bramkowych rywali. Atalanta z kolei zawsze gra ofensywnie i rzadko kończy mecz bez zdobycia bramki. Rynek początkowo niedoszacował ofensywnego potencjału obu ekip w bezpośrednim starciu, co skutkuje korektą kursów w stronę wysokiej prawdopodobieństwa goli z obu stron."
+      "mecz": "West Ham United - Fulham FC (Premier League Anglia)",
+      "typ": "Powyżej 9.5 rzutów rożnych",
+      "kurs": "1.85",
+      "analiza": "Anomalia rzutów rożnych. Pomimo, że obydwie drużyny nie są statystycznie liderami w generowaniu rożnych, ostatnie analizy taktyczne wskazują na dużą tendencję do gry skrzydłami i strzałów z dystansu, co często skutkuje rzutami rożnymi. System zanotował znaczący wzrost liczby zakładów na powyżej 9.5 rzutów rożnych, co sugeruje, że rynek antycypuje bardziej otwarty i atakujący mecz niż zakładały początkowe linie bukmacherów."
+    },
+    {
+      "data": "11.03.2026",
+      "godzina": "22:00",
+      "mecz": "Villarreal CF - CA Osasuna (La Liga Hiszpania)",
+      "typ": "Poniżej 2.5 gola",
+      "kurs": "2.00",
+      "analiza": "Wykryto anomalię 'poniżej 2.5 gola'. Rynek początkowo faworyzował więcej bramek, jednak po analizie ostatnich występów defensywnych obu zespołów, które zaskakująco poprawiły swoje wskaźniki xGA (oczekiwane stracone gole), kurs na 'under' zaczął gwałtownie spadać. Dodatkowo, doniesienia o kontuzji kluczowego napastnika Villarreal, choć oficjalnie bagatelizowane, mogły mieć wpływ na decyzje bukmacherów i przepływ zakładów."
     }
   ]
 }
