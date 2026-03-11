@@ -1,30 +1,51 @@
 name: Codzienna Analiza
 on:
   schedule:
-    - cron: '30 15 * * *' # 16:30 czasu polskiego
-  workflow_dispatch: # Pozwala odpalić ręcznie guzikiem
+    # Uruchamia się codziennie o 15:30 UTC (czyli 16:30 lub 17:30 czasu polskiego)
+    - cron: '30 15 * * *' 
+  workflow_dispatch: # Pozwala na ręczne kliknięcie "Run workflow"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # Dodatkowe zabezpieczenie uprawnień zapisu w kodzie
+    permissions:
+      contents: write
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      - name: Pobierz kod
-        uses: actions/checkout@v4 # Zaktualizowane z v3 na v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4 # Zaktualizowane z v3 na v4
+      - name: Pobierz kod repozytorium
+        uses: actions/checkout@v4
         with:
-          node-version: '22' # Zaktualizowane z 20 na 22
-      - name: Generuj raport
+          # Pobiera całą historię, co jest ważne przy 'git pull --rebase'
+          fetch-depth: 0 
+
+      - name: Ustawienie Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Generuj raport przez Gemini AI
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate.js
-     - name: Zapisz zmiany w kodzie
+
+      - name: Zapisz raport w repozytorium
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
+          
+          # Dodaj nowo wygenerowany plik
           git add public/raport.json
-          # Pobieramy Twoje ostatnie zmiany, żeby nie było konfliktu
+          
+          # Pobierz ewentualne zmiany, które zrobiłeś ręcznie w międzyczasie
           git pull --rebase origin main
-          # Zapisujemy raport i wysyłamy
-          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
+          
+          # Jeśli są zmiany (nowy raport), to je zatwierdź
+          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || echo "Brak zmian do zapisania"
+          
+          # Wyślij plik na serwer
           git push origin main
