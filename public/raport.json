@@ -1,1 +1,1 @@
-{"mecze":[{"godzina":"BŁĄD","mecz":"Google odrzuciło zapytanie","typ":"?","kurs":"0.00","analiza":"Filtry bezpieczeństwa nadal blokują treści sportowe. Sprawdź logi w GitHub Actions."}]}
+{"mecze":[{"godzina":"BŁĄD","mecz":"Odpowiedź od Google:","typ":"!","kurs":"0.00","analiza":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."}]}
