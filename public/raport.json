@@ -1,1 +1,1 @@
-{"mecze":[{"godzina":"BŁĄD","mecz":"Błąd połączenia","typ":"!","kurs":"0.00","analiza":"models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."}]}
+{"mecze":[{"godzina":"BŁĄD","mecz":"Błąd skryptu","typ":"!","kurs":"0.00","analiza":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."}]}
