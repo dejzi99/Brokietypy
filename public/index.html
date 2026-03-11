@@ -67,9 +67,38 @@
         fetch('/raport.json?t=' + Date.now())
             .then(res => res.json())
             .then(data => {
-                document.getElementById('count').innerText = data.mecze.length;
-                document.getElementById('date').innerText = new Date().toLocaleDateString();
+    // 1. STRAŻNIK: Jeśli nie ma meczów w pliku, pokaż info i przerwij
+    if (!data.mecze || !Array.isArray(data.mecze) || data.mecze.length === 0) {
+        document.getElementById('results').innerHTML = `
+            <div style="text-align:center; padding: 40px; color: #555;">
+                <p>🤖 AI właśnie analizuje dzisiejszą ofertę...</p>
+                <small>Status: ${data.status || 'Oczekiwanie'}</small><br>
+                <button onclick="location.reload()" style="margin-top:10px; background:#222; color:white; border:1px solid #444; padding:5px 15px; border-radius:5px; cursor:pointer;">Odśwież stronę</button>
+            </div>`;
+        return; // Nie idź dalej, bo nie ma czego wyświetlać
+    }
 
+    // 2. Jeśli mecze SĄ, wyświetl je normalnie:
+    document.getElementById('count').innerText = data.mecze.length;
+    document.getElementById('date').innerText = new Date().toLocaleDateString();
+
+    let html = '';
+    data.mecze.forEach(m => {
+        html += `
+            <div class="match-card">
+                <div>
+                    <div class="match-meta">${m.godzina || 'Dziś'} • Piłka Nożna</div>
+                    <div class="match-name">${m.mecz}</div>
+                    <div class="reasoning">${m.analiza}</div>
+                </div>
+                <div style="display:flex; align-items:center;">
+                    <div class="pick-box">${m.typ}</div>
+                    <div class="odds">@${m.kurs}</div>
+                </div>
+            </div>`;
+    });
+    document.getElementById('results').innerHTML = html;
+})
                 let html = '';
                 data.mecze.forEach(m => {
                     html += `
