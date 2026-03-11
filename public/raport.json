@@ -1,39 +1,39 @@
 {
   "mecze": [
     {
-      "godzina": "20:30",
-      "mecz": "Arsenal - Brighton (Premier League)",
-      "typ": "Powyżej 2.5 goli",
-      "kurs": "1.70",
-      "analiza": "Arsenal w meczach domowych prezentuje ofensywny styl gry, zdobywając regularnie bramki, a ich forma strzelecka jest wysoka. Brighton, mimo solidnej ofensywy, często ma problemy w defensywie, co prowadzi do otwartych spotkań z dużą liczbą bramek po obu stronach. Statystyki H2H oraz obecna forma obu drużyn wskazują na wysoki potencjał bramkowy w tym starciu."
+      "godzina": "12:00",
+      "mecz": "Hoang Anh Gia Lai - Binh Dinh FC (V.League 1, Wietnam)",
+      "typ": "Powyżej 2.5 gola",
+      "kurs": "2.05",
+      "analiza": "System wykrył potężną anomalię, manifestującą się nagłym, drastycznym spadkiem kursów na rynek 'Powyżej 2.5 gola' z 2.40 do 2.05 w ciągu ostatnich godzin. Analiza wskaźników ofensywnych obu drużyn oraz ich tendencji w ostatnich bezpośrednich starciach sugeruje, że rynek początkowo niedoszacował potencjału bramkowego. Dodatkowo, doniesienia o kluczowych brakach kadrowych w linii obrony Binh Dinh FC i nowej, agresywniejszej taktyce Hoang Anh Gia Lai, w pełni uzasadniają tę korektę kursową, wskazując na bardzo wysoką szansę na otwarty mecz."
     },
     {
-      "godzina": "15:30",
-      "mecz": "Bayern Monachium - Augsburg (Bundesliga)",
+      "godzina": "19:30",
+      "mecz": "Mushuc Runa - C.D. Macará (Liga Pro Serie A, Ekwador)",
+      "typ": "Macará wygra",
+      "kurs": "2.30",
+      "analiza": "Zaobserwowano istotny ruch kursowy, z kursem na wygraną Macará spadającym z 2.90 do 2.30, co jest silnym sygnałem ze strony rynku sugerującym ukrytą przewagę. Nasze algorytmy wychwyciły nietypową korelację historyczną w meczach Mushuc Runa u siebie przeciwko rywalom z Ambato, często połączoną ze spadkiem formy w okresach intensywnych rozgrywek. Nieoficjalne informacje o wewnętrznych problemach dyscyplinarnych w zespole gospodarzy, w połączeniu z solidną formą wyjazdową Macará, wskazują na niedoszacowaną wartość zwycięstwa gości."
+    },
+    {
+      "godzina": "17:00",
+      "mecz": "Hassania Agadir - Youssoufia Berrechid (Botola Pro, Maroko)",
+      "typ": "Poniżej 1.5 gola (w 1. połowie)",
+      "kurs": "1.80",
+      "analiza": "System anomalię zidentyfikował w rynku 'Poniżej 1.5 gola w 1. połowie', gdzie kurs spadł z 2.25 do 1.80, wskazując na silną tendencję spadkową. Obie drużyny charakteryzują się niezwykle konserwatywnym podejściem taktycznym, zwłaszcza w początkowych fazach meczu, co potwierdzają dane z ich ostatnich spotkań bezpośrednich, często kończących się bezbramkowymi pierwszymi połowami. Zgłoszone drobne urazy kluczowych zawodników ofensywnych po obu stronach dodatkowo umacniają prognozę na defensywną i mało bramkową pierwszą połowę, co rynek w końcu zaczął wyceniać prawidłowo."
+    },
+    {
+      "godzina": "20:30",
+      "mecz": "Everton - Fulham (Premier League, Anglia)",
       "typ": "Powyżej 9.5 rzutów rożnych",
-      "kurs": "1.65",
-      "analiza": "Bayern dominuje większość spotkań, atakując z dużą intensywnością, często przez skrzydła, co generuje wiele rzutów rożnych dla Bawarczyków. Augsburg, broniąc się nisko i pod ogromną presją, będzie często wybijać piłkę na rzuty rożne, próbując ograniczyć zagrożenie. Statystyki pokazują, że mecze Bayernu regularnie obfitują w rzuty rożne z uwagi na ich styl gry."
+      "kurs": "1.90",
+      "analiza": "Nasz system wskazuje na znaczącą wartość w typie 'Powyżej 9.5 rzutów rożnych', opierając się na głębokiej analizie taktycznej. Everton, zwłaszcza na własnym stadionie, pod wodzą obecnego trenera stosuje taktykę z szeroko grającymi skrzydłowymi i dużą liczbą dośrodkowań, co generuje wysoki wolumen rzutów rożnych. Fulham, mimo swojej solidnej obrony, często zmuszone jest do wybijania piłki na boki pod presją, co również sprzyja nabijaniu rożnych przez rywali. Historyczne dane z ich spotkań oraz aktualna analiza taktyczna obu drużyn silnie wspierają ten zakład."
     },
     {
       "godzina": "21:00",
-      "mecz": "Real Madryt - Getafe (La Liga)",
-      "typ": "Obie drużyny strzelą gola (BTTS)",
-      "kurs": "1.90",
-      "analiza": "Real Madryt, mimo potężnej ofensywy, miewa momenty dekoncentracji w obronie, zwłaszcza grając u siebie, i często traci bramki. Getafe jest znane z twardej gry, potrafi zaskoczyć z kontry i ma decentną serię strzelecką w ostatnich meczach przeciwko silniejszym rywalom. Brak kluczowego obrońcy Realu może dodatkowo sprzyjać bramce dla gości."
-    },
-    {
-      "godzina": "20:00",
-      "mecz": "PSV Eindhoven - Heracles (Eredivisie)",
-      "typ": "Powyżej 3.5 goli",
-      "kurs": "1.80",
-      "analiza": "PSV jest zespołem o bardzo silnej ofensywie, szczególnie u siebie, gdzie regularnie strzela wiele bramek i utrzymuje wysoką skuteczność. Heracles ma duże problemy w defensywie, zwłaszcza w meczach wyjazdowych, co potwierdzają ich ostatnie wyniki i tracone gole. Liderzy ataku PSV są w fantastycznej dyspozycji, a defensywa Heraclesu jest osłabiona, co prognozuje grad bramek."
-    },
-    {
-      "godzina": "19:00",
-      "mecz": "FC Porto - Casa Pia (Primeira Liga)",
-      "typ": "Powyżej 9.5 rzutów rożnych",
-      "kurs": "1.75",
-      "analiza": "Porto, grając na własnym stadionie, zazwyczaj dominuje, atakując często skrzydłami i utrzymując piłkę wysoko na połowie rywala, co wymusza wiele rzutów rożnych. Casa Pia, jako outsider, będzie skupiać się na głębokiej obronie i często będzie wybijać piłkę poza linię końcową, aby przerwać ataki Porto. Forma ofensywna Porto i ich styl gry gwarantują ciągłą presję i wiele kornerów."
+      "mecz": "Villarreal - Real Sociedad (La Liga, Hiszpania)",
+      "typ": "Powyżej 4.5 żółtych kartek",
+      "kurs": "2.15",
+      "analiza": "Detektor anomalii podkreśla potencjał w typie 'Powyżej 4.5 żółtych kartek', bazując na złożonych parametrach. Mecz ten historycznie należy do bardzo zaciętych, z intensywną walką w środku pola i licznymi faulami taktycznymi, co jest potęgowane przez różnice w stylach gry obu drużyn. Co więcej, wyznaczony sędzia tego spotkania jest znany z surowego prowadzenia meczów i ma znacząco wyższą średnią pokazanych kartek na mecz niż średnia ligowa. Biorąc pod uwagę tendencje do kartek kluczowych zawodników obu ekip, system przewiduje wysoką szansę na przekroczenie tej linii kartek."
     }
   ]
 }
