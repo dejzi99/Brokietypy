@@ -1,21 +1,5 @@
 // api/generate.js
-// Wywoływane automatycznie codziennie o 7:00 UTC przez Vercel Cron
-import { NextResponse } from 'next/server';
 
-export async function GET(request) {
-  // 1. Pobieramy nagłówek autoryzacji, który wysyła Vercel
-  const authHeader = request.headers.get('authorization');
-
-  // 2. Sprawdzamy, czy nagłówek istnieje i czy pasuje do naszego CRON_SECRET
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response('Brak autoryzacji', { status: 401 });
-  }
-
-  // TUTAJ ROZPOCZYNA SIĘ TWÓJ WŁAŚCIWY KOD ANALIZY...
-  // np. const data = await fetch...
-  
-  return NextResponse.json({ success: true });
-}
 export const config = { maxDuration: 60 };
 
 const SYSTEM_PROMPT = `
@@ -53,10 +37,10 @@ Dla pola "value" używaj wyłącznie: "wysokie", "umiarkowane" lub "spekulatywne
 `;
 
 export default async function handler(req, res) {
-  // Zabezpieczenie przed nieautoryzowanym wywołaniem
-  const secret = req.query.secret || req.headers['x-cron-secret'];
-  if (secret !== process.env.CRON_SECRET && process.env.CRON_SECRET) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  // 1. Zabezpieczenie przed nieautoryzowanym wywołaniem z zewnątrz
+  const authHeader = req.headers.authorization;
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).json({ error: 'Brak autoryzacji' });
   }
 
   try {
@@ -65,7 +49,7 @@ export default async function handler(req, res) {
       timeZone: 'Europe/Warsaw'
     });
 
-    // Wywołaj Claude Sonnet 4.6 z web search
+    // 2. Wywołanie sztucznej inteligencji
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -93,20 +77,20 @@ export default async function handler(req, res) {
 
     const claudeData = await claudeRes.json();
 
-    // Wyciągnij tekst z odpowiedzi
+    // 3. Wyciągnięcie tekstu z odpowiedzi
     const teksty = claudeData.content
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('');
 
-    // Parsuj JSON z odpowiedzi Claude
+    // 4. Parsowanie JSON z odpowiedzi Claude
     const jsonMatch = teksty.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error('Brak JSON w odpowiedzi Claude');
 
     const raport = JSON.parse(jsonMatch[0]);
     raport.wygenerowano = new Date().toISOString();
 
-    // Zapisz w Vercel KV
+    // 5. Zapis do bazy danych Vercel KV
     const { kv } = await import('@vercel/kv');
     await kv.set('raport:latest', JSON.stringify(raport));
     await kv.set(`raport:${new Date().toISOString().split('T')[0]}`, JSON.stringify(raport));
