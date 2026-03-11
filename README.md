@@ -52,7 +52,7 @@ Poczekaj ~30 sekund — Claude przeszuka internet i wygeneruje raport.
 Potem wejdź na stronę główną i sprawdź czy raport się pojawił!
 
 ### Krok 6 — Cron (automatyczny)
-Raport będzie się generował automatycznie **codziennie o 7:00 UTC (9:00 CET)**.
+Raport będzie się generował automatycznie **codziennie o 17:00 CET**.
 Skonfigurowane w pliku `vercel.json`.
 
 ---
