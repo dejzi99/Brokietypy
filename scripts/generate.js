@@ -8,29 +8,17 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  // PROMPT "SUPER-ANALITYK": Szukamy rzutów rożnych, goli i wygranych w topowych oraz niszowych ligach.
-  // Zwróć uwagę, że celowo unikam słów o hazardzie.
-  const promptText = `Jesteś zaawansowanym systemem analitycznym piłki nożnej. 
-  Znajdź 5 zdarzeń boiskowych o najwyższym matematycznym prawdopodobieństwie wystąpienia w dzisiejszych meczach (${new Date().toLocaleDateString()}).
-  Wybierz minimum 2 mecze z Top 5 lig europejskich oraz minimum 2 mecze z lig niszowych/egzotycznych.
-  Zdarzenia mogą dotyczyć: końcowego wyniku (1X2), liczby goli (np. Powyżej 2.5), rzutów rożnych lub fauli.
-  
-  Dla każdego zdarzenia podaj:
-  - 'godzina': czas startu
-  - 'mecz': uczestnicy i liga (np. "Arsenal - Luton (Premier League)")
-  - 'typ': prognozowane zdarzenie (np. "Powyżej 9.5 rzutów rożnych", "1", "Obie strzelą")
-  - 'kurs': oszacowana wartość statystyczna od 1.40 do 2.50
-  - 'analiza': bardzo szczegółowe techniczne uzasadnienie w 3-4 zdaniach (analiza formy, braków kadrowych, stylu gry obu drużyn).
-  
-  Odpowiedz WYŁĄCZNIE jako JSON:
+  // TEST: Prosimy o zwykłe, historyczne mecze, żeby sprawdzić czy AI w ogóle chce z nami gadać
+  const promptText = `Wymień 5 historycznych meczów piłkarskich z Ligi Mistrzów.
+  Odpowiedz tylko jako JSON:
   {
     "mecze": [
       {
-        "godzina": "20:00",
-        "mecz": "Nazwa Klubu - Nazwa Klubu",
-        "typ": "Powyżej 2.5 gola",
-        "kurs": "1.75",
-        "analiza": "Bardzo szczegółowy opis oparty na statystykach i taktyce..."
+        "godzina": "20:45",
+        "mecz": "Real Madryt - Bayern",
+        "typ": "1",
+        "kurs": "Historyczny test",
+        "analiza": "Krótki opis tego historycznego meczu."
       }
     ]
   }`;
@@ -53,7 +41,6 @@ async function run() {
     });
 
     const resData = await response.json();
-    console.log("LOG Z AI:", JSON.stringify(resData));
 
     if (resData.candidates && resData.candidates[0].content) {
       let rawText = resData.candidates[0].content.parts[0].text;
@@ -62,18 +49,29 @@ async function run() {
       const cleanJson = rawText.substring(start, end);
       
       fs.writeFileSync(filePath, cleanJson);
-      console.log("✅ SUKCES! Zaawansowane analizy pobrane.");
+      console.log("✅ SUKCES! AI odpowiedziało.");
     } else {
-      throw new Error("Blokada Google lub brak danych");
+      // Wyciągamy DOKŁADNY błąd z Google
+      let exactError = "Nieznany błąd zablokowania.";
+      if (resData.error) exactError = resData.error.message;
+      else if (resData.promptFeedback) exactError = "Blokada filtrów (Safety): " + JSON.stringify(resData.promptFeedback);
+      
+      throw new Error(exactError);
     }
   } catch (e) {
-    console.error("❌ BŁĄD:", e.message);
-    const emergencyData = {
+    // POKAZUJEMY BŁĄD BEZPOŚREDNIO NA TWOJEJ STRONIE
+    const diagnosticData = {
       mecze: [
-        { godzina: "BŁĄD", mecz: "Google odrzuciło zapytanie", typ: "?", kurs: "0.00", analiza: "Filtry bezpieczeństwa nadal blokują treści sportowe. Sprawdź logi w GitHub Actions." }
+        { 
+          godzina: "BŁĄD", 
+          mecz: "Odpowiedź od Google:", 
+          typ: "!", 
+          kurs: "0.00", 
+          analiza: e.message // Tu wyświetli się prawdziwy powód!
+        }
       ]
     };
-    fs.writeFileSync(filePath, JSON.stringify(emergencyData));
+    fs.writeFileSync(filePath, JSON.stringify(diagnosticData));
   }
 }
 run();
