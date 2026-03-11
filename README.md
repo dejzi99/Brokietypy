@@ -9,7 +9,7 @@ bukmacher/
 ├── public/
 │   └── index.html    ← strona frontendowa
 ├── package.json
-├── vercel.json       ← konfiguracja crona (codziennie 7:00 UTC)
+├── vercel.json       ← konfiguracja crona (codziennie 17:05 CET)
 └── README.md
 ```
 
