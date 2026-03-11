@@ -1,7 +1,21 @@
 // api/generate.js
 // Wywoływane automatycznie codziennie o 7:00 UTC przez Vercel Cron
-// Możesz też wywołać ręcznie: GET /api/generate?secret=TWOJ_SECRET
+import { NextResponse } from 'next/server';
 
+export async function GET(request) {
+  // 1. Pobieramy nagłówek autoryzacji, który wysyła Vercel
+  const authHeader = request.headers.get('authorization');
+
+  // 2. Sprawdzamy, czy nagłówek istnieje i czy pasuje do naszego CRON_SECRET
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Brak autoryzacji', { status: 401 });
+  }
+
+  // TUTAJ ROZPOCZYNA SIĘ TWÓJ WŁAŚCIWY KOD ANALIZY...
+  // np. const data = await fetch...
+  
+  return NextResponse.json({ success: true });
+}
 export const config = { maxDuration: 60 };
 
 const SYSTEM_PROMPT = `
