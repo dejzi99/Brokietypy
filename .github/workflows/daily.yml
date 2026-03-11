@@ -1,7 +1,7 @@
 name: Codzienna Analiza
 on:
   schedule:
-    - cron: '30 15 * * *' # Codziennie o 16:30 czasu polskiego
+    - cron: '0 12 * * *' # Codziennie o 16:30 czasu polskiego
   workflow_dispatch: 
 
 jobs:
