@@ -56,7 +56,7 @@ export default async function handler(req, res) {
     }
 
     // 3. Wywołanie darmowego API Gemini (model 2.5 Pro z dostępem do sieci)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const geminiRes = await fetch(url, {
       method: 'POST',
