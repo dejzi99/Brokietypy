@@ -1,7 +1,7 @@
 name: Codzienna Analiza
 on:
   schedule:
-    - cron: '30 15 * * *' 
+    - cron: '30 15 * * *' # Codziennie o 16:30 czasu polskiego
   workflow_dispatch: 
 
 jobs:
@@ -16,30 +16,28 @@ jobs:
       - name: Pobierz kod
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Pobiera całą historię zmian
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
 
-      - name: Generuj raport
+      - name: Generuj raport i dane finansowe
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           mkdir -p public
           node scripts/generate.js
 
-      - name: Zapisz i Wymuś (Force Push)
+      - name: Publikacja na Vercel
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           git add public/raport.json
+          # Usunięto [skip ci] - to wymusi odświeżenie strony na Vercel
+          git commit -m "Aktualizacja danych: Mecze + Crypto + Portfel" || exit 0
           
-          # Zrób commit, a jeśli plik się nie zmienił, po prostu zakończ
-          git commit -m "Automatyczna aktualizacja raportu [skip ci]" || exit 0
-          
-          # KLUCZOWA ZMIANA: Pobieramy zmiany i WYMUSZAMY wysłanie naszego raportu
           git pull --rebase origin main
           git push origin main --force
