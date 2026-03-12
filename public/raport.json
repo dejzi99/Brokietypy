@@ -1,1 +1,1 @@
-{"mecze":[{"data":"12.03.2026","godzina":"BŁĄD","mecz":"Błąd systemu statystyk","typ":"!","kurs":"0.00","analiza":"Brak klucza RAPIDAPI_KEY. Upewnij się, że dodałeś go w Settings -> Secrets na GitHubie."}]}
+{"mecze":[{"data":"12.03.2026","godzina":"BŁĄD","mecz":"Błąd systemu statystyk","typ":"!","kurs":"0.00","analiza":"Brak jakichkolwiek meczów na dzisiaj w bazie API-Football."}]}
