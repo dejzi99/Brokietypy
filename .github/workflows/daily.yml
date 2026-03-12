@@ -26,6 +26,7 @@ jobs:
       - name: Generuj raport i dane finansowe
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
         run: |
           mkdir -p public
           node scripts/generate.js
