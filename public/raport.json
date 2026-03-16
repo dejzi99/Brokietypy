@@ -1,44 +1,44 @@
 {
   "mecze": [
     {
-      "data": "15.03.2026",
-      "godzina": "15:00",
-      "mecz": "Manchester United vs Aston Villa (Premier League)",
-      "typ": "Powyżej 2.5 goli",
+      "data": "16.03.2026",
+      "godzina": "21:00",
+      "mecz": "Brentford vs Wolves (Premier League)",
+      "typ": "Powyżej 9.5 rzutów rożnych",
       "kurs": "1.75",
-      "analiza": "Mecz na szczycie Premier League, gdzie obie drużyny prezentują ofensywny styl gry, choć z różną skutecznością w obronie. Manchester United, grając u siebie, będzie dążył do dominacji i przełamania rywala. Aston Villa pod wodzą Unaia Emery'ego to zespół, który nie boi się atakować i potrafi zaskoczyć. Spodziewamy się otwartego spotkania z dużą liczbą sytuacji bramkowych, co powinno zaowocować przynajmniej trzema golami."
+      "analiza": "Brentford często gra skrzydłami i dośrodkowuje, a Wolves, broniąc się, potrafi zmuszać rywali do strzałów blokowanych na rzuty rożne. Spodziewam się dynamicznego meczu z wieloma atakami pozycyjnymi, co powinno przełożyć się na liczne korony po obu stronach. Oba zespoły charakteryzują się bezpośrednim stylem gry, co również sprzyja statystyce rzutów rożnych."
     },
     {
-      "data": "15.03.2026",
-      "godzina": "16:15",
-      "mecz": "Barcelona vs Sevilla (La Liga)",
-      "typ": "Obie drużyny strzelą (BTS)",
+      "data": "16.03.2026",
+      "godzina": "20:45",
+      "mecz": "Cremonese vs Fiorentina (Serie A)",
+      "typ": "Fiorentina wygra i Powyżej 1.5 gola w meczu",
+      "kurs": "2.10",
+      "analiza": "Fiorentina, mimo że bywa chimeryczna, ma znacznie większy potencjał ofensywny niż Cremonese, które walczy o utrzymanie i często ma problemy ze skutecznością. Spodziewam się dominacji 'Violi' i zdobycia przynajmniej dwóch bramek, co powinno wystarczyć do pewnego zwycięstwa nad niżej notowanym rywalem. Fiorentina będzie dążyć do umocnienia swojej pozycji w tabeli."
+    },
+    {
+      "data": "16.03.2026",
+      "godzina": "21:00",
+      "mecz": "Rayo Vallecano vs Levante (La Liga)",
+      "typ": "Obie drużyny strzelą gola (BTTS)",
       "kurs": "1.80",
-      "analiza": "Klasyk hiszpańskiej piłki, który zawsze dostarcza emocji. Barcelona, mimo że jest faworytem, często miewa momenty dekoncentracji w defensywie, pozwalając rywalom na stworzenie szans. Sevilla, nawet jeśli nie jest w szczytowej formie, posiada wystarczającą jakość w ataku, by wykorzystać ewentualne błędy i strzelić bramkę. Historia bezpośrednich pojedynków często wskazuje na wymianę ciosów, co czyni typ BTS bardzo atrakcyjnym."
+      "analiza": "Rayo Vallecano jest znane z ofensywnego stylu gry na własnym boisku, potrafi zaskoczyć, ale jednocześnie ma tendencje do tracenia bramek. Levante również dysponuje solidnym atakiem i będzie szukać punktów, grając odważnie. Oczekuję otwartego meczu, w którym obie ekipy znajdą drogę do siatki, tworząc dynamiczne widowisko."
     },
     {
-      "data": "15.03.2026",
-      "godzina": "03:30",
-      "mecz": "Los Angeles FC vs St. Louis City (Major League Soccer)",
-      "typ": "Powyżej 3.5 goli",
-      "kurs": "2.00",
-      "analiza": "Mecze w Major League Soccer słyną z dużej liczby bramek, a ten pojedynek ma potencjał, by być prawdziwą strzelaniną. LAFC to jeden z czołowych zespołów ligi, z potężną siłą ofensywną. St. Louis City, choć relatywnie nowa drużyna, pokazało, że potrafi grać odważnie i stwarzać sobie okazje. Ich styl gry, często bezkompromisowy, sprzyja otwartym spotkaniom. Spodziewamy się, że obie drużyny będą aktywnie szukać goli, co doprowadzi do wysokiego wyniku."
-    },
-    {
-      "data": "15.03.2026",
-      "godzina": "14:30",
-      "mecz": "Feyenoord vs Excelsior (Eredivisie)",
-      "typ": "Powyżej 8.5 rzutów rożnych",
+      "data": "16.03.2026",
+      "godzina": "00:00",
+      "mecz": "Chapecoense-sc vs Gremio (Serie A)",
+      "typ": "Poniżej 2.5 gola w meczu",
       "kurs": "1.65",
-      "analiza": "Rotterdamskie derby zawsze charakteryzują się wysoką intensywnością i walką. Feyenoord, grając u siebie jako faworyt, będzie dążył do narzucenia swojego stylu gry, co często oznacza wiele ataków skrzydłami i dośrodkowań. Excelsior, broniąc się i szukając swoich szans z kontry, również może wywalczyć cenne rzuty rożne. Spodziewamy się, że wysoka dynamika meczu i akcje podbramkowe z obu stron przełożą się na dużą liczbę stałych fragmentów gry z narożnika boiska."
+      "analiza": "Brazylijska Serie A często charakteryzuje się taktyczną i ostrożną grą, zwłaszcza w meczach, gdzie jedna z drużyn (Gremio) jest faworytem, a druga walczy o przetrwanie (Chapecoense-sc). Chapecoense będzie stawiać na solidną defensywę, a Gremio może mieć trudności z przełamaniem dobrze zorganizowanej obrony. Spodziewam się zaciętego spotkania z niewielką liczbą bramek."
     },
     {
-      "data": "15.03.2026",
-      "godzina": "14:45",
-      "mecz": "Zaglebie Lubin vs Lech Poznan (Ekstraklasa)",
-      "typ": "Lech Poznan wygra",
+      "data": "16.03.2026",
+      "godzina": "19:00",
+      "mecz": "Pogon Szczecin vs Korona Kielce (Ekstraklasa)",
+      "typ": "Powyżej 4.5 żółtych kartek",
       "kurs": "1.90",
-      "analiza": "Lech Poznań, pomimo zmiennej formy w tym sezonie, nadal posiada jeden z najsilniejszych składów w Ekstraklasie i walczy o czołowe pozycje. Zagłębie Lubin, choć potrafi być groźne na własnym stadionie, często ustępuje jakością indywidualną. Dla Lecha każdy punkt jest na wagę złota, a determinacja w walce o zwycięstwo powinna być widoczna. Zespół z Poznania ma potencjał, aby zdominować ten mecz i zdobyć komplet punktów, umacniając swoją pozycję w lidze."
+      "analiza": "Mecze w Ekstraklasie, zwłaszcza te o potencjalnie dużą stawkę dla obu zespołów i z udziałem drużyn o agresywnym stylu, często obfitują w kartki. Pogoń u siebie jest silna i zdeterminowana, a Korona, walcząc o ligowy byt, będzie walczyć o każdy centymetr boiska. Spodziewam się intensywnego, fizycznego spotkania, w którym sędzia będzie miał sporo pracy."
     }
   ]
 }
