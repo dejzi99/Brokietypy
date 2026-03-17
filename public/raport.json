@@ -1,44 +1,44 @@
 {
   "mecze": [
     {
-      "data": "16.03.2026",
+      "data": "17.03.2026",
       "godzina": "21:00",
-      "mecz": "Brentford vs Wolves (Premier League)",
-      "typ": "Powyżej 9.5 rzutów rożnych",
-      "kurs": "1.75",
-      "analiza": "Brentford często gra skrzydłami i dośrodkowuje, a Wolves, broniąc się, potrafi zmuszać rywali do strzałów blokowanych na rzuty rożne. Spodziewam się dynamicznego meczu z wieloma atakami pozycyjnymi, co powinno przełożyć się na liczne korony po obu stronach. Oba zespoły charakteryzują się bezpośrednim stylem gry, co również sprzyja statystyce rzutów rożnych."
-    },
-    {
-      "data": "16.03.2026",
-      "godzina": "20:45",
-      "mecz": "Cremonese vs Fiorentina (Serie A)",
-      "typ": "Fiorentina wygra i Powyżej 1.5 gola w meczu",
-      "kurs": "2.10",
-      "analiza": "Fiorentina, mimo że bywa chimeryczna, ma znacznie większy potencjał ofensywny niż Cremonese, które walczy o utrzymanie i często ma problemy ze skutecznością. Spodziewam się dominacji 'Violi' i zdobycia przynajmniej dwóch bramek, co powinno wystarczyć do pewnego zwycięstwa nad niżej notowanym rywalem. Fiorentina będzie dążyć do umocnienia swojej pozycji w tabeli."
-    },
-    {
-      "data": "16.03.2026",
-      "godzina": "21:00",
-      "mecz": "Rayo Vallecano vs Levante (La Liga)",
-      "typ": "Obie drużyny strzelą gola (BTTS)",
-      "kurs": "1.80",
-      "analiza": "Rayo Vallecano jest znane z ofensywnego stylu gry na własnym boisku, potrafi zaskoczyć, ale jednocześnie ma tendencje do tracenia bramek. Levante również dysponuje solidnym atakiem i będzie szukać punktów, grając odważnie. Oczekuję otwartego meczu, w którym obie ekipy znajdą drogę do siatki, tworząc dynamiczne widowisko."
-    },
-    {
-      "data": "16.03.2026",
-      "godzina": "00:00",
-      "mecz": "Chapecoense-sc vs Gremio (Serie A)",
-      "typ": "Poniżej 2.5 gola w meczu",
+      "mecz": "Manchester City vs Real Madrid (UEFA Champions League)",
+      "typ": "Powyżej 2.5 goli",
       "kurs": "1.65",
-      "analiza": "Brazylijska Serie A często charakteryzuje się taktyczną i ostrożną grą, zwłaszcza w meczach, gdzie jedna z drużyn (Gremio) jest faworytem, a druga walczy o przetrwanie (Chapecoense-sc). Chapecoense będzie stawiać na solidną defensywę, a Gremio może mieć trudności z przełamaniem dobrze zorganizowanej obrony. Spodziewam się zaciętego spotkania z niewielką liczbą bramek."
+      "analiza": "Starcie gigantów europejskiej piłki, obu znanych z ofensywnego stylu gry i potężnych ataków. Ostatnie mecze tych drużyn często obfitowały w bramki, a wysoka stawka Ligi Mistrzów motywuje do otwartej gry. Spodziewam się zaciętego, ale i obfitującego w trafienia widowiska."
     },
     {
-      "data": "16.03.2026",
-      "godzina": "19:00",
-      "mecz": "Pogon Szczecin vs Korona Kielce (Ekstraklasa)",
-      "typ": "Powyżej 4.5 żółtych kartek",
-      "kurs": "1.90",
-      "analiza": "Mecze w Ekstraklasie, zwłaszcza te o potencjalnie dużą stawkę dla obu zespołów i z udziałem drużyn o agresywnym stylu, często obfitują w kartki. Pogoń u siebie jest silna i zdeterminowana, a Korona, walcząc o ligowy byt, będzie walczyć o każdy centymetr boiska. Spodziewam się intensywnego, fizycznego spotkania, w którym sędzia będzie miał sporo pracy."
+      "data": "17.03.2026",
+      "godzina": "21:00",
+      "mecz": "Chelsea vs Paris Saint Germain (UEFA Champions League)",
+      "typ": "Obie drużyny strzelą gola (BTTS)",
+      "kurs": "1.70",
+      "analiza": "Dwie ekipy z ambicjami na triumf w Lidze Mistrzów, dysponujące ogromną siłą ognia w ataku, ale czasem z tendencją do błędów w defensywie. PSG z pewnością będzie dążyć do przejęcia inicjatywy, natomiast Chelsea na własnym stadionie postawi na skuteczność. Typ BTTS wydaje się bardzo prawdopodobny."
+    },
+    {
+      "data": "17.03.2026",
+      "godzina": "21:00",
+      "mecz": "Arsenal vs Bayer Leverkusen (UEFA Champions League)",
+      "typ": "Powyżej 9.5 rzutów rożnych",
+      "kurs": "1.80",
+      "analiza": "Zarówno Arsenal, jak i Bayer Leverkusen to drużyny preferujące dynamiczny i ofensywny styl gry, często wykorzystujące skrzydła do kreowania sytuacji. Ich intensywna presja i próby dośrodkowań/strzałów, blokowane przez obrońców, regularnie przekładają się na wysoką liczbę rzutów rożnych w meczach."
+    },
+    {
+      "data": "17.03.2026",
+      "godzina": "18:45",
+      "mecz": "Sporting CP vs Bodo/Glimt (UEFA Champions League)",
+      "typ": "Sporting CP wygra (1)",
+      "kurs": "1.50",
+      "analiza": "Sporting CP, grając u siebie w Lidze Mistrzów, jest zawsze bardzo silnym zespołem. Bodo/Glimt to drużyna, która potrafi zaskoczyć, ale na tak wysokim poziomie i w tak ważnym meczu, doświadczenie i jakość po stronie gospodarzy powinny okazać się decydujące. Sporting będzie dążył do dominacji od pierwszej minuty."
+    },
+    {
+      "data": "17.03.2026",
+      "godzina": "18:00",
+      "mecz": "Fenerbahçe vs Gaziantep FK (Süper Lig)",
+      "typ": "Fenerbahçe strzeli powyżej 1.5 gola",
+      "kurs": "1.45",
+      "analiza": "Fenerbahçe, będąc jednym z czołowych klubów Süper Lig i grając na własnym stadionie, jest zdecydowanym faworytem tego spotkania. W starciu z niżej notowanym Gaziantep FK, gospodarze będą naciskać od początku i z dużą pewnością zdołają zdobyć co najmniej dwie bramki, kontynuując walkę o mistrzostwo."
     }
   ]
 }
