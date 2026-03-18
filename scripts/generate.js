@@ -6,7 +6,6 @@ async function run() {
   const apiSportsKey = process.env.APISPORTS_KEY; 
   const publicDir = path.join(process.cwd(), 'public');
   const filePath = path.join(publicDir, 'raport.json');
-  // NOWOŚĆ: Ścieżka do naszego archiwum
   const historyPath = path.join(publicDir, 'historia.json');
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
@@ -46,7 +45,6 @@ async function run() {
 
         const prawdziweMecze = wybraneMecze.slice(0, 25).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
-            // DODANE: Pobieramy też ID meczu (fixture.id), będzie nam potrzebne do sprawdzania wyników jutro!
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         });
 
@@ -62,17 +60,19 @@ async function run() {
   let promptText = "";
 
   if (listaDoAnalizy) {
-    promptText = `Jesteś elitarnym analitykiem. Dzisiejsza data: ${dzisiajPl}.
+    promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
     Oto PRAWDZIWA lista meczów na dziś:
     ${listaDoAnalizy}
     
     Wybierz 5 najciekawszych meczów. ZABRANIAM wymyślania innych meczów.
     Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. 
-    WAŻNE: Dla każdego wybranego meczu wyciągnij jego ID z listy powyżej i dodaj do obiektu jako "fixture_id".`;
+    WAŻNE: Dla każdego wybranego meczu wyciągnij jego ID z listy powyżej i dodaj do obiektu jako "fixture_id".
+    Dla każdego typu podaj rynkowe uśrednione kursy dla 3 popularnych polskich bukmacherów (np. STS, Superbet, Fortuna) w tablicy "bukmacherzy". Ustal "kurs" główny jako uśredniony (np. 1.85).`;
   } else {
     promptText = `Jesteś systemem symulacji analitycznych. Dzisiejsza data: ${dzisiajPl}.
     Z powodu awarii bazy wygeneruj 5 WYSOCE REALISTYCZNYCH analiz (symulacji).
-    Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. Ustaw "fixture_id" jako "0".`;
+    Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. Ustaw "fixture_id" jako "0".
+    Dla każdego typu podaj wymyślone, ale realistyczne kursy dla STS, Superbet i Fortuna w tablicy "bukmacherzy".`;
   }
 
   promptText += `\n
@@ -87,7 +87,12 @@ async function run() {
         "typ": "Powyżej 10.5 rzutów rożnych",
         "kurs": "1.85",
         "analiza": "Twoja analiza...",
-        "status": "oczekujący"
+        "status": "oczekujący",
+        "bukmacherzy": [
+          { "nazwa": "STS", "kurs": "1.82" },
+          { "nazwa": "Superbet", "kurs": "1.88" },
+          { "nazwa": "Fortuna", "kurs": "1.85" }
+        ]
       }
     ]
   }`;
@@ -110,10 +115,10 @@ async function run() {
       
       const generatedData = JSON.parse(cleanJson);
       
-      // 1. Zapisz dla dzisiejszej strony (żeby nic nie popsuć)
+      // Zapisz dla dzisiejszej strony
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
       
-      // 2. MODUŁ PAMIĘCI (Zapis do historii)
+      // Zapis do historii
       let historia = [];
       if (fs.existsSync(historyPath)) {
           try {
@@ -124,25 +129,24 @@ async function run() {
           }
       }
 
-      // Sprawdzamy, czy dzisiaj już dodaliśmy raport (zapobieganie dublowaniu)
       const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
       const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze };
 
       if (dzisiejszyIndex !== -1) {
-          historia[dzisiejszyIndex] = nowyWpis; // Nadpisz tylko dzisiejszy wpis
+          historia[dzisiejszyIndex] = nowyWpis;
       } else {
-          historia.push(nowyWpis); // Dodaj nowy dzień na koniec bazy
+          historia.push(nowyWpis);
       }
 
-      // Zapisz zaktualizowaną historię
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
 
-      console.log("✅ SUKCES! Raport dzisiejszy oraz ARCHIWUM zostały zaktualizowane.");
+      console.log("✅ SUKCES! Raport dzisiejszy (z bukmacherami) oraz ARCHIWUM zostały zaktualizowane.");
     } else {
       throw new Error("API Gemini nie zwróciło odpowiedzi.");
     }
   } catch (e) {
     fs.writeFileSync(filePath, JSON.stringify({
+      error: e.message,
       mecze: [{ data: dzisiajPl, godzina: "BŁĄD", mecz: "Błąd Analizy", typ: "-", kurs: "0.00", analiza: e.message, status: "błąd" }]
     }));
   }
