@@ -3,116 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Value Bets AI - Codzienne Typy</title>
+<title>Value Bets AI - BROKIETYPY</title>
 <style>
-body { background: #0d0f12; color: white; font-family: -apple-system, sans-serif; text-align: center; padding: 20px; }
-.container { max-width: 800px; margin: 0 auto; }
-.green { color: #00ff66; text-transform: uppercase; }
-h1 { font-size: 50px; font-weight: 900; letter-spacing: -2px; margin-bottom: 10px; }
-h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    :root {
+        --bg: #0d0f12;
+        --card-bg: #161a1e;
+        --accent: #00ff66;
+        --text: #ffffff;
+        --text-dim: #888;
+        --error: #ff4444;
+        --pending: #ffaa00;
+    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; text-align: center; padding: 20px; margin: 0; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .green { color: var(--accent); text-transform: uppercase; }
+    h1 { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; margin: 20px 0; }
+    h2 { font-size: 22px; margin-top: 40px; color: var(--text-dim); text-align: left; border-bottom: 1px solid #333; padding-bottom: 10px; }
 
-/* Panel Statystyk */
-.stats-panel { display: flex; justify-content: space-between; background: #1a1e24; border-radius: 12px; padding: 20px; margin-top: 30px; border: 1px solid #333; }
-.stat-box { flex: 1; text-align: center; border-right: 1px solid #333; }
-.stat-box:last-child { border-right: none; }
-.stat-value { font-size: 32px; font-weight: 900; }
-.stat-label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-.profit { color: #00ff66; }
-.loss { color: #ff4444; }
-.neutral { color: #fff; }
+    /* Stats Panel */
+    .stats-panel { display: flex; justify-content: space-between; background: #1a1e24; border-radius: 12px; padding: 20px; margin-top: 20px; border: 1px solid #333; }
+    .stat-box { flex: 1; text-align: center; border-right: 1px solid #333; }
+    .stat-box:last-child { border-right: none; }
+    .stat-value { font-size: 28px; font-weight: 900; }
+    .stat-label { color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+    
+    .profit { color: var(--accent); }
+    .loss { color: var(--error); }
 
-.card { background: #161a1e; border-radius: 12px; padding: 25px; margin-top: 20px; text-align: left; border: 1px solid #222; }
-.history-card { background: #111417; opacity: 0.95; }
-.match-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding: 15px 0; }
-.match-row:last-child { border-bottom: none; }
-.pick-box { background: #00ff66; color: black; padding: 10px 18px; border-radius: 6px; font-weight: 900; font-size: 18px; text-align: center; }
-.pick-box.pending { background: #ffaa00; color: black; }
-.pick-box.win { background: #00ff66; color: black; }
-.pick-box.loss { background: #ff4444; color: white; }
-.pick-box.error { background: #333; color: #ff4444; }
-.meta { color: #555; font-size: 12px; margin-bottom: 4px; }
-.reason { color: #777; font-size: 13px; margin-top: 8px; font-style: italic; }
-#error-info { color: #ff4444; font-size: 14px; margin-top: 20px; font-weight: bold; }
-.date-header { font-weight: bold; color: #fff; margin-bottom: 10px; font-size: 18px; }
+    /* Cards */
+    .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-top: 15px; text-align: left; border: 1px solid #222; }
+    .history-card { opacity: 0.9; margin-bottom: 15px; }
+    .match-row { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #222; padding: 15px 0; }
+    .match-row:last-child { border-bottom: none; }
+    
+    .pick-box { background: var(--accent); color: #000; padding: 8px 15px; border-radius: 6px; font-weight: 900; font-size: 16px; min-width: 100px; text-align: center; }
+    .pick-box.pending { background: var(--pending); }
+    .pick-box.win { background: var(--accent); }
+    .pick-box.loss { background: var(--error); color: #fff; }
 
-/* Style dla bukmacherów (Dynamiczne) */
-.bookies-container { display: flex; gap: 6px; margin-top: 10px; justify-content: flex-end; flex-wrap: wrap; }
-.bookie-badge { font-size: 11px; padding: 4px 6px; border-radius: 4px; font-weight: bold; background: #1a1e24; border: 1px solid #333; }
-.bookie-badge.sts { color: #ff7700; border-color: rgba(255, 119, 0, 0.3); }
-.bookie-badge.superbet { color: #ff0000; border-color: rgba(255, 0, 0, 0.3); }
-.bookie-badge.fortuna { color: #ffcc00; border-color: rgba(255, 204, 0, 0.3); }
-.bookie-badge.default { color: #00ff66; border-color: rgba(0, 255, 102, 0.3); }
+    .meta { color: #555; font-size: 11px; margin-bottom: 3px; font-weight: bold; }
+    .reason { color: #999; font-size: 13px; margin-top: 8px; line-height: 1.4; border-left: 2px solid #333; padding-left: 10px; }
+
+    /* Bookies */
+    .bookies-container { display: flex; gap: 5px; margin-top: 10px; justify-content: flex-end; flex-wrap: wrap; }
+    .bookie-badge { font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: bold; background: #000; border: 1px solid #333; }
+    .sts { color: #ff7700; }
+    .superbet { color: #ff0000; }
+    .fortuna { color: #ffcc00; }
+    
+    #error-display { color: var(--error); font-weight: bold; margin: 20px 0; display: none; background: rgba(255,68,68,0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--error); }
 </style>
 </head>
 <body>
+
 <div class="container">
     <h1>BROKIE<span class="green">TYPY</span></h1>
 
-    <!-- POJEMNIK NA STATYSTYKI -->
+    <div id="error-display"></div>
     <div id="stats-container"></div>
-
     <div id="results">Ładowanie analizy AI...</div>
-    <div id="error-info"></div>
 
-    <h2>HISTORIA TYPÓW</h2>
+    <h2>OSTATNIE TYPY</h2>
     <div id="history">Ładowanie historii...</div>
 </div>
 
 <script>
-    // Zaktualizowana funkcja czytająca PRAWDZIWYCH bukmacherów z bazy danych
+    // Bezpieczne renderowanie kursów i bukmacherów
     function renderBookies(m) {
-        if (m.status === 'błąd' || m.status === 'error') return '';
-
-        if (m.bukmacherzy && Array.isArray(m.bukmacherzy) && m.bukmacherzy.length > 0) {
-            let html = '<div class="bookies-container">';
+        if (!m.kurs || m.status === 'błąd') return '';
+        
+        let html = '<div class="bookies-container">';
+        if (m.bukmacherzy && Array.isArray(m.bukmacherzy)) {
             m.bukmacherzy.forEach(b => {
-                let klasaCSS = b.nazwa.toLowerCase().replace(/[^a-z0-9]/g, '');
-                // Fallback dla nieznanych bukmacherów
-                if (!['sts', 'superbet', 'fortuna'].includes(klasaCSS)) klasaCSS = 'default';
-                html += `<span class="bookie-badge ${klasaCSS}">${b.nazwa} @${b.kurs}</span>`;
+                let cleanName = b.nazwa.toLowerCase();
+                html += `<span class="bookie-badge ${cleanName}">${b.nazwa} @${b.kurs}</span>`;
             });
-            html += '</div>';
-            return html;
+        } else {
+            html += `<span class="bookie-badge" style="color:#888">KURS @${m.kurs}</span>`;
         }
-
-        // Zwykły kurs jeśli AI nie wygenerowało listy bukmacherów
-        return `<div style="color: #666; margin-top: 8px; font-weight: bold; text-align: right;">Średni kurs: @${m.kurs || '-'}</div>`;
+        html += '</div>';
+        return html;
     }
 
     async function fetchTypy() {
         try {
-            const response = await fetch('/raport.json?t=' + Date.now());
-            const data = await response.json();
+            const res = await fetch('/raport.json?t=' + Date.now());
+            const data = await res.json();
             
+            if (data.error) {
+                const errBox = document.getElementById('error-display');
+                errBox.style.display = 'block';
+                errBox.innerHTML = `Błąd systemu AI ⚠️<br><small style="font-weight:normal">${data.error}</small>`;
+            }
+
             if (!data.mecze || data.mecze.length === 0) {
-                document.getElementById('results').innerHTML = "Brak typów na dzisiaj. Sprawdź logi Actions.";
-                if(data.error) document.getElementById('error-info').innerText = "Szczegóły: " + data.error;
+                document.getElementById('results').innerHTML = "<div class='card'>Czekamy na dzisiejsze typy... ⏳</div>";
                 return;
             }
 
             let html = '<div class="card">';
             data.mecze.forEach(m => {
-                // Bezpieczna obsługa błędu AI - gdy nie udało się przeanalizować meczów
-                if (m.status === 'błąd' || m.mecz === 'Błąd Analizy') {
-                    html += `
-                    <div class="match-row" style="background: rgba(255,0,0,0.1); padding: 15px; border-radius: 8px;">
-                        <div style="flex: 1;">
-                            <div style="font-size: 18px; font-weight: bold; color: #ff4444;">Błąd systemu AI ⚠️</div>
-                            <div class="reason" style="color: #ccc;">${m.analiza || 'Nie udało się pobrać dzisiejszych analiz. Skrypt spróbuje ponownie później.'}</div>
-                        </div>
-                    </div>`;
-                    return;
-                }
-
+                if (m.status === 'błąd') return;
                 html += `
                     <div class="match-row">
-                        <div style="flex: 1;">
+                        <div style="flex: 1; padding-right: 15px;">
                             <div class="meta">${m.godzina || 'DZIŚ'} • PIŁKA NOŻNA</div>
-                            <div style="font-size: 18px; font-weight: bold;">${m.mecz}</div>
-                            <div class="reason">${m.analiza || ''}</div>
+                            <div style="font-size: 17px; font-weight: bold;">${m.mecz}</div>
+                            <div class="reason">${m.analiza || 'Analiza w trakcie...'}</div>
                         </div>
-                        <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: 20px; min-width: 140px;">
-                            <div class="pick-box" style="width: 100%; box-sizing: border-box;">${m.typ}</div>
+                        <div style="text-align: right;">
+                            <div class="pick-box">${m.typ}</div>
                             ${renderBookies(m)}
                         </div>
                     </div>`;
@@ -120,103 +120,73 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
             html += '</div>';
             document.getElementById('results').innerHTML = html;
         } catch (e) {
-            document.getElementById('results').innerHTML = "";
-            document.getElementById('error-info').innerText = "Wystąpił krytyczny błąd połączenia z bazą danych (raport.json uszkodzony).";
+            console.error(e);
+            document.getElementById('results').innerHTML = "Błąd połączenia z bazą.";
         }
     }
 
     async function fetchHistory() {
         try {
-            const response = await fetch('/historia.json?t=' + Date.now());
-            if (!response.ok) {
-                document.getElementById('history').innerHTML = "<p style='color: #555;'>Historia dopiero się buduje...</p>";
-                return;
-            }
-            const historiaData = await response.json();
+            const res = await fetch('/historia.json?t=' + Date.now());
+            if (!res.ok) throw new Error();
+            const data = await res.json();
             
-            if (!historiaData || historiaData.length === 0) return;
-
-            let wygrane = 0;
-            let przegrane = 0;
-            let zyskKuponowy = 0; 
-
-            const odwroconaHistoria = historiaData.reverse();
+            let wygrane = 0, przegrane = 0, zysk = 0;
             let html = '';
 
-            odwroconaHistoria.forEach(dzien => {
-                html += `<div class="card history-card">
-                            <div class="date-header">📅 Typy z dnia: ${dzien.data}</div>`;
-                
+            data.slice().reverse().forEach(dzien => {
+                let dzienHtml = `<div class="card history-card"><div class="meta" style="color:#fff; font-size:14px; margin-bottom:10px;">📅 ${dzien.data}</div>`;
                 dzien.mecze.forEach(m => {
-                    // Ignorujemy błędy AI w historii, żeby nie psuły statystyk
-                    if (m.status === 'błąd' || m.mecz === 'Błąd Analizy') return;
-
-                    let statusClass = 'pending';
-                    let statusText = '⌛ Oczekujący';
+                    if (m.status === 'błąd') return;
                     
+                    let statusClass = 'pending';
                     if (m.status === 'wygrana') { 
                         statusClass = 'win'; 
-                        statusText = '✅ TRAFIONY';
-                        wygrane++;
-                        zyskKuponowy += (parseFloat(String(m.kurs).replace(',','.')) - 1);
+                        wygrane++; 
+                        zysk += (parseFloat(String(m.kurs).replace(',','.')) - 1);
                     }
                     if (m.status === 'przegrana') { 
                         statusClass = 'loss'; 
-                        statusText = '❌ PUDŁO';
-                        przegrane++;
-                        zyskKuponowy -= 1; 
+                        przegrane++; 
+                        zysk -= 1; 
                     }
 
-                    html += `
-                        <div class="match-row">
+                    dzienHtml += `
+                        <div class="match-row" style="opacity: 0.8; font-size: 0.9em;">
                             <div style="flex: 1;">
-                                <div style="font-size: 16px; font-weight: bold; color: #ddd;">${m.mecz}</div>
-                                <div class="meta">Typ: ${m.typ}</div>
+                                <strong>${m.mecz}</strong><br>
+                                <small>${m.typ} @${m.kurs}</small>
                             </div>
-                            <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: 10px; min-width: 140px;">
-                                <div class="pick-box ${statusClass}" style="width: 100%; box-sizing: border-box; font-size: 12px; padding: 6px 10px;">${statusText}</div>
-                                ${renderBookies(m)}
+                            <div class="pick-box ${statusClass}" style="min-width: 80px; font-size: 11px; padding: 5px;">
+                                ${m.status.toUpperCase()}
                             </div>
                         </div>`;
                 });
-                html += `</div>`;
+                dzienHtml += `</div>`;
+                html += dzienHtml;
             });
 
             document.getElementById('history').innerHTML = html;
 
-            // RYSOWANIE PANELU STATYSTYK
-            const sumaZakladow = wygrane + przegrane;
-            const winRate = sumaZakladow > 0 ? Math.round((wygrane / sumaZakladow) * 100) : 0;
-            const yieldPct = sumaZakladow > 0 ? ((zyskKuponowy / sumaZakladow) * 100).toFixed(2) : "0.00";
-            
-            let yieldColor = parseFloat(yieldPct) > 0 ? 'profit' : (parseFloat(yieldPct) < 0 ? 'loss' : 'neutral');
-            let yieldZnak = parseFloat(yieldPct) > 0 ? '+' : '';
+            // Stats update
+            const total = wygrane + przegrane;
+            const winRate = total > 0 ? Math.round((wygrane / total) * 100) : 0;
+            const yieldVal = total > 0 ? ((zysk / total) * 100).toFixed(2) : "0.00";
 
-            const statsHtml = `
+            document.getElementById('stats-container').innerHTML = `
                 <div class="stats-panel">
-                    <div class="stat-box">
-                        <div class="stat-value ${winRate >= 50 && sumaZakladow > 0 ? 'profit' : (sumaZakladow === 0 ? 'neutral' : 'loss')}">${winRate}%</div>
-                        <div class="stat-label">Skuteczność</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value ${yieldColor}">${yieldZnak}${yieldPct}%</div>
-                        <div class="stat-label">Yield (Zysk)</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value neutral">${wygrane} - ${przegrane}</div>
-                        <div class="stat-label">Bilans (W-L)</div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('stats-container').innerHTML = statsHtml;
-
+                    <div class="stat-box"><div class="stat-value">${winRate}%</div><div class="stat-label">Skuteczność</div></div>
+                    <div class="stat-box"><div class="stat-value ${parseFloat(yieldVal) >= 0 ? 'profit' : 'loss'}">${yieldVal}%</div><div class="stat-label">Yield</div></div>
+                    <div class="stat-box"><div class="stat-value">${wygrane}-${przegrane}</div><div class="stat-label">Bilans</div></div>
+                </div>`;
         } catch (e) {
-            document.getElementById('history').innerHTML = "<p style='color: #555;'>Błąd ładowania archiwum.</p>";
+            document.getElementById('history').innerHTML = "Brak danych historycznych.";
         }
     }
 
     fetchTypy();
     fetchHistory();
 </script>
+
 </body>
 </html>
