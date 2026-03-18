@@ -27,7 +27,7 @@ async function run() {
         
         console.log(`Próba ${i+1}/${maxRetries} nieudana. Status: ${response.status}.`);
 
-        // Jeśli błąd to 429 lub 5xx, próbujemy dalej.
+        // Jeśli błąd to 429 (limit) lub 5xx (serwer), próbujemy dalej.
         if (response.status !== 429 && response.status < 500) {
             throw new Error(resJson.error?.message || `Błąd HTTP ${response.status}`);
         }
@@ -69,11 +69,11 @@ async function run() {
   ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz.'}
   
   Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
-  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
+  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
 
   try {
-    // UŻYWAMY NAJBARDZIEJ STABILNEGO MODELU PUBLICZNEGO
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    // UŻYWAMY NAJBARDZIEJ STABILNEGO MODELU PUBLICZNEGO gemini-1.5-flash I ENDPOINTU v1
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
@@ -115,7 +115,7 @@ async function run() {
     console.error("Błąd krytyczny:", e.message);
     fs.writeFileSync(filePath, JSON.stringify({
       error: e.message,
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd połączenia z modelem Gemini. Sprawdź swój GEMINI_API_KEY w Secrets: " + e.message, status: "błąd" }]
+      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd połączenia z modelem Gemini. Sprawdź swój klucz API: " + e.message, status: "błąd" }]
     }));
   }
 }
