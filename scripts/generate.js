@@ -49,7 +49,6 @@ async function run() {
     });
 
     if (apiData.response && apiData.response.length > 0) {
-        // Filtrujemy tylko popularne ligi
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
         let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
         if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
@@ -65,36 +64,16 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Oto PRAWDZIWA lista meczów na dziś:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz meczów (symulacja).'}
+  const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiaj: ${dzisiajPl}.
+  Lista meczów:
+  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz.'}
   
-  Wybierz 5 najciekawszych typów. Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON.
-  Dla każdego meczu podaj "fixture_id" oraz tablicę "bukmacherzy" z kursami dla STS, Superbet i Fortuna.
-  Struktura JSON:
-  {
-    "mecze": [
-      {
-        "fixture_id": "123",
-        "data": "${dzisiajPl}",
-        "godzina": "21:00",
-        "mecz": "Drużyna A vs B (Liga)",
-        "typ": "Powyżej 2.5 gola",
-        "kurs": "1.85",
-        "analiza": "Krótki opis dlaczego ten typ.",
-        "status": "oczekujący",
-        "bukmacherzy": [
-          { "nazwa": "STS", "kurs": "1.82" },
-          { "nazwa": "Superbet", "kurs": "1.88" },
-          { "nazwa": "Fortuna", "kurs": "1.85" }
-        ]
-      }
-    ]
-  }`;
+  Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
+  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
 
   try {
-    // STRYKTNE UŻYCIE MODELU I WERSJI API DLA TEGO ŚRODOWISKA
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`;
+    // UŻYWAMY NAJBARDZIEJ STABILNEGO MODELU PUBLICZNEGO
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
@@ -104,17 +83,13 @@ async function run() {
 
     if (resData.candidates && resData.candidates[0].content) {
       let rawText = resData.candidates[0].content.parts[0].text;
-      
-      // Wyciąganie czystego JSONa z odpowiedzi (na wypadek gdyby AI dodało markdown)
       const start = rawText.indexOf('{');
       const end = rawText.lastIndexOf('}') + 1;
       const cleanJson = rawText.substring(start, end);
       const generatedData = JSON.parse(cleanJson);
       
-      // 1. Zapisujemy dzisiejszy raport
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
       
-      // 2. Aktualizujemy historię
       let historia = [];
       if (fs.existsSync(historyPath)) {
           try {
@@ -132,16 +107,15 @@ async function run() {
       }
 
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-      console.log("✅ Raport i Historia zostały pomyślnie zaktualizowane.");
+      console.log("✅ Raport i Historia zaktualizowane.");
     } else {
       throw new Error("API Gemini zwróciło pustą odpowiedź.");
     }
   } catch (e) {
     console.error("Błąd krytyczny:", e.message);
-    // Zapisujemy plik z błędem, żeby strona wiedziała, co się stało
     fs.writeFileSync(filePath, JSON.stringify({
       error: e.message,
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Wystąpił problem z modelem Gemini: " + e.message, status: "błąd" }]
+      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd połączenia z modelem Gemini. Sprawdź swój GEMINI_API_KEY w Secrets: " + e.message, status: "błąd" }]
     }));
   }
 }
