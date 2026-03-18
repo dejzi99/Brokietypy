@@ -1,1 +1,124 @@
-{"error":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\nPlease retry in 30.244924118s.","mecze":[{"data":"18.03.2026","mecz":"Błąd Analizy AI","analiza":"Szczegóły awarii: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\nPlease retry in 30.244924118s.","status":"błąd"}]}
+{
+  "mecze": [
+    {
+      "fixture_id": "UCL_RM_MC_180326",
+      "data": "18.03.2026",
+      "godzina": "21:00",
+      "mecz": "Real Madryt vs Manchester City",
+      "typ": "Powyżej 2.5 gola",
+      "kurs": "1.78",
+      "analiza": "Rewanżowe spotkanie Ligi Mistrzów pomiędzy dwoma gigantami europejskiego futbolu. Pierwszy mecz zakończył się wynikiem 1:1, co sugeruje, że obie drużyny będą musiały zaryzykować w Madrycie. Real, grający u siebie, zawsze stawia na ofensywę, a ich linia ataku jest w doskonałej formie. Manchester City, z Haalandem na czele, również dysponuje potężną siłą rażenia i potrafi strzelać gole każdemu rywalowi. Spodziewam się otwartego spotkania z wieloma szansami bramkowymi po obu stronach. Potencjał ofensywny obu drużyn sprawia, że typ na over 2.5 gola jest bardzo prawdopodobny. Ich poprzednie starcia często obfitowały w bramki, co potwierdza ten trend.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.75"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.80"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.77"
+        }
+      ]
+    },
+    {
+      "fixture_id": "PL_ARS_WOL_180326",
+      "data": "18.03.2026",
+      "godzina": "20:30",
+      "mecz": "Arsenal vs Wolverhampton Wanderers",
+      "typ": "Arsenal -1.5 (handicap)",
+      "kurs": "1.95",
+      "analiza": "Arsenal walczy o mistrzostwo Premier League i każde domowe spotkanie jest dla nich kluczowe. 'Kanonierzy' są w fantastycznej formie na Emirates Stadium, dominując nad większością rywali. Wolverhampton, choć potrafi sprawić niespodziankę, na wyjazdach często ma problemy ze zdobywaniem punktów przeciwko czołowym drużynom. Ich gra jest bardziej reaktywna, co na tle ofensywnego Arsenalu może okazać się niewystarczające. Spodziewam się, że Arsenal od początku narzuci swoje tempo i będzie dążył do szybkiego rozstrzygnięcia meczu, co powinno przełożyć się na zwycięstwo co najmniej dwoma bramkami.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.90"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.95"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.92"
+        }
+      ]
+    },
+    {
+      "fixture_id": "SA_JUV_ROM_180326",
+      "data": "18.03.2026",
+      "godzina": "20:45",
+      "mecz": "Juventus vs AS Roma",
+      "typ": "Poniżej 2.5 gola",
+      "kurs": "1.70",
+      "analiza": "Klasyk Serie A, który historycznie często charakteryzował się taktyczną i ostrożną grą. Obie drużyny mają silne defensywy i trenerzy stawiający na solidną organizację z tyłu. Juventus, grając u siebie, rzadko traci bramki, ale też nie zawsze dominuje ofensywnie, zwłaszcza w meczach z rywalami z górnej półki. Roma, pod wodzą swojego obecnego trenera, również priorytetyzuje bezpieczeństwo w obronie, szczególnie na wyjazdach. Spodziewam się zaciętego spotkania, gdzie każdy błąd może kosztować, co skłoni obie ekipy do ostrożności. Typ na poniżej 2.5 gola wydaje się najbardziej rozsądny, biorąc pod uwagę charakterystykę obu zespołów i ich dotychczasowe starcia.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.68"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.70"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.67"
+        }
+      ]
+    },
+    {
+      "fixture_id": "BUN_BVB_SCF_180326",
+      "data": "18.03.2026",
+      "godzina": "18:30",
+      "mecz": "Borussia Dortmund vs SC Freiburg",
+      "typ": "Borussia Dortmund -1.0 (handicap azjatycki)",
+      "kurs": "1.65",
+      "analiza": "Borussia Dortmund na Signal Iduna Park to zupełnie inna drużyna. Ich forma domowa jest zazwyczaj imponująca, a wsparcie kibiców napędza ich do dominacji. Freiburg, choć solidny, na wyjazdach przeciwko silniejszym rywalom często ma problemy. BVB potrzebuje punktów, aby utrzymać się w czołówce Bundesligi, a takie mecze muszą wygrywać pewnie. Spodziewam się, że Dortmund od początku narzuci wysokie tempo i będzie dążył do kontrolowania meczu, tworząc wiele okazji. Zwycięstwo Borussii co najmniej dwoma bramkami jest bardzo prawdopodobne, co czyni handicap -1.0 atrakcyjnym typem.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.60"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.65"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.63"
+        }
+      ]
+    },
+    {
+      "fixture_id": "LL_ATH_RBB_180326",
+      "data": "18.03.2026",
+      "godzina": "19:00",
+      "mecz": "Athletic Bilbao vs Real Betis",
+      "typ": "Obie drużyny strzelą gola - Tak",
+      "kurs": "1.85",
+      "analiza": "Spotkanie dwóch drużyn z aspiracjami do europejskich pucharów, które potrafią grać ofensywnie. Athletic Bilbao u siebie jest niezwykle groźne, a ich styl gry oparty na wysokim pressingu często prowadzi do otwartych spotkań. Real Betis, mimo że czasem bywa nieregularny, dysponuje talentem w ataku i potrafi zaskoczyć w kontrze. Obie drużyny mają swoje mocne strony w ofensywie, ale także miewają momenty dekoncentracji w obronie. Spodziewam się, że to będzie mecz pełen walki, gdzie obie strony będą dążyć do strzelenia bramki, co czyni typ BTTS - Tak bardzo prawdopodobnym.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.80"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.85"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.83"
+        }
+      ]
+    }
+  ]
+}
