@@ -5,19 +5,9 @@
       "data": "18.03.2026",
       "godzina": "18:45",
       "mecz": "Barcelona vs Newcastle (UEFA Champions League)",
-      "typ": "Obie drużyny strzelą (BTTS)",
-      "kurs": "1.75",
-      "analiza": "Barcelona w ostatnich meczach prezentuje ofensywny styl, często zdobywając bramki, ale także dając szanse rywalom. Newcastle, choć zmagające się z kontuzjami, potrafi zaskoczyć i ma zawodników zdolnych do wykorzystania każdej luki. Spodziewam się otwartego spotkania z bramkami po obu stronach.",
-      "status": "oczekujący"
-    },
-    {
-      "fixture_id": "1528348",
-      "data": "18.03.2026",
-      "godzina": "16:30",
-      "mecz": "SC Braga vs Ferencvarosi TC (UEFA Europa League)",
       "typ": "Powyżej 2.5 gola",
-      "kurs": "1.80",
-      "analiza": "Braga jest zespołem grającym agresywnie u siebie, z dużym potencjałem ofensywnym. Ferencvarosi, mimo że jest underdoggem, również potrafi strzelić bramkę i nie boi się otwartej gry, co może prowadzić do wielu sytuacji podbramkowych i goli.",
+      "kurs": "1.70",
+      "analiza": "Barcelona, grająca u siebie w kluczowym meczu Ligi Mistrzów, zmierzy się z ofensywnie usposobionym Newcastle. Oczekujemy otwartego spotkania z dużą liczbą sytuacji bramkowych z obu stron. Obie drużyny mają tendencję do wysokiego pressingu i szybkiego przechodzenia do ataku, co sprzyja bramkom. Forma strzelecka Barcelony w ostatnich meczach na Camp Nou jest imponująca, a Newcastle z pewnością będzie dążyć do rewanżu.",
       "status": "oczekujący"
     },
     {
@@ -27,7 +17,7 @@
       "mecz": "Liverpool vs Galatasaray (UEFA Champions League)",
       "typ": "Liverpool -1.5 Handicap Azjatycki",
       "kurs": "1.90",
-      "analiza": "Liverpool u siebie w Lidze Mistrzów to prawdziwa twierdza. Galatasaray, choć z ambicjami, prawdopodobnie nie dorówna intensywnością i jakością drużynie Kloppa. Spodziewam się dominacji gospodarzy i zwycięstwa co najmniej dwoma bramkami.",
+      "analiza": "Liverpool na Anfield w Lidze Mistrzów to zawsze potęga, szczególnie w fazach pucharowych. Spodziewam się dominacji 'The Reds' od pierwszej minuty. Galatasaray, choć zdeterminowane, prawdopodobnie będzie miało trudności z opanowaniem tempa i intensywności gospodarzy. Wysoka wygrana Liverpoolu, który będzie chciał zapewnić sobie komfortową przewagę, jest bardzo prawdopodobna.",
       "status": "oczekujący"
     },
     {
@@ -36,8 +26,8 @@
       "godzina": "21:00",
       "mecz": "Tottenham vs Atletico Madrid (UEFA Champions League)",
       "typ": "Poniżej 2.5 gola",
-      "kurs": "1.68",
-      "analiza": "Klasyczne starcie stylów. Atletico pod wodzą Simeone słynie z defensywnej organizacji i minimalizowania ryzyka. Tottenham, choć ma ofensywny potencjał, w meczach o wysoką stawkę bywa ostrożny. Spodziewam się taktycznego meczu z niewielką liczbą bramek.",
+      "kurs": "1.80",
+      "analiza": "Spotkanie dwóch drużyn znanych z taktycznej dyscypliny i silnych formacji defensywnych. Atletico pod wodzą Diego Simeone to synonim twardej gry w obronie. Spurs, zwłaszcza w europejskich pucharach, również potrafią grać pragmatycznie. Oczekujemy zaciętego boju w środku pola, z minimalną liczbą klarownych sytuacji. Każdy gol będzie na wagę złota, a defensywa będzie kluczowa.",
       "status": "oczekujący"
     },
     {
@@ -45,9 +35,19 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Bayern München vs Atalanta (UEFA Champions League)",
-      "typ": "Bayern München wygra i obie drużyny strzelą",
-      "kurs": "2.10",
-      "analiza": "Bayern u siebie to potęga, a w Lidze Mistrzów rzadko zawodzi. Atalanta znana jest z ofensywnego i bezkompromisowego podejścia, często strzelając bramki nawet przeciwko najlepszym. Oczekuję, że Bayern wygra, ale Atalanta postawi opór i również wpisze się na listę strzelców.",
+      "typ": "Obie drużyny strzelą (BTTS)",
+      "kurs": "1.65",
+      "analiza": "Bayern u siebie to maszyna do strzelania goli, której ofensywa rzadko zawodzi. Z drugiej strony, Atalanta jest znana ze swojej ofensywnej, odważnej gry, która często prowadzi do bramek po obu stronach boiska, niezależnie od rywala. Spodziewam się otwartego meczu, w którym obie drużyny znajdą drogę do siatki, wykorzystując swoje atuty w ataku i potencjalne luki w obronie przeciwnika.",
+      "status": "oczekujący"
+    },
+    {
+      "fixture_id": "1492177",
+      "data": "18.03.2026",
+      "godzina": "23:00",
+      "mecz": "Palmeiras vs Botafogo (Serie A)",
+      "typ": "Palmeiras wygra",
+      "kurs": "1.75",
+      "analiza": "Palmeiras, jeden z czołowych klubów Brazylii i regularny pretendent do tytułu, gra u siebie przeciwko solidnemu Botafogo. Choć brazylijska Serie A jest ligą niezwykle wyrównaną, atut własnego boiska na Allianz Parque i wyższa jakość indywidualna piłkarzy Palmeiras powinny przeważyć. Spodziewam się zaciętego meczu, ale ostatecznie zwycięstwa gospodarzy, którzy będą dążyć do umocnienia swojej pozycji w lidze.",
       "status": "oczekujący"
     }
   ]
