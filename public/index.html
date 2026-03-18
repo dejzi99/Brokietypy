@@ -70,12 +70,12 @@
 <script>
     // Bezpieczne renderowanie kursów i bukmacherów
     function renderBookies(m) {
-        if (!m.kurs || m.status === 'błąd') return '';
+        if (!m || !m.kurs || m.status === 'błąd') return '';
         
         let html = '<div class="bookies-container">';
         if (m.bukmacherzy && Array.isArray(m.bukmacherzy)) {
             m.bukmacherzy.forEach(b => {
-                let cleanName = b.nazwa.toLowerCase();
+                let cleanName = b.nazwa ? b.nazwa.toLowerCase() : 'default';
                 html += `<span class="bookie-badge ${cleanName}">${b.nazwa} @${b.kurs}</span>`;
             });
         } else {
@@ -88,6 +88,7 @@
     async function fetchTypy() {
         try {
             const res = await fetch('/raport.json?t=' + Date.now());
+            if (!res.ok) throw new Error("Plik raportu niedostępny.");
             const data = await res.json();
             
             if (data.error) {
@@ -96,7 +97,7 @@
                 errBox.innerHTML = `Błąd systemu AI ⚠️<br><small style="font-weight:normal">${data.error}</small>`;
             }
 
-            if (!data.mecze || data.mecze.length === 0) {
+            if (!data.mecze || !Array.isArray(data.mecze) || data.mecze.length === 0) {
                 document.getElementById('results').innerHTML = "<div class='card'>Czekamy na dzisiejsze typy... ⏳</div>";
                 return;
             }
@@ -112,7 +113,7 @@
                             <div class="reason">${m.analiza || 'Analiza w trakcie...'}</div>
                         </div>
                         <div style="text-align: right;">
-                            <div class="pick-box">${m.typ}</div>
+                            <div class="pick-box">${m.typ || 'Typ'}</div>
                             ${renderBookies(m)}
                         </div>
                     </div>`;
@@ -121,7 +122,7 @@
             document.getElementById('results').innerHTML = html;
         } catch (e) {
             console.error(e);
-            document.getElementById('results').innerHTML = "Błąd połączenia z bazą.";
+            document.getElementById('results').innerHTML = "<div class='card' style='border-color: #444;'>Brak dzisiejszego raportu. Sprawdź GitHub Actions.</div>";
         }
     }
 
@@ -131,19 +132,23 @@
             if (!res.ok) throw new Error();
             const data = await res.json();
             
+            if (!Array.isArray(data)) throw new Error("Zły format historii.");
+
             let wygrane = 0, przegrane = 0, zysk = 0;
             let html = '';
 
             data.slice().reverse().forEach(dzien => {
+                if (!dzien.mecze || !Array.isArray(dzien.mecze)) return;
+
                 let dzienHtml = `<div class="card history-card"><div class="meta" style="color:#fff; font-size:14px; margin-bottom:10px;">📅 ${dzien.data}</div>`;
                 dzien.mecze.forEach(m => {
-                    if (m.status === 'błąd') return;
+                    if (!m || m.status === 'błąd') return;
                     
                     let statusClass = 'pending';
                     if (m.status === 'wygrana') { 
                         statusClass = 'win'; 
                         wygrane++; 
-                        zysk += (parseFloat(String(m.kurs).replace(',','.')) - 1);
+                        zysk += (parseFloat(String(m.kurs || 1).replace(',','.')) - 1);
                     }
                     if (m.status === 'przegrana') { 
                         statusClass = 'loss'; 
@@ -154,11 +159,11 @@
                     dzienHtml += `
                         <div class="match-row" style="opacity: 0.8; font-size: 0.9em;">
                             <div style="flex: 1;">
-                                <strong>${m.mecz}</strong><br>
-                                <small>${m.typ} @${m.kurs}</small>
+                                <strong>${m.mecz || 'Mecz'}</strong><br>
+                                <small>${m.typ || 'Typ'} @${m.kurs || '-'}</small>
                             </div>
                             <div class="pick-box ${statusClass}" style="min-width: 80px; font-size: 11px; padding: 5px;">
-                                ${m.status.toUpperCase()}
+                                ${(m.status || 'Oczekujący').toUpperCase()}
                             </div>
                         </div>`;
                 });
@@ -168,7 +173,6 @@
 
             document.getElementById('history').innerHTML = html;
 
-            // Stats update
             const total = wygrane + przegrane;
             const winRate = total > 0 ? Math.round((wygrane / total) * 100) : 0;
             const yieldVal = total > 0 ? ((zysk / total) * 100).toFixed(2) : "0.00";
@@ -180,7 +184,7 @@
                     <div class="stat-box"><div class="stat-value">${wygrane}-${przegrane}</div><div class="stat-label">Bilans</div></div>
                 </div>`;
         } catch (e) {
-            document.getElementById('history').innerHTML = "Brak danych historycznych.";
+            document.getElementById('history').innerHTML = "<div class='card' style='color:#555;'>Archiwum jest puste. Pierwsze wyniki pojawią się jutro.</div>";
         }
     }
 
