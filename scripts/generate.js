@@ -15,7 +15,6 @@ async function run() {
 
   let listaDoAnalizy = "";
 
-  // Funkcja pobierająca z automatycznymi powtórkami
   async function fetchSports(url, options, maxRetries = 3) {
     let delay = 1000;
     for (let i = 0; i < maxRetries; i++) {
@@ -68,59 +67,73 @@ async function run() {
   try {
       if (!geminiKey) throw new Error("Brak klucza GEMINI_API_KEY w Secrets!");
 
-      console.log("Krok 1: Pytam serwery Google o listę dostępnych modeli dla Twojego klucza API...");
+      console.log("Krok 1: Pobieram listę modeli dla Twojego klucza...");
       
       const modelsUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`;
       const modelsRes = await fetch(modelsUrl);
       const modelsData = await modelsRes.json();
 
       if (modelsData.error) {
-          throw new Error(`Błąd odczytu klucza API z Google: ${modelsData.error.message}. Upewnij się, że poprawnie zapisałeś klucz.`);
+          throw new Error(`Błąd odczytu klucza API z Google: ${modelsData.error.message}`);
       }
 
-      let selectedModel = "";
+      let availableModels = [];
       if (modelsData.models && Array.isArray(modelsData.models)) {
-          // Filtrujemy tylko te modele, które potrafią generować tekst
-          const availableModels = modelsData.models
+          availableModels = modelsData.models
               .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"))
               .map(m => m.name.replace('models/', ''));
-
-          console.log("Modele do których masz dostęp na nowym kluczu:", availableModels.join(", "));
-
-          // Wybieramy najlepszy dostępny na koncie
-          if (availableModels.includes("gemini-1.5-flash")) selectedModel = "gemini-1.5-flash";
-          else if (availableModels.includes("gemini-1.5-pro")) selectedModel = "gemini-1.5-pro";
-          else if (availableModels.includes("gemini-2.0-flash")) selectedModel = "gemini-2.0-flash";
-          else if (availableModels.includes("gemini-pro")) selectedModel = "gemini-pro";
-          else if (availableModels.length > 0) selectedModel = availableModels[0]; // Bierzemy cokolwiek co zadziała
       }
 
-      if (!selectedModel) {
-          throw new Error("Twój nowy klucz API nie posiada uprawnień do żadnego modelu generującego tekst.");
+      if (availableModels.length === 0) {
+          throw new Error("Twój nowy klucz API nie posiada uprawnień do generowania tekstu.");
       }
 
-      console.log(`Krok 2: Używam pewnego modelu prosto z Twojej listy: ${selectedModel}`);
-      const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${geminiKey}`;
-
-      const response = await fetch(generateUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-      });
-
-      const resData = await response.json();
-
-      if (response.ok && resData.candidates && resData.candidates[0].content) {
-          console.log(`✅ Sukces! Wygenerowano analizy.`);
-          let rawText = resData.candidates[0].content.parts[0].text;
-          const start = rawText.indexOf('{');
-          const end = rawText.lastIndexOf('}') + 1;
-          cleanJson = rawText.substring(start, end);
-      } else {
-          throw new Error(resData.error?.message || "Odpowiedź nie zawierała danych JSON.");
+      // Sortujemy modele, żeby zacząć od najbardziej darmowych/stabilnych
+      const preferredOrder = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro", "gemini-1.0-pro", "gemini-2.0-flash"];
+      let modelsToTry = [];
+      
+      for (const pref of preferredOrder) {
+          if (availableModels.includes(pref)) modelsToTry.push(pref);
+      }
+      for (const am of availableModels) {
+          if (!modelsToTry.includes(am)) modelsToTry.push(am);
       }
 
-      if (!cleanJson) throw new Error("Błąd przy parsowaniu danych z AI.");
+      console.log("Krok 2: Będę testował modele po kolei:", modelsToTry.join(", "));
+      let lastError = "Nieznany błąd";
+
+      // Pętla omijająca błędy limitów (Quota Exceeded)
+      for (const model of modelsToTry) {
+          try {
+              console.log(`>>> Próbuję użyć modelu: ${model}...`);
+              const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+              
+              const response = await fetch(generateUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+              });
+
+              const resData = await response.json();
+
+              if (response.ok && resData.candidates && resData.candidates[0].content) {
+                  console.log(`✅ SUKCES! Model ${model} ma wolne limity i zadziałał!`);
+                  let rawText = resData.candidates[0].content.parts[0].text;
+                  const start = rawText.indexOf('{');
+                  const end = rawText.lastIndexOf('}') + 1;
+                  cleanJson = rawText.substring(start, end);
+                  break; // Przerywamy pętlę, bo znaleźliśmy działający model!
+              } else {
+                  lastError = resData.error?.message || "Błąd limitu";
+                  console.log(`⚠️ Model ${model} odrzucił zapytanie (Prawdopodobnie brak limitów). Szukam dalej... Odrzucenie: ${lastError}`);
+              }
+          } catch (e) {
+              lastError = e.message;
+              console.log(`❌ Błąd przy modelu ${model}: ${e.message}`);
+          }
+      }
+
+      if (!cleanJson) throw new Error("Wszystkie modele mają zablokowane limity. Ostatni błąd: " + lastError);
 
       const generatedData = JSON.parse(cleanJson);
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
