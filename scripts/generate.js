@@ -10,8 +10,9 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
+  // Wymuszenie strefy czasowej polskiej (Warszawa), aby Github nie mylił dni (UTC)
   const dzisiajPl = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
-  const dataDlaApi = new Date().toISOString().split('T')[0];
+  const dataDlaApi = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
 
   let listaDoAnalizy = "";
 
@@ -40,14 +41,23 @@ async function run() {
     });
 
     if (apiData && apiData.response && apiData.response.length > 0) {
+        // FILTR: Wybieramy TYLKO mecze, które się jeszcze NIE rozpoczęły ('NS' = Not Started)
+        const nadchodzaceMecze = apiData.response.filter(match => match.fixture.status.short === 'NS');
+
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
-        let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
-        if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
+        let wybraneMecze = nadchodzaceMecze.filter(match => szerokieLigi.includes(match.league.id));
+        
+        // Jeśli nie ma meczów z głównych lig, bierzemy jakiekolwiek nadchodzące
+        if (wybraneMecze.length === 0) wybraneMecze = nadchodzaceMecze; 
 
         listaDoAnalizy = wybraneMecze.slice(0, 25).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
+
+        if (!listaDoAnalizy) {
+             console.log("Wszystkie dzisiejsze mecze zostały już rozegrane lub brakuje nadchodzących.");
+        }
     } else {
         console.log("API-Sports nie zwróciło meczów na dzisiaj.");
     }
@@ -56,8 +66,8 @@ async function run() {
   }
 
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Lista meczów:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz (symulacja).'}
+  Lista nadchodzących meczów na dzisiaj:
+  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz (symulacja) dla nadchodzących zdarzeń z dzisiaj.'}
   
   Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
