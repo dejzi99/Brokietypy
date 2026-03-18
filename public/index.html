@@ -8,10 +8,21 @@
 body { background: #0d0f12; color: white; font-family: -apple-system, sans-serif; text-align: center; padding: 20px; }
 .container { max-width: 800px; margin: 0 auto; }
 .green { color: #00ff66; text-transform: uppercase; }
-h1 { font-size: 50px; font-weight: 900; letter-spacing: -2px; }
-h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bottom: 1px solid #333; padding-bottom: 10px; }
+h1 { font-size: 50px; font-weight: 900; letter-spacing: -2px; margin-bottom: 10px; }
+h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+/* Nowy styl dla Panelu Statystyk */
+.stats-panel { display: flex; justify-content: space-between; background: #1a1e24; border-radius: 12px; padding: 20px; margin-top: 30px; border: 1px solid #333; }
+.stat-box { flex: 1; text-align: center; border-right: 1px solid #333; }
+.stat-box:last-child { border-right: none; }
+.stat-value { font-size: 32px; font-weight: 900; }
+.stat-label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+.profit { color: #00ff66; }
+.loss { color: #ff4444; }
+.neutral { color: #fff; }
+
 .card { background: #161a1e; border-radius: 12px; padding: 25px; margin-top: 20px; text-align: left; border: 1px solid #222; }
-.history-card { background: #111417; opacity: 0.9; }
+.history-card { background: #111417; opacity: 0.95; }
 .match-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding: 15px 0; }
 .match-row:last-child { border-bottom: none; }
 .pick-box { background: #00ff66; color: black; padding: 10px 18px; border-radius: 6px; font-weight: 900; font-size: 18px; }
@@ -29,6 +40,9 @@ h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bo
     <p style="color: #444; font-size: 12px; font-weight: bold; margin-bottom: 0;">CODZIENNIE O 13:00 — POWERED BY GEMINI AI</p>
     <h1>DZIŚ GRAMY <span class="green">MĄDRZE</span></h1>
 
+    <!-- PUSTY POJEMNIK NA STATYSTYKI -->
+    <div id="stats-container"></div>
+
     <div id="results">Ładowanie analizy AI...</div>
     <div id="error-info"></div>
 
@@ -37,7 +51,6 @@ h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bo
 </div>
 
 <script>
-    // Ładowanie dzisiejszych typów z raport.json
     async function fetchTypy() {
         try {
             const response = await fetch('/raport.json?t=' + Date.now());
@@ -71,22 +84,22 @@ h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bo
         }
     }
 
-    // Ładowanie archiwum z historia.json
     async function fetchHistory() {
         try {
             const response = await fetch('/historia.json?t=' + Date.now());
             if (!response.ok) {
-                document.getElementById('history').innerHTML = "<p style='color: #555;'>Historia dopiero się buduje. Zobaczysz ją tutaj przy kolejnej aktualizacji!</p>";
+                document.getElementById('history').innerHTML = "<p style='color: #555;'>Historia dopiero się buduje...</p>";
                 return;
             }
             const historiaData = await response.json();
             
-            if (!historiaData || historiaData.length === 0) {
-                document.getElementById('history').innerHTML = "<p style='color: #555;'>Brak wpisów w historii.</p>";
-                return;
-            }
+            if (!historiaData || historiaData.length === 0) return;
 
-            // Odwracamy tablicę, żeby najnowsze dni wyświetlały się na samej górze
+            // ZMIENNE DO OBLICZEŃ MATEMATYCZNYCH
+            let wygrane = 0;
+            let przegrane = 0;
+            let zyskKuponowy = 0; // Liczymy czysty profit (kurs - 1)
+
             const odwroconaHistoria = historiaData.reverse();
             let html = '';
 
@@ -95,12 +108,23 @@ h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bo
                             <div class="date-header">📅 Typy z dnia: ${dzien.data}</div>`;
                 
                 dzien.mecze.forEach(m => {
-                    // Logika kolorów dla statusu typu
                     let statusClass = 'pending';
                     let statusText = '⌛ Oczekujący';
                     
-                    if (m.status === 'wygrana') { statusClass = 'win'; statusText = '✅ TRAFIONY'; }
-                    if (m.status === 'przegrana') { statusClass = 'loss'; statusText = '❌ PUDŁO'; }
+                    if (m.status === 'wygrana') { 
+                        statusClass = 'win'; 
+                        statusText = '✅ TRAFIONY';
+                        wygrane++;
+                        // Zysk: kurs 1.85 to na czysto +0.85 jednostki
+                        zyskKuponowy += (parseFloat(m.kurs.replace(',','.')) - 1);
+                    }
+                    if (m.status === 'przegrana') { 
+                        statusClass = 'loss'; 
+                        statusText = '❌ PUDŁO';
+                        przegrane++;
+                        // Strata: cała 1 jednostka
+                        zyskKuponowy -= 1; 
+                    }
 
                     html += `
                         <div class="match-row">
@@ -117,8 +141,37 @@ h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bo
             });
 
             document.getElementById('history').innerHTML = html;
+
+            // RYSOWANIE PANELU STATYSTYK
+            const sumaZakladow = wygrane + przegrane;
+            if (sumaZakladow > 0) {
+                const winRate = Math.round((wygrane / sumaZakladow) * 100);
+                const yieldPct = ((zyskKuponowy / sumaZakladow) * 100).toFixed(2);
+                
+                let yieldColor = yieldPct > 0 ? 'profit' : (yieldPct < 0 ? 'loss' : 'neutral');
+                let yieldZnak = yieldPct > 0 ? '+' : '';
+
+                const statsHtml = `
+                    <div class="stats-panel">
+                        <div class="stat-box">
+                            <div class="stat-value ${winRate >= 50 ? 'profit' : 'loss'}">${winRate}%</div>
+                            <div class="stat-label">Skuteczność</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value ${yieldColor}">${yieldZnak}${yieldPct}%</div>
+                            <div class="stat-label">Yield (Zysk)</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value neutral">${wygrane} - ${przegrane}</div>
+                            <div class="stat-label">Bilans (W-L)</div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('stats-container').innerHTML = statsHtml;
+            }
+
         } catch (e) {
-            document.getElementById('history').innerHTML = "<p style='color: #555;'>Archiwum jest puste. Pierwsze dane pojawią się wkrótce.</p>";
+            document.getElementById('history').innerHTML = "<p style='color: #555;'>Błąd ładowania archiwum.</p>";
         }
     }
 
@@ -127,4 +180,3 @@ h2 { font-size: 24px; margin-top: 50px; color: #aaa; text-align: left; border-bo
 </script>
 </body>
 </html>
-```
