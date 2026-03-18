@@ -15,39 +15,32 @@ async function run() {
 
   let listaDoAnalizy = "";
 
-  // Funkcja obsługująca powtórki (retry)
-  async function fetchWithRetry(url, options, maxRetries = 5) {
+  // Funkcja pobierająca z automatycznymi powtórkami
+  async function fetchSports(url, options, maxRetries = 3) {
     let delay = 1000;
     for (let i = 0; i < maxRetries; i++) {
       try {
         const response = await fetch(url, options);
-        const resJson = await response.json();
-        
-        if (response.ok) return resJson;
-        
-        console.log(`Próba ${i+1}/${maxRetries} nieudana. Status: ${response.status}.`);
-
-        if (response.status !== 429 && response.status < 500) {
-            throw new Error(resJson.error?.message || `Błąd HTTP ${response.status}`);
-        }
+        if (response.ok) return await response.json();
       } catch (e) {
         if (i === maxRetries - 1) throw e;
       }
       await new Promise(resolve => setTimeout(resolve, delay));
       delay *= 2; 
     }
+    return null;
   }
 
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
 
-    console.log(`Pobieram mecze na dzień: ${dataDlaApi}`);
-    const apiData = await fetchWithRetry(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}`, {
+    console.log(`Pobieram mecze z API-Sports na dzień: ${dataDlaApi}`);
+    const apiData = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
     });
 
-    if (apiData.response && apiData.response.length > 0) {
+    if (apiData && apiData.response && apiData.response.length > 0) {
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
         let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
         if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
@@ -57,56 +50,95 @@ async function run() {
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
     } else {
-        throw new Error("API-Sports nie zwróciło meczów.");
+        console.log("API-Sports nie zwróciło meczów na dzisiaj.");
     }
   } catch (e) {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  const promptText = `Jesteś elitarnym analitykiem. Dzisiaj: ${dzisiajPl}.
-  Mecze do analizy:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj realistyczne symulacje.'}
+  const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
+  Lista meczów:
+  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz (symulacja).'}
   
   Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
 
-  try {
-    // POWRÓT DO SPRAWDZONEGO ENDPOINTU v1beta I MODELU gemini-1.5-flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
-    
-    const resData = await fetchWithRetry(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-    });
+  // WODOODPORNY SYSTEM AUTO-WYKRYWANIA MODELU
+  const modeleDoTestu = [
+      "gemini-1.5-flash",
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-pro",
+      "gemini-pro",
+      "gemini-2.5-flash-preview-09-2025"
+  ];
 
-    if (resData.candidates && resData.candidates[0].content) {
-      let rawText = resData.candidates[0].content.parts[0].text;
-      const start = rawText.indexOf('{');
-      const end = rawText.lastIndexOf('}') + 1;
-      const cleanJson = rawText.substring(start, end);
+  let cleanJson = null;
+  let lastError = "Nieznany błąd";
+
+  console.log("Rozpoczynam łączenie z AI. Testuję listę dostępnych modeli...");
+
+  for (const model of modeleDoTestu) {
+      try {
+          console.log(`Testuję model: ${model}...`);
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+          
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+          });
+
+          const resData = await response.json();
+
+          if (response.ok && resData.candidates && resData.candidates[0].content) {
+              console.log(`✅ Sukces! Znalazłem działający model: ${model}`);
+              let rawText = resData.candidates[0].content.parts[0].text;
+              const start = rawText.indexOf('{');
+              const end = rawText.lastIndexOf('}') + 1;
+              cleanJson = rawText.substring(start, end);
+              break; // Mamy dane, wychodzimy z pętli!
+          } else {
+              console.log(`❌ Model ${model} niedostępny. Błąd:`, resData.error?.message);
+              lastError = resData.error?.message || "Błąd odpowiedzi API";
+          }
+      } catch (e) {
+          console.log(`❌ Błąd przy modelu ${model}:`, e.message);
+          lastError = e.message;
+      }
+  }
+
+  try {
+      if (!cleanJson) {
+          throw new Error("Wszystkie modele w Twoim regionie/kluczu API zawiodły. Ostatni błąd: " + lastError);
+      }
+
       const generatedData = JSON.parse(cleanJson);
-      
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
       
       let historia = [];
       if (fs.existsSync(historyPath)) {
-          try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) {}
+          try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) { historia = []; }
       }
+
       const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-      if (dzisiejszyIndex !== -1) historia[dzisiejszyIndex] = { data: dzisiajPl, mecze: generatedData.mecze };
-      else historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
+      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze };
+
+      if (dzisiejszyIndex !== -1) {
+          historia[dzisiejszyIndex] = nowyWpis;
+      } else {
+          historia.push(nowyWpis);
+      }
 
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-      console.log("✅ Raport gotowy.");
-    } else {
-      throw new Error("Błąd odpowiedzi AI.");
-    }
+      console.log("✅ Raport i Historia zaktualizowane.");
+
   } catch (e) {
-    fs.writeFileSync(filePath, JSON.stringify({
-      error: e.message,
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd modelu: " + e.message, status: "błąd" }]
-    }));
+      console.error("Błąd krytyczny:", e.message);
+      fs.writeFileSync(filePath, JSON.stringify({
+          error: e.message,
+          mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Awaria AI: " + e.message, status: "błąd" }]
+      }));
   }
 }
+
 run();
