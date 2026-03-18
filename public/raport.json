@@ -5,19 +5,9 @@
       "data": "18.03.2026",
       "godzina": "18:45",
       "mecz": "Barcelona vs Newcastle (UEFA Champions League)",
-      "typ": "Powyżej 2.5 goli",
-      "kurs": "1.70",
-      "analiza": "Starcie dwóch czołowych drużyn, które aspirują do wysokich celów w Lidze Mistrzów. Barcelona na własnym stadionie zawsze gra o pełną pulę, a Newcastle pod wodzą Howe'a potrafi zaskoczyć ofensywnymi akcjami. Spodziewamy się otwartego meczu z wieloma szansami bramkowymi po obu stronach. Potencjał ofensywny Barcy i zdolność Newcastle do wykorzystywania przestrzeni stwarzają idealne warunki dla typowania wysokiego wyniku bramkowego.",
-      "status": "oczekujący"
-    },
-    {
-      "fixture_id": "1528348",
-      "data": "18.03.2026",
-      "godzina": "16:30",
-      "mecz": "SC Braga vs Ferencvarosi TC (UEFA Europa League)",
-      "typ": "SC Braga wygra i Powyżej 1.5 goli",
-      "kurs": "1.90",
-      "analiza": "Braga, grając u siebie, w europejskich pucharach jest niezwykle silna. Portugalska drużyna charakteryzuje się solidną organizacją gry i skutecznością w ataku. Ferencvarosi, choć nie można go lekceważyć, prawdopodobnie będzie miało trudności z nawiązaniem równorzędnej walki w Lizbonie. Oczekujemy dominacji Bragi i co najmniej dwóch zdobytych przez nią bramek, co powinno zapewnić im komfortowe zwycięstwo.",
+      "typ": "Barcelona -1.5 Handicap Azjatycki",
+      "kurs": "2.10",
+      "analiza": "Barcelona na swoim stadionie w fazie pucharowej Ligi Mistrzów to zawsze groźny rywal. Newcastle, choć z solidnym składem, może mieć trudności z wytrzymaniem presji Camp Nou. Oczekuje się, że gospodarze zdominują mecz i wygrają z przewagą co najmniej dwóch bramek.",
       "status": "oczekujący"
     },
     {
@@ -25,9 +15,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Liverpool vs Galatasaray (UEFA Champions League)",
-      "typ": "Liverpool wygra z handicapem (-1.5)",
-      "kurs": "2.05",
-      "analiza": "Liverpool na Anfield w Lidze Mistrzów to prawdziwa twierdza. Ich intensywność i siła ofensywna są trudne do zatrzymania dla większości rywali. Galatasaray, choć z pewnością będzie walczyć, prawdopodobnie ulegnie presji i jakości angielskiej drużyny. Spodziewamy się komfortowego zwycięstwa gospodarzy z przewagą co najmniej dwóch bramek, pokazując ich ambicje w tej edycji rozgrywek.",
+      "typ": "Liverpool wygra i obie drużyny strzelą gola (BTTS)",
+      "kurs": "2.30",
+      "analiza": "Liverpool na Anfield to twierdza, zwłaszcza w Lidze Mistrzów, a ich ofensywa jest bezlitosna. Galatasaray pokazało już, że potrafi zaskoczyć i ma zawodników zdolnych do strzelenia gola. Spodziewam się zwycięstwa The Reds, ale z honorowym trafieniem gości.",
       "status": "oczekujący"
     },
     {
@@ -35,9 +25,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Tottenham vs Atletico Madrid (UEFA Champions League)",
-      "typ": "Poniżej 2.5 goli",
-      "kurs": "1.80",
-      "analiza": "Spotkanie dwóch drużyn znanych z taktycznej dyscypliny i solidnej obrony. Atletico pod wodzą Simeone zawsze stawia na defensywę, a Tottenham, szczególnie w meczach o taką stawkę, potrafi dostosować się do stylu rywala. Oczekujemy zaciętej walki w środku pola, z niewielką liczbą klarownych sytuacji bramkowych. Prawdopodobny wynik to niski, taktyczny remis lub minimalne zwycięstwo jednej ze stron.",
+      "typ": "Poniżej 2.5 gola",
+      "kurs": "1.75",
+      "analiza": "To będzie klasyczne starcie dwóch taktycznie zdyscyplinowanych drużyn. Atletico pod wodzą Simeone słynie z defensywy, a Tottenham w ważnych meczach często gra ostrożnie. Spodziewam się meczu z niewielką liczbą bramek i wysoką intensywnością w środku pola.",
       "status": "oczekujący"
     },
     {
@@ -45,9 +35,19 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Bayern München vs Atalanta (UEFA Champions League)",
-      "typ": "Obie drużyny strzelą gola (BTTS)",
-      "kurs": "1.65",
-      "analiza": "Bayern u siebie to maszyna do zdobywania bramek, a ich ofensywny styl jest niezmienny. Atalanta natomiast jest zespołem, który gra odważnie, stawiając na atak i potrafi znaleźć drogę do bramki nawet przeciwko najsilniejszym rywalom. Jednocześnie, ich ofensywna filozofia często pozostawia luki w obronie. Spodziewamy się dynamicznego meczu z szansami i golami po obu stronach, co zapewni kibicom wiele emocji.",
+      "typ": "Powyżej 3.5 gola",
+      "kurs": "2.00",
+      "analiza": "Bayern to maszyna do strzelania goli, a Atalanta, znana ze swojego ofensywnego stylu, często pozostawia luki w obronie. Mecz ma potencjał na otwartą wymianę ciosów, gdzie obie drużyny będą szukać okazji do ataku, co powinno przełożyć się na wiele bramek.",
+      "status": "oczekujący"
+    },
+    {
+      "fixture_id": "1528348",
+      "data": "18.03.2026",
+      "godzina": "16:30",
+      "mecz": "SC Braga vs Ferencvarosi TC (UEFA Europa League)",
+      "typ": "SC Braga wygra",
+      "kurs": "1.60",
+      "analiza": "Braga to doświadczony zespół w rozgrywkach europejskich, zwłaszcza u siebie, gdzie prezentuje się bardzo solidnie. Ferencvaros, choć potrafi sprawić niespodziankę, na wyjazdach przeciwko silniejszym rywalom zazwyczaj ma problemy. Spodziewam się kontrolowanego zwycięstwa gospodarzy.",
       "status": "oczekujący"
     }
   ]
