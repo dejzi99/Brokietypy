@@ -15,7 +15,7 @@ async function run() {
 
   let listaDoAnalizy = "";
 
-  // Pomocnicza funkcja do obsługi powtórek (retry) dla API
+  // Funkcja obsługująca powtórki (retry) z wykładniczym czasem oczekiwania
   async function fetchWithRetry(url, options, maxRetries = 5) {
     let delay = 1000;
     for (let i = 0; i < maxRetries; i++) {
@@ -25,9 +25,9 @@ async function run() {
         
         if (response.ok) return resJson;
         
-        console.log(`Próba ${i+1} nieudana. Status: ${response.status}. Serwer mówi:`, JSON.stringify(resJson));
+        console.log(`Próba ${i+1}/${maxRetries} nieudana. Status: ${response.status}.`);
 
-        // Jeśli błąd to 429 (Too Many Requests) lub 5xx, ponawiamy. Inaczej wyrzucamy błąd.
+        // Jeśli błąd to 429 lub 5xx, próbujemy dalej.
         if (response.status !== 429 && response.status < 500) {
             throw new Error(resJson.error?.message || `Błąd HTTP ${response.status}`);
         }
@@ -42,13 +42,14 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
 
-    console.log(`Pobieram mecze na dzień: ${dataDlaApi}`);
+    console.log(`Pobieram mecze z API-Sports na dzień: ${dataDlaApi}`);
     const apiData = await fetchWithRetry(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
     });
 
     if (apiData.response && apiData.response.length > 0) {
+        // Filtrujemy tylko popularne ligi
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
         let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
         if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
@@ -58,21 +59,41 @@ async function run() {
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
     } else {
-        throw new Error("API-Sports nie zwróciło meczów.");
+        throw new Error("API-Sports nie zwróciło meczów na dzisiaj.");
     }
   } catch (e) {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  let promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiaj: ${dzisiajPl}.
+  const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto PRAWDZIWA lista meczów na dziś:
   ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz meczów (symulacja).'}
   
-  Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
-  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
+  Wybierz 5 najciekawszych typów. Zwróć odpowiedź WYŁĄCZNIE jako czysty kod JSON.
+  Dla każdego meczu podaj "fixture_id" oraz tablicę "bukmacherzy" z kursami dla STS, Superbet i Fortuna.
+  Struktura JSON:
+  {
+    "mecze": [
+      {
+        "fixture_id": "123",
+        "data": "${dzisiajPl}",
+        "godzina": "21:00",
+        "mecz": "Drużyna A vs B (Liga)",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "1.85",
+        "analiza": "Krótki opis dlaczego ten typ.",
+        "status": "oczekujący",
+        "bukmacherzy": [
+          { "nazwa": "STS", "kurs": "1.82" },
+          { "nazwa": "Superbet", "kurs": "1.88" },
+          { "nazwa": "Fortuna", "kurs": "1.85" }
+        ]
+      }
+    ]
+  }`;
 
   try {
-    // UŻYWAMY KONKRETNEJ NAZWY MODELU gemini-2.5-flash-preview-09-2025 I ENDPOINTU v1beta
+    // STRYKTNE UŻYCIE MODELU I WERSJI API DLA TEGO ŚRODOWISKA
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
@@ -83,31 +104,46 @@ async function run() {
 
     if (resData.candidates && resData.candidates[0].content) {
       let rawText = resData.candidates[0].content.parts[0].text;
+      
+      // Wyciąganie czystego JSONa z odpowiedzi (na wypadek gdyby AI dodało markdown)
       const start = rawText.indexOf('{');
       const end = rawText.lastIndexOf('}') + 1;
       const cleanJson = rawText.substring(start, end);
       const generatedData = JSON.parse(cleanJson);
       
+      // 1. Zapisujemy dzisiejszy raport
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
       
+      // 2. Aktualizujemy historię
       let historia = [];
       if (fs.existsSync(historyPath)) {
-          try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) {}
+          try {
+              historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+          } catch (e) { historia = []; }
       }
+
       const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-      if (dzisiejszyIndex !== -1) historia[dzisiejszyIndex] = { data: dzisiajPl, mecze: generatedData.mecze };
-      else historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
+      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze };
+
+      if (dzisiejszyIndex !== -1) {
+          historia[dzisiejszyIndex] = nowyWpis;
+      } else {
+          historia.push(nowyWpis);
+      }
 
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-      console.log("✅ Raport gotowy.");
+      console.log("✅ Raport i Historia zostały pomyślnie zaktualizowane.");
     } else {
-      throw new Error("Błąd odpowiedzi AI (pusta odpowiedź).");
+      throw new Error("API Gemini zwróciło pustą odpowiedź.");
     }
   } catch (e) {
     console.error("Błąd krytyczny:", e.message);
+    // Zapisujemy plik z błędem, żeby strona wiedziała, co się stało
     fs.writeFileSync(filePath, JSON.stringify({
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd modelu: " + e.message, status: "błąd" }]
+      error: e.message,
+      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Wystąpił problem z modelem Gemini: " + e.message, status: "błąd" }]
     }));
   }
 }
+
 run();
