@@ -1,13 +1,13 @@
 {
   "mecze": [
     {
-      "fixture_id": "RM018",
+      "fixture_id": "MECZ-20260318-UCL-01",
       "data": "18.03.2026",
       "godzina": "21:00",
-      "mecz": "Real Madryt vs. FC Liverpool",
+      "mecz": "Real Madryt vs Liverpool FC",
       "typ": "Powyżej 2.5 goli",
-      "kurs": "1.72",
-      "analiza": "Rewanż 1/8 finału Ligi Mistrzów. Real Madryt wygrał pierwsze spotkanie 2:1 na Anfield. Liverpool, by odrobić straty, będzie musiał zagrać ofensywnie i otworzyć się, co stworzy przestrzeń dla szybkich kontrataków Realu. Obie drużyny posiadają potężną siłę w ataku i choć stawka jest wysoka, presja na Liverpoolu do strzelania goli sprawi, że mecz powinien obfitować w sytuacje bramkowe. Spodziewamy się otwartej gry i minimum trzech trafień.",
+      "kurs": "1.75",
+      "analiza": "Rewanżowe starcie 1/8 finału Ligi Mistrzów po pasjonującym remisie 2:2 w pierwszym meczu. Obie drużyny charakteryzują się niezwykłą siłą ofensywną i pewnymi lukami w defensywie. Real, grający u siebie, będzie szukał dominacji, a Liverpool, by awansować, musi zaatakować, co z pewnością otworzy mecz. Ostatnie występy obu zespołów regularnie obfitowały w bramki. Spodziewam się otwartej gry i wielu okazji bramkowych po obu stronach. Potencjał ofensywny Viniciusa, Bellinghama po stronie Realu oraz Salaha, Darwina Nuneza po stronie Liverpoolu gwarantuje, że będziemy świadkami co najmniej trzech trafień.",
       "status": "oczekujący",
       "bukmacherzy": [
         {
@@ -16,107 +16,107 @@
         },
         {
           "nazwa": "Superbet",
+          "kurs": "1.75"
+        },
+        {
+          "nazwa": "Fortuna",
           "kurs": "1.72"
-        },
-        {
-          "nazwa": "Fortuna",
-          "kurs": "1.68"
         }
       ]
     },
     {
-      "fixture_id": "BM018",
+      "fixture_id": "MECZ-20260318-PL-02",
       "data": "18.03.2026",
-      "godzina": "21:00",
-      "mecz": "Bayern Monachium vs. Arsenal FC",
-      "typ": "Bayern Monachium - Remis nie ma zakładu (DNB)",
-      "kurs": "1.65",
-      "analiza": "Kolejny rewanż w Lidze Mistrzów. Bayern wywiózł cenne zwycięstwo 1:0 z Emirates Stadium. Grając u siebie, na Allianz Arenie, Bayern jest niezwykle silny i rzadko przegrywa, zwłaszcza w fazach pucharowych europejskich rozgrywek. Arsenal będzie musiał zaryzykować, aby odrobić stratę, co może narazić ich na kontry Bawarczyków. Nawet remis w tym meczu oznacza awans Bayernu, ale ich ambicje i forma u siebie wskazują na wygraną. Zakład DNB zabezpiecza nas na wypadek remisu.",
+      "godzina": "20:30",
+      "mecz": "Manchester United vs West Ham United",
+      "typ": "Manchester United wygra (1)",
+      "kurs": "1.60",
+      "analiza": "Manchester United po serii udanych występów na Old Trafford, zwłaszcza w meczach ligowych, prezentuje coraz lepszą formę. West Ham, choć jest solidną drużyną, na wyjazdach często ma problemy z utrzymaniem koncentracji i szczelności defensywy, zwłaszcza przeciwko czołowym zespołom. United walczy o miejsca dające grę w Lidze Mistrzów, co motywuje ich do maksymalnego zaangażowania. Statystyki H2H na Old Trafford również przemawiają za gospodarzami, którzy wygrali 4 z 5 ostatnich bezpośrednich starć. Przewaga własnego boiska i jakość kadrowa powinny zapewnić 'Czerwonym Diabłom' pewne trzy punkty.",
       "status": "oczekujący",
       "bukmacherzy": [
         {
           "nazwa": "STS",
-          "kurs": "1.62"
+          "kurs": "1.58"
         },
         {
           "nazwa": "Superbet",
-          "kurs": "1.65"
-        },
-        {
-          "nazwa": "Fortuna",
           "kurs": "1.60"
-        }
-      ]
-    },
-    {
-      "fixture_id": "AS018",
-      "data": "18.03.2026",
-      "godzina": "18:45",
-      "mecz": "AS Roma vs. Brighton & Hove Albion",
-      "typ": "Obie drużyny strzelą gola (BTTS - Tak)",
-      "kurs": "1.68",
-      "analiza": "Rewanż 1/8 finału Ligi Europy. AS Roma wygrała pierwszy mecz 2:0 na własnym stadionie. Brighton, aby myśleć o awansie, musi zagrać bardzo ofensywnie i strzelić minimum dwa gole. Ich styl gry oparty na posiadaniu piłki i ataku sprzyja otwartej grze. Roma, z silnym atakiem i grająca przed własną publicznością, z pewnością będzie dążyć do 'zabicia' meczu kolejnym golem. Spodziewamy się, że obie ekipy znajdą drogę do siatki.",
-      "status": "oczekujący",
-      "bukmacherzy": [
-        {
-          "nazwa": "STS",
-          "kurs": "1.65"
-        },
-        {
-          "nazwa": "Superbet",
-          "kurs": "1.68"
         },
         {
           "nazwa": "Fortuna",
-          "kurs": "1.66"
+          "kurs": "1.57"
         }
       ]
     },
     {
-      "fixture_id": "MU018",
+      "fixture_id": "MECZ-20260318-SA-03",
       "data": "18.03.2026",
-      "godzina": "21:15",
-      "mecz": "Manchester United vs. Aston Villa",
-      "typ": "Powyżej 9.5 rzutów rożnych",
-      "kurs": "1.82",
-      "analiza": "Spotkanie w ramach Premier League, niezwykle ważne w walce o europejskie puchary. Zarówno Manchester United, jak i Aston Villa, to drużyny, które lubią atakować skrzydłami i często dośrodkowują w pole karne. Spodziewamy się zaciętego meczu, w którym obie strony będą dążyć do kreowania okazji bramkowych, co w konsekwencji powinno przełożyć się na dużą liczbę rzutów rożnych. Linia 9.5 wydaje się być bezpieczna do pokrycia przez dynamiczną grę obu zespołów.",
+      "godzina": "18:30",
+      "mecz": "Juventus FC vs S.S. Lazio",
+      "typ": "Obie drużyny strzelą gola (BTTS)",
+      "kurs": "1.90",
+      "analiza": "Derby Włoch zawsze gwarantują emocje, a to starcie ma dodatkowo dużą stawkę w kontekście walki o europejskie puchary. Juventus, mimo solidnej obrony, w ostatnich meczach nie zawsze zachowuje czyste konto, jednocześnie będąc bardzo skutecznym w ataku. Lazio, pod wodzą swojego trenera, preferuje ofensywny styl gry i regularnie zdobywa bramki, niezależnie od rywala. Bezpośrednie starcia między tymi drużynami często kończyły się golami z obu stron, co świadczy o ich wzajemnym otwieraniu się na grę. Oczekuję zaciętego, ale i otwartego spotkania, gdzie obie ekipy udowodnią swoją siłę w ofensywie.",
       "status": "oczekujący",
       "bukmacherzy": [
         {
           "nazwa": "STS",
-          "kurs": "1.80"
-        },
-        {
-          "nazwa": "Superbet",
-          "kurs": "1.82"
-        },
-        {
-          "nazwa": "Fortuna",
-          "kurs": "1.78"
-        }
-      ]
-    },
-    {
-      "fixture_id": "LY018",
-      "data": "18.03.2026",
-      "godzina": "19:00",
-      "mecz": "Olympique Lyon vs. OGC Nice",
-      "typ": "Poniżej 2.5 goli",
-      "kurs": "1.88",
-      "analiza": "Mecz Ligue 1. OGC Nice to drużyna słynąca z solidnej defensywy i często grająca w meczach o niskiej liczbie bramek. Lyon, choć w ataku posiada indywidualności, w tym sezonie bywa nieregularny i ma problemy ze skutecznością, zwłaszcza przeciwko zorganizowanym obronie. Spodziewamy się taktycznego pojedynku, gdzie żadna z drużyn nie będzie chciała zbytnio się odkryć. Mecz powinien być zacięty i zakończyć się maksymalnie dwoma trafieniami.",
-      "status": "oczekujący",
-      "bukmacherzy": [
-        {
-          "nazwa": "STS",
-          "kurs": "1.85"
-        },
-        {
-          "nazwa": "Superbet",
           "kurs": "1.88"
         },
         {
+          "nazwa": "Superbet",
+          "kurs": "1.90"
+        },
+        {
           "nazwa": "Fortuna",
-          "kurs": "1.83"
+          "kurs": "1.87"
+        }
+      ]
+    },
+    {
+      "fixture_id": "MECZ-20260318-BL-04",
+      "data": "18.03.2026",
+      "godzina": "20:30",
+      "mecz": "Bayer Leverkusen vs Borussia Dortmund",
+      "typ": "Powyżej 3.5 goli",
+      "kurs": "2.20",
+      "analiza": "To będzie prawdziwy festiwal ofensywnego futbolu w Bundeslidze. Obie drużyny słyną z dynamicznej gry, szybkości w ataku i posiadają w składach wielu utalentowanych strzelców. Bayer Leverkusen pod wodzą Xabiego Alonso gra widowiskowo, a ich mecze często kończą się wysokimi wynikami. Borussia Dortmund również preferuje otwarty futbol, co czasami skutkuje lukami w obronie, ale zawsze nadrabia to skutecznością z przodu. Wzajemne mecze tych zespołów rzadko rozczarowują pod względem bramek. Biorąc pod uwagę formę strzelecką obu ekip i ich styl gry, linia 3.5 goli, choć ryzykowna, ma dużą wartość, a kurs jest wyjątkowo atrakcyjny.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "2.15"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "2.20"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "2.18"
+        }
+      ]
+    },
+    {
+      "fixture_id": "MECZ-20260318-CDR-05",
+      "data": "18.03.2026",
+      "godzina": "21:30",
+      "mecz": "Sevilla FC vs Real Betis",
+      "typ": "Poniżej 2.5 goli",
+      "kurs": "1.70",
+      "analiza": "Derby Sewilli w półfinale Pucharu Króla to zawsze spotkania pełne walki, napięcia i taktyki, ale rzadko kiedy obfitują w bramki. Pierwszy mecz zakończył się wynikiem 1:0 dla Sevilli, co dodatkowo zacieśnia ten rewanż. Obie drużyny są znane z solidnej obrony i wagi, jaką przykładają do nie tracenia bramki w tak prestiżowych meczach. Sevilla będzie bronić skromnej zaliczki, a Betis, mimo konieczności ataku, zrobi to z rozwagą, obawiając się kontr. Przewiduję bardzo taktyczne i zamknięte spotkanie z niewielką liczbą klarownych sytuacji podbramkowych, gdzie priorytetem będzie kontrola środka pola i minimalizacja ryzyka.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.68"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.70"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.67"
         }
       ]
     }
