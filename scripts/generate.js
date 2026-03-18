@@ -35,25 +35,30 @@ async function run() {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
 
     console.log(`Pobieram mecze z API-Sports na dzień: ${dataDlaApi} (Strefa: Europe/Warsaw)`);
-    // DODANO &timezone=Europe/Warsaw ABY API NIE DAWAŁO MECZÓW Z WCZORAJ
+    
     const apiData = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
     });
 
     if (apiData && apiData.response && apiData.response.length > 0) {
-        // Skupiamy się na meczach, które się jeszcze nie zaczęły
-        let nadchodzace = apiData.response.filter(match => match.fixture.status.short === 'NS' || match.fixture.status.short === 'TBD');
-        if (nadchodzace.length === 0) nadchodzace = apiData.response;
-
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
-        let wybraneMecze = nadchodzace.filter(match => szerokieLigi.includes(match.league.id));
+        let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
         
-        if (wybraneMecze.length === 0) wybraneMecze = nadchodzace; 
+        if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
 
-        listaDoAnalizy = wybraneMecze.slice(0, 30).map(match => {
+        // SORTOWANIE PRIORYTETOWE: Liga Mistrzów (2), LE (3) i Top 5 lig lądują na samej górze listy!
+        const topLigi = [2, 3, 39, 140, 135, 78, 61];
+        wybraneMecze.sort((a, b) => {
+            const aTop = topLigi.includes(a.league.id) ? 0 : 1;
+            const bTop = topLigi.includes(b.league.id) ? 0 : 1;
+            return aTop - bTop;
+        });
+
+        // Poszerzamy limit do 45 i pokazujemy AI status meczu
+        listaDoAnalizy = wybraneMecze.slice(0, 45).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
-            return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
+            return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name}) | Status: ${match.fixture.status.short}`;
         }).join('\n');
 
     } else {
@@ -63,15 +68,15 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  // Wzmocniony prompt - USUNIĘTO SŁOWO "SYMULACJA" ORAZ POZWOLENIE NA WYMYŚLANIE
+  // Wzmocniony prompt z priorytetem na "NS" i Ligę Mistrzów
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto PRAWDZIWA i JEDYNA lista meczów na dzisiaj:
   ${listaDoAnalizy || 'BRAK MECZÓW.'}
   
   ZASADY ABSOLUTNE:
   1. ZABRANIAM wymyślania meczów, których nie ma na powyższej liście.
-  2. Jeśli lista to "BRAK MECZÓW", zwróć JSON z pustą tablicą "mecze": [].
-  3. Jeśli na liście są mecze, wybierz maksymalnie 5 najciekawszych i wygeneruj dla nich typy.
+  2. Wybierz 5 najciekawszych meczów, które mają status "NS" (Not Started). Priorytetowo potraktuj Ligę Mistrzów (UEFA Champions League) oraz topowe ligi.
+  3. Jeśli lista to "BRAK MECZÓW", zwróć JSON z pustą tablicą "mecze": [].
   4. Zwróć WYŁĄCZNIE czysty JSON. Podaj dokładne fixture_id z listy oraz kursy dla STS, Superbet, Fortuna.
   
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
