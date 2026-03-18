@@ -173,7 +173,7 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
         } catch (e) {
             document.getElementById('history').innerHTML = "<p style='color: #555;'>Błąd ładowania archiwum.</p>";
         }
-    }
+    } // <-- Tutaj brakowało klamry zamykającej funkcję
 
     fetchTypy();
     fetchHistory();
