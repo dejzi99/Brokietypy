@@ -4,6 +4,7 @@
   "description": "Codzienne typy bukmacherskie generowane przez Claude AI",
   "private": true,
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "@vercel/kv": "^3.0.0"
   },
   "engines": {
