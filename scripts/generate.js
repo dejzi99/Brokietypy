@@ -15,7 +15,7 @@ async function run() {
 
   let listaDoAnalizy = "";
 
-  // Funkcja obsługująca powtórki (retry) z wykładniczym czasem oczekiwania
+  // Funkcja obsługująca powtórki (retry)
   async function fetchWithRetry(url, options, maxRetries = 5) {
     let delay = 1000;
     for (let i = 0; i < maxRetries; i++) {
@@ -27,7 +27,6 @@ async function run() {
         
         console.log(`Próba ${i+1}/${maxRetries} nieudana. Status: ${response.status}.`);
 
-        // Jeśli błąd to 429 (limit) lub 5xx (serwer), próbujemy dalej.
         if (response.status !== 429 && response.status < 500) {
             throw new Error(resJson.error?.message || `Błąd HTTP ${response.status}`);
         }
@@ -42,7 +41,7 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
 
-    console.log(`Pobieram mecze z API-Sports na dzień: ${dataDlaApi}`);
+    console.log(`Pobieram mecze na dzień: ${dataDlaApi}`);
     const apiData = await fetchWithRetry(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
@@ -58,22 +57,22 @@ async function run() {
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
     } else {
-        throw new Error("API-Sports nie zwróciło meczów na dzisiaj.");
+        throw new Error("API-Sports nie zwróciło meczów.");
     }
   } catch (e) {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiaj: ${dzisiajPl}.
-  Lista meczów:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz.'}
+  const promptText = `Jesteś elitarnym analitykiem. Dzisiaj: ${dzisiajPl}.
+  Mecze do analizy:
+  ${listaDoAnalizy || 'Brak danych z API, wygeneruj realistyczne symulacje.'}
   
   Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
 
   try {
-    // UŻYWAMY NAJBARDZIEJ STABILNEGO MODELU PUBLICZNEGO gemini-1.5-flash I ENDPOINTU v1
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    // POWRÓT DO SPRAWDZONEGO ENDPOINTU v1beta I MODELU gemini-1.5-flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
@@ -92,32 +91,22 @@ async function run() {
       
       let historia = [];
       if (fs.existsSync(historyPath)) {
-          try {
-              historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
-          } catch (e) { historia = []; }
+          try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) {}
       }
-
       const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze };
-
-      if (dzisiejszyIndex !== -1) {
-          historia[dzisiejszyIndex] = nowyWpis;
-      } else {
-          historia.push(nowyWpis);
-      }
+      if (dzisiejszyIndex !== -1) historia[dzisiejszyIndex] = { data: dzisiajPl, mecze: generatedData.mecze };
+      else historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
 
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-      console.log("✅ Raport i Historia zaktualizowane.");
+      console.log("✅ Raport gotowy.");
     } else {
-      throw new Error("API Gemini zwróciło pustą odpowiedź.");
+      throw new Error("Błąd odpowiedzi AI.");
     }
   } catch (e) {
-    console.error("Błąd krytyczny:", e.message);
     fs.writeFileSync(filePath, JSON.stringify({
       error: e.message,
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd połączenia z modelem Gemini. Sprawdź swój klucz API: " + e.message, status: "błąd" }]
+      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd modelu: " + e.message, status: "błąd" }]
     }));
   }
 }
-
 run();
