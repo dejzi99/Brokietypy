@@ -7,7 +7,17 @@
       "mecz": "Barcelona vs Newcastle (UEFA Champions League)",
       "typ": "Powyżej 2.5 goli",
       "kurs": "1.70",
-      "analiza": "Barcelona, znana z ofensywnego stylu gry, podejmie waleczny Newcastle, który potrafi zaskoczyć. Oczekuję otwartego meczu z wieloma okazjami bramkowymi, gdyż obie drużyny mają w swoich składach graczy zdolnych do zdobywania bramek, a stawka meczu w Lidze Mistrzów tylko podgrzeje atmosferę, sprzyjając ofensywnym poczynaniom. Defensywy mogą być nieco rozluźnione.",
+      "analiza": "Starcie dwóch czołowych drużyn, które aspirują do wysokich celów w Lidze Mistrzów. Barcelona na własnym stadionie zawsze gra o pełną pulę, a Newcastle pod wodzą Howe'a potrafi zaskoczyć ofensywnymi akcjami. Spodziewamy się otwartego meczu z wieloma szansami bramkowymi po obu stronach. Potencjał ofensywny Barcy i zdolność Newcastle do wykorzystywania przestrzeni stwarzają idealne warunki dla typowania wysokiego wyniku bramkowego.",
+      "status": "oczekujący"
+    },
+    {
+      "fixture_id": "1528348",
+      "data": "18.03.2026",
+      "godzina": "16:30",
+      "mecz": "SC Braga vs Ferencvarosi TC (UEFA Europa League)",
+      "typ": "SC Braga wygra i Powyżej 1.5 goli",
+      "kurs": "1.90",
+      "analiza": "Braga, grając u siebie, w europejskich pucharach jest niezwykle silna. Portugalska drużyna charakteryzuje się solidną organizacją gry i skutecznością w ataku. Ferencvarosi, choć nie można go lekceważyć, prawdopodobnie będzie miało trudności z nawiązaniem równorzędnej walki w Lizbonie. Oczekujemy dominacji Bragi i co najmniej dwóch zdobytych przez nią bramek, co powinno zapewnić im komfortowe zwycięstwo.",
       "status": "oczekujący"
     },
     {
@@ -15,9 +25,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Liverpool vs Galatasaray (UEFA Champions League)",
-      "typ": "Liverpool -1.5 Handicap",
-      "kurs": "1.90",
-      "analiza": "Liverpool na własnym boisku w Lidze Mistrzów to prawdziwa twierdza. Biorąc pod uwagę ich formę i intensywność gry, a także różnicę klas między ligą angielską a turecką, spodziewam się, że zdominują Galatasaray i wygrają z przewagą co najmniej dwóch bramek. Ich ofensywa powinna być zbyt silna dla tureckiej obrony.",
+      "typ": "Liverpool wygra z handicapem (-1.5)",
+      "kurs": "2.05",
+      "analiza": "Liverpool na Anfield w Lidze Mistrzów to prawdziwa twierdza. Ich intensywność i siła ofensywna są trudne do zatrzymania dla większości rywali. Galatasaray, choć z pewnością będzie walczyć, prawdopodobnie ulegnie presji i jakości angielskiej drużyny. Spodziewamy się komfortowego zwycięstwa gospodarzy z przewagą co najmniej dwóch bramek, pokazując ich ambicje w tej edycji rozgrywek.",
       "status": "oczekujący"
     },
     {
@@ -27,7 +37,7 @@
       "mecz": "Tottenham vs Atletico Madrid (UEFA Champions League)",
       "typ": "Poniżej 2.5 goli",
       "kurs": "1.80",
-      "analiza": "Mecz dwóch drużyn, które cenią sobie dyscyplinę taktyczną i solidną obronę. Atletico pod wodzą Simeone słynie z defensywnego podejścia i skutecznej kontry, a Tottenham w ważnych meczach potrafi być pragmatyczny i stawiać na kontrolę. Spodziewam się zaciętej walki w środku pola i niewielu czystych okazji bramkowych, co przełoży się na niski wynik.",
+      "analiza": "Spotkanie dwóch drużyn znanych z taktycznej dyscypliny i solidnej obrony. Atletico pod wodzą Simeone zawsze stawia na defensywę, a Tottenham, szczególnie w meczach o taką stawkę, potrafi dostosować się do stylu rywala. Oczekujemy zaciętej walki w środku pola, z niewielką liczbą klarownych sytuacji bramkowych. Prawdopodobny wynik to niski, taktyczny remis lub minimalne zwycięstwo jednej ze stron.",
       "status": "oczekujący"
     },
     {
@@ -35,19 +45,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Bayern München vs Atalanta (UEFA Champions League)",
-      "typ": "Obie drużyny strzelą gola (BTTS - Tak)",
+      "typ": "Obie drużyny strzelą gola (BTTS)",
       "kurs": "1.65",
-      "analiza": "Bayern to maszyna do strzelania goli, zwłaszcza na własnym stadionie, ale Atalanta udowodniła w Europie, że potrafi grać ofensywnie i zaskakiwać gigantów. Ich dynamiczny i nieprzewidywalny styl gry powinien pozwolić im na stworzenie kilku okazji i zdobycie bramki, nawet na trudnym terenie w Monachium, podczas gdy Bayern niemal zawsze strzela u siebie.",
-      "status": "oczekujący"
-    },
-    {
-      "fixture_id": "1394672",
-      "data": "18.03.2026",
-      "godzina": "19:00",
-      "mecz": "Göztepe vs Galatasaray (Süper Lig)",
-      "typ": "Galatasaray - Wygrana",
-      "kurs": "1.55",
-      "analiza": "Galatasaray, jako jeden z czołowych klubów w Turcji i aspirujący do tytułu mistrzowskiego, w meczu ligowym przeciwko Göztepe będzie dążyć do zwycięstwa, aby utrzymać swoją pozycję w tabeli. Mimo potencjalnie trudnego terenu, oczekuję, że ich wyższa jakość indywidualna i doświadczenie w walce o najwyższe cele przeważą nad przeciwnikiem.",
+      "analiza": "Bayern u siebie to maszyna do zdobywania bramek, a ich ofensywny styl jest niezmienny. Atalanta natomiast jest zespołem, który gra odważnie, stawiając na atak i potrafi znaleźć drogę do bramki nawet przeciwko najsilniejszym rywalom. Jednocześnie, ich ofensywna filozofia często pozostawia luki w obronie. Spodziewamy się dynamicznego meczu z szansami i golami po obu stronach, co zapewni kibicom wiele emocji.",
       "status": "oczekujący"
     }
   ]
