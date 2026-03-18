@@ -34,21 +34,24 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
 
-    console.log(`Pobieram mecze z API-Sports na dzień: ${dataDlaApi}`);
-    const apiData = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}`, {
+    console.log(`Pobieram mecze z API-Sports na dzień: ${dataDlaApi} (Strefa: Europe/Warsaw)`);
+    // DODANO &timezone=Europe/Warsaw ABY API NIE DAWAŁO MECZÓW Z WCZORAJ
+    const apiData = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
     });
 
     if (apiData && apiData.response && apiData.response.length > 0) {
-        // Przywrócona logika: bierzemy mecze z dzisiaj z głównych lig
-        const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
-        let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
-        
-        // Jeśli nie ma meczów z głównych lig na dzisiaj, bierzemy jakiekolwiek dzisiejsze
-        if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
+        // Skupiamy się na meczach, które się jeszcze nie zaczęły
+        let nadchodzace = apiData.response.filter(match => match.fixture.status.short === 'NS' || match.fixture.status.short === 'TBD');
+        if (nadchodzace.length === 0) nadchodzace = apiData.response;
 
-        listaDoAnalizy = wybraneMecze.slice(0, 25).map(match => {
+        const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
+        let wybraneMecze = nadchodzace.filter(match => szerokieLigi.includes(match.league.id));
+        
+        if (wybraneMecze.length === 0) wybraneMecze = nadchodzace; 
+
+        listaDoAnalizy = wybraneMecze.slice(0, 30).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
@@ -60,12 +63,17 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  // Wzmocniony prompt - surowy zakaz wymyślania meczów
+  // Wzmocniony prompt - USUNIĘTO SŁOWO "SYMULACJA" ORAZ POZWOLENIE NA WYMYŚLANIE
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Oto PRAWDZIWA lista meczów na dzisiaj:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz (symulacja).'}
+  Oto PRAWDZIWA i JEDYNA lista meczów na dzisiaj:
+  ${listaDoAnalizy || 'BRAK MECZÓW.'}
   
-  ABSOLUTNY ZAKAZ wymyślania meczów, których nie ma na powyższej liście (chyba że lista jest pusta). Wybierz 5 najciekawszych typów WYŁĄCZNIE z podanych meczów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
+  ZASADY ABSOLUTNE:
+  1. ZABRANIAM wymyślania meczów, których nie ma na powyższej liście.
+  2. Jeśli lista to "BRAK MECZÓW", zwróć JSON z pustą tablicą "mecze": [].
+  3. Jeśli na liście są mecze, wybierz maksymalnie 5 najciekawszych i wygeneruj dla nich typy.
+  4. Zwróć WYŁĄCZNIE czysty JSON. Podaj dokładne fixture_id z listy oraz kursy dla STS, Superbet, Fortuna.
+  
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
 
   let cleanJson = null;
@@ -94,7 +102,6 @@ async function run() {
           throw new Error("Twój nowy klucz API nie posiada uprawnień do generowania tekstu.");
       }
 
-      // Sortujemy modele, żeby zacząć od najbardziej darmowych/stabilnych
       const preferredOrder = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro", "gemini-1.0-pro", "gemini-2.0-flash"];
       let modelsToTry = [];
       
