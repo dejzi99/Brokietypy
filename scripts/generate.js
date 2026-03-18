@@ -6,6 +6,8 @@ async function run() {
   const apiSportsKey = process.env.APISPORTS_KEY; 
   const publicDir = path.join(process.cwd(), 'public');
   const filePath = path.join(publicDir, 'raport.json');
+  // NOWOŚĆ: Ścieżka do naszego archiwum
+  const historyPath = path.join(publicDir, 'historia.json');
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
@@ -16,7 +18,7 @@ async function run() {
 
   try {
     if (!apiSportsKey) {
-        throw new Error("Brak klucza APISPORTS_KEY. Dodaj go w Settings -> Secrets na GitHubie i wpisz w pliku daily.yml.");
+        throw new Error("Brak klucza APISPORTS_KEY!");
     }
 
     console.log(`Pobieram mecze z bezpośredniego API-Sports na dzień: ${dataDlaApi}`);
@@ -38,11 +40,14 @@ async function run() {
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
         let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
 
-        if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
+        if (wybraneMecze.length === 0) {
+            wybraneMecze = apiData.response; 
+        }
 
         const prawdziweMecze = wybraneMecze.slice(0, 25).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
-            return `${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
+            // DODANE: Pobieramy też ID meczu (fixture.id), będzie nam potrzebne do sprawdzania wyników jutro!
+            return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         });
 
         listaDoAnalizy = prawdziweMecze.join('\n');
@@ -61,12 +66,13 @@ async function run() {
     Oto PRAWDZIWA lista meczów na dziś:
     ${listaDoAnalizy}
     
-    Wybierz 5 najciekawszych meczów z powyższej listy i podaj dla nich typy (np. rożne, gole, faule). ZABRANIAM wymyślania innych meczów.
-    Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. Każdy obiekt musi mieć pole "data" z wartością "${dzisiajPl}".`;
+    Wybierz 5 najciekawszych meczów. ZABRANIAM wymyślania innych meczów.
+    Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. 
+    WAŻNE: Dla każdego wybranego meczu wyciągnij jego ID z listy powyżej i dodaj do obiektu jako "fixture_id".`;
   } else {
     promptText = `Jesteś systemem symulacji analitycznych. Dzisiejsza data: ${dzisiajPl}.
-    Z powodu awarii bazy wygeneruj 5 WYSOCE REALISTYCZNYCH analiz (symulacji) dla drużyn Top 5 lig europejskich na dzisiaj.
-    Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. Każdy obiekt musi mieć pole "data" z wartością "${dzisiajPl}".`;
+    Z powodu awarii bazy wygeneruj 5 WYSOCE REALISTYCZNYCH analiz (symulacji).
+    Zwróć odpowiedź WYŁĄCZNIE jako czysty JSON. Ustaw "fixture_id" jako "0".`;
   }
 
   promptText += `\n
@@ -74,12 +80,14 @@ async function run() {
   {
     "mecze": [
       {
+        "fixture_id": "123456",
         "data": "${dzisiajPl}",
         "godzina": "21:00",
         "mecz": "Drużyna A vs Drużyna B (Nazwa Ligi)",
         "typ": "Powyżej 10.5 rzutów rożnych",
         "kurs": "1.85",
-        "analiza": "Twoja analiza..."
+        "analiza": "Twoja analiza...",
+        "status": "oczekujący"
       }
     ]
   }`;
@@ -99,16 +107,43 @@ async function run() {
       const start = rawText.indexOf('{');
       const end = rawText.lastIndexOf('}') + 1;
       const cleanJson = rawText.substring(start, end);
-      JSON.parse(cleanJson);
       
-      fs.writeFileSync(filePath, cleanJson);
-      console.log("✅ SUKCES! Raport został zapisany.");
+      const generatedData = JSON.parse(cleanJson);
+      
+      // 1. Zapisz dla dzisiejszej strony (żeby nic nie popsuć)
+      fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
+      
+      // 2. MODUŁ PAMIĘCI (Zapis do historii)
+      let historia = [];
+      if (fs.existsSync(historyPath)) {
+          try {
+              const rawHistory = fs.readFileSync(historyPath, 'utf8');
+              historia = JSON.parse(rawHistory);
+          } catch (e) {
+              historia = [];
+          }
+      }
+
+      // Sprawdzamy, czy dzisiaj już dodaliśmy raport (zapobieganie dublowaniu)
+      const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
+      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze };
+
+      if (dzisiejszyIndex !== -1) {
+          historia[dzisiejszyIndex] = nowyWpis; // Nadpisz tylko dzisiejszy wpis
+      } else {
+          historia.push(nowyWpis); // Dodaj nowy dzień na koniec bazy
+      }
+
+      // Zapisz zaktualizowaną historię
+      fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
+
+      console.log("✅ SUKCES! Raport dzisiejszy oraz ARCHIWUM zostały zaktualizowane.");
     } else {
       throw new Error("API Gemini nie zwróciło odpowiedzi.");
     }
   } catch (e) {
     fs.writeFileSync(filePath, JSON.stringify({
-      mecze: [{ data: dzisiajPl, godzina: "BŁĄD", mecz: "Błąd Analizy", typ: "-", kurs: "0.00", analiza: e.message }]
+      mecze: [{ data: dzisiajPl, godzina: "BŁĄD", mecz: "Błąd Analizy", typ: "-", kurs: "0.00", analiza: e.message, status: "błąd" }]
     }));
   }
 }
