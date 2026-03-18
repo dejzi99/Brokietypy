@@ -21,13 +21,15 @@ async function run() {
     for (let i = 0; i < maxRetries; i++) {
       try {
         const response = await fetch(url, options);
-        if (response.ok) return await response.json();
+        const resJson = await response.json();
         
-        const errData = await response.json();
-        console.log(`Próba ${i+1} nieudana. Status: ${response.status}. Serwer mówi:`, JSON.stringify(errData));
+        if (response.ok) return resJson;
+        
+        console.log(`Próba ${i+1} nieudana. Status: ${response.status}. Serwer mówi:`, JSON.stringify(resJson));
 
+        // Jeśli błąd to 429 (Too Many Requests) lub 5xx, ponawiamy. Inaczej wyrzucamy błąd.
         if (response.status !== 429 && response.status < 500) {
-            throw new Error(errData.error?.message || `Błąd HTTP ${response.status}`);
+            throw new Error(resJson.error?.message || `Błąd HTTP ${response.status}`);
         }
       } catch (e) {
         if (i === maxRetries - 1) throw e;
@@ -62,16 +64,16 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  let promptText = `Jesteś elitarnym analitykiem. Dzisiaj: ${dzisiajPl}.
-  Mecze:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj realistyczne symulacje.'}
+  let promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
+  Oto PRAWDZIWA lista meczów na dziś:
+  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz meczów (symulacja).'}
   
   Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
 
   try {
-    // UŻYWAMY ENDPOINTU v1beta ORAZ MODELU gemini-2.5-flash-preview-09-2025
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`;
+    // UŻYWAMY NAJBARDZIEJ STABILNEGO MODELU gemini-1.5-flash I ENDPOINTU v1beta
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
@@ -99,11 +101,12 @@ async function run() {
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
       console.log("✅ Raport gotowy.");
     } else {
-      throw new Error("Błąd odpowiedzi AI.");
+      throw new Error("Błąd odpowiedzi AI (pusta odpowiedź).");
     }
   } catch (e) {
+    console.error("Błąd krytyczny:", e.message);
     fs.writeFileSync(filePath, JSON.stringify({
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd połączenia/modelu: " + e.message, status: "błąd" }]
+      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd modelu: " + e.message, status: "błąd" }]
     }));
   }
 }
