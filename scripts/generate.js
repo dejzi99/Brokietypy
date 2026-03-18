@@ -10,7 +10,7 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  // Wymuszenie strefy czasowej polskiej (Warszawa), aby Github nie mylił dni (UTC)
+  // Wymuszenie strefy czasowej polskiej (Warszawa), aby Github nie mylił dni
   const dzisiajPl = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
   const dataDlaApi = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
 
@@ -41,23 +41,18 @@ async function run() {
     });
 
     if (apiData && apiData.response && apiData.response.length > 0) {
-        // FILTR: Wybieramy TYLKO mecze, które się jeszcze NIE rozpoczęły ('NS' = Not Started)
-        const nadchodzaceMecze = apiData.response.filter(match => match.fixture.status.short === 'NS');
-
+        // Przywrócona logika: bierzemy mecze z dzisiaj z głównych lig
         const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
-        let wybraneMecze = nadchodzaceMecze.filter(match => szerokieLigi.includes(match.league.id));
+        let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
         
-        // Jeśli nie ma meczów z głównych lig, bierzemy jakiekolwiek nadchodzące
-        if (wybraneMecze.length === 0) wybraneMecze = nadchodzaceMecze; 
+        // Jeśli nie ma meczów z głównych lig na dzisiaj, bierzemy jakiekolwiek dzisiejsze
+        if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
 
         listaDoAnalizy = wybraneMecze.slice(0, 25).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
 
-        if (!listaDoAnalizy) {
-             console.log("Wszystkie dzisiejsze mecze zostały już rozegrane lub brakuje nadchodzących.");
-        }
     } else {
         console.log("API-Sports nie zwróciło meczów na dzisiaj.");
     }
@@ -65,11 +60,12 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
+  // Wzmocniony prompt - surowy zakaz wymyślania meczów
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Lista nadchodzących meczów na dzisiaj:
-  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz (symulacja) dla nadchodzących zdarzeń z dzisiaj.'}
+  Oto PRAWDZIWA lista meczów na dzisiaj:
+  ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz (symulacja).'}
   
-  Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
+  ABSOLUTNY ZAKAZ wymyślania meczów, których nie ma na powyższej liście (chyba że lista jest pusta). Wybierz 5 najciekawszych typów WYŁĄCZNIE z podanych meczów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
 
   let cleanJson = null;
@@ -112,7 +108,6 @@ async function run() {
       console.log("Krok 2: Będę testował modele po kolei:", modelsToTry.join(", "));
       let lastError = "Nieznany błąd";
 
-      // Pętla omijająca błędy limitów (Quota Exceeded)
       for (const model of modelsToTry) {
           try {
               console.log(`>>> Próbuję użyć modelu: ${model}...`);
@@ -132,7 +127,7 @@ async function run() {
                   const start = rawText.indexOf('{');
                   const end = rawText.lastIndexOf('}') + 1;
                   cleanJson = rawText.substring(start, end);
-                  break; // Przerywamy pętlę, bo znaleźliśmy działający model!
+                  break; 
               } else {
                   lastError = resData.error?.message || "Błąd limitu";
                   console.log(`⚠️ Model ${model} odrzucił zapytanie (Prawdopodobnie brak limitów). Szukam dalej... Odrzucenie: ${lastError}`);
