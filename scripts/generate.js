@@ -64,7 +64,7 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  let promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
+  let promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiaj: ${dzisiajPl}.
   Oto PRAWDZIWA lista meczów na dziś:
   ${listaDoAnalizy || 'Brak danych z API, wygeneruj 5 realistycznych analiz meczów (symulacja).'}
   
@@ -72,8 +72,8 @@ async function run() {
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
 
   try {
-    // UŻYWAMY NAJBARDZIEJ STABILNEGO MODELU gemini-1.5-flash I ENDPOINTU v1beta
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    // UŻYWAMY KONKRETNEJ NAZWY MODELU gemini-2.5-flash-preview-09-2025 I ENDPOINTU v1beta
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
