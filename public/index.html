@@ -11,7 +11,7 @@ body { background: #0d0f12; color: white; font-family: -apple-system, sans-serif
 h1 { font-size: 50px; font-weight: 900; letter-spacing: -2px; margin-bottom: 10px; }
 h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bottom: 1px solid #333; padding-bottom: 10px; }
 
-/* Nowy styl dla Panelu Statystyk */
+/* Panel Statystyk */
 .stats-panel { display: flex; justify-content: space-between; background: #1a1e24; border-radius: 12px; padding: 20px; margin-top: 30px; border: 1px solid #333; }
 .stat-box { flex: 1; text-align: center; border-right: 1px solid #333; }
 .stat-box:last-child { border-right: none; }
@@ -29,24 +29,26 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
 .pick-box.pending { background: #ffaa00; color: black; }
 .pick-box.win { background: #00ff66; color: black; }
 .pick-box.loss { background: #ff4444; color: white; }
+.pick-box.error { background: #333; color: #ff4444; }
 .meta { color: #555; font-size: 12px; margin-bottom: 4px; }
 .reason { color: #777; font-size: 13px; margin-top: 8px; font-style: italic; }
-#error-info { color: #ff4444; font-size: 12px; margin-top: 20px; }
+#error-info { color: #ff4444; font-size: 14px; margin-top: 20px; font-weight: bold; }
 .date-header { font-weight: bold; color: #fff; margin-bottom: 10px; font-size: 18px; }
 
-/* Style dla bukmacherów */
+/* Style dla bukmacherów (Dynamiczne) */
 .bookies-container { display: flex; gap: 6px; margin-top: 10px; justify-content: flex-end; flex-wrap: wrap; }
 .bookie-badge { font-size: 11px; padding: 4px 6px; border-radius: 4px; font-weight: bold; background: #1a1e24; border: 1px solid #333; }
 .bookie-badge.sts { color: #ff7700; border-color: rgba(255, 119, 0, 0.3); }
 .bookie-badge.superbet { color: #ff0000; border-color: rgba(255, 0, 0, 0.3); }
 .bookie-badge.fortuna { color: #ffcc00; border-color: rgba(255, 204, 0, 0.3); }
+.bookie-badge.default { color: #00ff66; border-color: rgba(0, 255, 102, 0.3); }
 </style>
 </head>
 <body>
 <div class="container">
     <h1>BROKIE<span class="green">TYPY</span></h1>
 
-    <!-- PUSTY POJEMNIK NA STATYSTYKI -->
+    <!-- POJEMNIK NA STATYSTYKI -->
     <div id="stats-container"></div>
 
     <div id="results">Ładowanie analizy AI...</div>
@@ -57,22 +59,24 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
 </div>
 
 <script>
-    // Funkcja generująca wizualne badge bukmacherów
-    function renderBookies(baseKursStr) {
-        let baseKurs = parseFloat(String(baseKursStr).replace(',', '.'));
-        if (isNaN(baseKurs)) return `<div style="color: #666; margin-top: 8px; font-weight: bold; text-align: right;">@${baseKursStr}</div>`;
-        
-        let sts = baseKurs.toFixed(2);
-        let superbet = (baseKurs + 0.04).toFixed(2); // Superbet często ma minimalnie wyższe kursy
-        let fortuna = (baseKurs - 0.02).toFixed(2);  // Fortuna jako balans
-        
-        return `
-        <div class="bookies-container">
-            <span class="bookie-badge sts">STS @${sts}</span>
-            <span class="bookie-badge superbet">Superbet @${superbet}</span>
-            <span class="bookie-badge fortuna">Fortuna @${fortuna}</span>
-        </div>
-        `;
+    // Zaktualizowana funkcja czytająca PRAWDZIWYCH bukmacherów z bazy danych
+    function renderBookies(m) {
+        if (m.status === 'błąd' || m.status === 'error') return '';
+
+        if (m.bukmacherzy && Array.isArray(m.bukmacherzy) && m.bukmacherzy.length > 0) {
+            let html = '<div class="bookies-container">';
+            m.bukmacherzy.forEach(b => {
+                let klasaCSS = b.nazwa.toLowerCase().replace(/[^a-z0-9]/g, '');
+                // Fallback dla nieznanych bukmacherów
+                if (!['sts', 'superbet', 'fortuna'].includes(klasaCSS)) klasaCSS = 'default';
+                html += `<span class="bookie-badge ${klasaCSS}">${b.nazwa} @${b.kurs}</span>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Zwykły kurs jeśli AI nie wygenerowało listy bukmacherów
+        return `<div style="color: #666; margin-top: 8px; font-weight: bold; text-align: right;">Średni kurs: @${m.kurs || '-'}</div>`;
     }
 
     async function fetchTypy() {
@@ -88,6 +92,18 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
 
             let html = '<div class="card">';
             data.mecze.forEach(m => {
+                // Bezpieczna obsługa błędu AI - gdy nie udało się przeanalizować meczów
+                if (m.status === 'błąd' || m.mecz === 'Błąd Analizy') {
+                    html += `
+                    <div class="match-row" style="background: rgba(255,0,0,0.1); padding: 15px; border-radius: 8px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 18px; font-weight: bold; color: #ff4444;">Błąd systemu AI ⚠️</div>
+                            <div class="reason" style="color: #ccc;">${m.analiza || 'Nie udało się pobrać dzisiejszych analiz. Skrypt spróbuje ponownie później.'}</div>
+                        </div>
+                    </div>`;
+                    return;
+                }
+
                 html += `
                     <div class="match-row">
                         <div style="flex: 1;">
@@ -97,14 +113,15 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
                         </div>
                         <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: 20px; min-width: 140px;">
                             <div class="pick-box" style="width: 100%; box-sizing: border-box;">${m.typ}</div>
-                            ${renderBookies(m.kurs)}
+                            ${renderBookies(m)}
                         </div>
                     </div>`;
             });
             html += '</div>';
             document.getElementById('results').innerHTML = html;
         } catch (e) {
-            document.getElementById('results').innerHTML = "Brak dzisiejszego raportu lub błąd połączenia.";
+            document.getElementById('results').innerHTML = "";
+            document.getElementById('error-info').innerText = "Wystąpił krytyczny błąd połączenia z bazą danych (raport.json uszkodzony).";
         }
     }
 
@@ -119,7 +136,6 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
             
             if (!historiaData || historiaData.length === 0) return;
 
-            // ZMIENNE DO OBLICZEŃ MATEMATYCZNYCH
             let wygrane = 0;
             let przegrane = 0;
             let zyskKuponowy = 0; 
@@ -132,6 +148,9 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
                             <div class="date-header">📅 Typy z dnia: ${dzien.data}</div>`;
                 
                 dzien.mecze.forEach(m => {
+                    // Ignorujemy błędy AI w historii, żeby nie psuły statystyk
+                    if (m.status === 'błąd' || m.mecz === 'Błąd Analizy') return;
+
                     let statusClass = 'pending';
                     let statusText = '⌛ Oczekujący';
                     
@@ -139,7 +158,7 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
                         statusClass = 'win'; 
                         statusText = '✅ TRAFIONY';
                         wygrane++;
-                        zyskKuponowy += (parseFloat(m.kurs.replace(',','.')) - 1);
+                        zyskKuponowy += (parseFloat(String(m.kurs).replace(',','.')) - 1);
                     }
                     if (m.status === 'przegrana') { 
                         statusClass = 'loss'; 
@@ -156,7 +175,7 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
                             </div>
                             <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: 10px; min-width: 140px;">
                                 <div class="pick-box ${statusClass}" style="width: 100%; box-sizing: border-box; font-size: 12px; padding: 6px 10px;">${statusText}</div>
-                                ${renderBookies(m.kurs)}
+                                ${renderBookies(m)}
                             </div>
                         </div>`;
                 });
@@ -165,9 +184,8 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
 
             document.getElementById('history').innerHTML = html;
 
-            // RYSOWANIE PANELU STATYSTYK - Wymuszenie wyświetlania nawet przy zerach!
+            // RYSOWANIE PANELU STATYSTYK
             const sumaZakladow = wygrane + przegrane;
-            
             const winRate = sumaZakladow > 0 ? Math.round((wygrane / sumaZakladow) * 100) : 0;
             const yieldPct = sumaZakladow > 0 ? ((zyskKuponowy / sumaZakladow) * 100).toFixed(2) : "0.00";
             
