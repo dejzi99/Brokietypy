@@ -1,16 +1,13 @@
-name: Codzienna Analiza
+name: Codzienna aktualizacja AI
+
 on:
   schedule:
-    - cron: '0 12 * * *' # Codziennie o 16:30 czasu polskiego
-  workflow_dispatch: 
+    - cron: '0 10 * * *' # Odpala się automatycznie każdego dnia
+  workflow_dispatch: # Pozwala na ręczne odpalanie z przycisku "Run workflow"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Pobierz kod
@@ -21,20 +18,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '20'
 
-      - name: Generuj raport i dane finansowe
+      - name: Weryfikuj wczorajsze typy i generuj nowe
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           APISPORTS_KEY: ${{ secrets.APISPORTS_KEY }}
         run: |
           mkdir -p public
+          node scripts/verify.js
           node scripts/generate.js
 
-      - name: Zapisz zmiany
+      - name: Zapisz zmiany w bazie danych
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add public/raport.json
-          git commit -m "Aktualizacja meczów" || exit 0
-          git push origin main --force
+          git add public/historia.json
+          git commit -m "🤖 Automatyczna weryfikacja i nowe typy AI" || exit 0
+          git push origin main
