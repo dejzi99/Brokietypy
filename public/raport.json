@@ -5,9 +5,9 @@
       "data": "18.03.2026",
       "godzina": "18:45",
       "mecz": "Barcelona vs Newcastle (UEFA Champions League)",
-      "typ": "Barcelona -1.5 Handicap Azjatycki",
-      "kurs": "2.10",
-      "analiza": "Barcelona na swoim stadionie w fazie pucharowej Ligi Mistrzów to zawsze groźny rywal. Newcastle, choć z solidnym składem, może mieć trudności z wytrzymaniem presji Camp Nou. Oczekuje się, że gospodarze zdominują mecz i wygrają z przewagą co najmniej dwóch bramek.",
+      "typ": "Powyżej 2.5 goli",
+      "kurs": "1.70",
+      "analiza": "Barcelona, grająca u siebie, zazwyczaj prezentuje ofensywny styl. Newcastle, mimo solidnej obrony, potrafi być zaskakujące w kontratakach. Oczekujemy otwartego meczu z szansami na bramki z obu stron, co sprzyja przekroczeniu linii 2.5 gola.",
       "status": "oczekujący"
     },
     {
@@ -15,9 +15,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Liverpool vs Galatasaray (UEFA Champions League)",
-      "typ": "Liverpool wygra i obie drużyny strzelą gola (BTTS)",
-      "kurs": "2.30",
-      "analiza": "Liverpool na Anfield to twierdza, zwłaszcza w Lidze Mistrzów, a ich ofensywa jest bezlitosna. Galatasaray pokazało już, że potrafi zaskoczyć i ma zawodników zdolnych do strzelenia gola. Spodziewam się zwycięstwa The Reds, ale z honorowym trafieniem gości.",
+      "typ": "Liverpool wygra z handicapem -1.5",
+      "kurs": "2.05",
+      "analiza": "Liverpool na Anfield to siła, zwłaszcza w fazie pucharowej Ligi Mistrzów. Galatasaray, choć niebezpieczne, może mieć problem z utrzymaniem intensywności przez 90 minut. Spodziewamy się dominacji gospodarzy i zwycięstwa co najmniej dwoma bramkami.",
       "status": "oczekujący"
     },
     {
@@ -25,9 +25,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Tottenham vs Atletico Madrid (UEFA Champions League)",
-      "typ": "Poniżej 2.5 gola",
-      "kurs": "1.75",
-      "analiza": "To będzie klasyczne starcie dwóch taktycznie zdyscyplinowanych drużyn. Atletico pod wodzą Simeone słynie z defensywy, a Tottenham w ważnych meczach często gra ostrożnie. Spodziewam się meczu z niewielką liczbą bramek i wysoką intensywnością w środku pola.",
+      "typ": "Poniżej 2.5 goli",
+      "kurs": "1.65",
+      "analiza": "Klasyczne starcie dwóch taktyków. Atletico słynie z defensywnej organizacji, a Tottenham, choć ma potencjał ofensywny, może być ostrożny w domowym meczu Ligi Mistrzów. Przewidujemy zacięte spotkanie z niewielką liczbą bramek.",
       "status": "oczekujący"
     },
     {
@@ -35,9 +35,9 @@
       "data": "18.03.2026",
       "godzina": "21:00",
       "mecz": "Bayern München vs Atalanta (UEFA Champions League)",
-      "typ": "Powyżej 3.5 gola",
-      "kurs": "2.00",
-      "analiza": "Bayern to maszyna do strzelania goli, a Atalanta, znana ze swojego ofensywnego stylu, często pozostawia luki w obronie. Mecz ma potencjał na otwartą wymianę ciosów, gdzie obie drużyny będą szukać okazji do ataku, co powinno przełożyć się na wiele bramek.",
+      "typ": "Obie drużyny strzelą gola (BTTS - Yes)",
+      "kurs": "1.58",
+      "analiza": "Bayern to maszyna do strzelania goli, ale ich defensywa bywa momentami podatna na błędy. Atalanta, ze swoim agresywnym stylem gry, potrafi zaskoczyć każdego i regularnie znajduje drogę do siatki, nawet przeciwko gigantom. Wysokie tempo i bramki z obu stron są bardzo prawdopodobne.",
       "status": "oczekujący"
     },
     {
@@ -46,8 +46,8 @@
       "godzina": "16:30",
       "mecz": "SC Braga vs Ferencvarosi TC (UEFA Europa League)",
       "typ": "SC Braga wygra",
-      "kurs": "1.60",
-      "analiza": "Braga to doświadczony zespół w rozgrywkach europejskich, zwłaszcza u siebie, gdzie prezentuje się bardzo solidnie. Ferencvaros, choć potrafi sprawić niespodziankę, na wyjazdach przeciwko silniejszym rywalom zazwyczaj ma problemy. Spodziewam się kontrolowanego zwycięstwa gospodarzy.",
+      "kurs": "1.75",
+      "analiza": "Braga u siebie w europejskich pucharach prezentuje się bardzo solidnie, z reguły dominując słabszych rywali. Ferencvarosi, choć potrafi być groźne, na wyjeździe w Portugalii będzie miało trudne zadanie. Gospodarze mają przewagę jakości i doświadczenia, co powinno przełożyć się na zwycięstwo.",
       "status": "oczekujący"
     }
   ]
