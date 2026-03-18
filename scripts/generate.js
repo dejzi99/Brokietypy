@@ -70,8 +70,8 @@ async function run() {
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
 
   try {
-    // UŻYWAMY STABILNEGO ENDPOINTU v1 ZAMIAST v1beta
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    // UŻYWAMY ENDPOINTU v1beta ORAZ MODELU gemini-2.5-flash-preview-09-2025
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
