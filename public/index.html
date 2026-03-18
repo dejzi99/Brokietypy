@@ -98,7 +98,7 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
             // ZMIENNE DO OBLICZEŃ MATEMATYCZNYCH
             let wygrane = 0;
             let przegrane = 0;
-            let zyskKuponowy = 0; // Liczymy czysty profit (kurs - 1)
+            let zyskKuponowy = 0; 
 
             const odwroconaHistoria = historiaData.reverse();
             let html = '';
@@ -115,14 +115,12 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
                         statusClass = 'win'; 
                         statusText = '✅ TRAFIONY';
                         wygrane++;
-                        // Zysk: kurs 1.85 to na czysto +0.85 jednostki
                         zyskKuponowy += (parseFloat(m.kurs.replace(',','.')) - 1);
                     }
                     if (m.status === 'przegrana') { 
                         statusClass = 'loss'; 
                         statusText = '❌ PUDŁO';
                         przegrane++;
-                        // Strata: cała 1 jednostka
                         zyskKuponowy -= 1; 
                     }
 
@@ -142,38 +140,37 @@ h2 { font-size: 24px; margin-top: 40px; color: #aaa; text-align: left; border-bo
 
             document.getElementById('history').innerHTML = html;
 
-            // RYSOWANIE PANELU STATYSTYK
+            // RYSOWANIE PANELU STATYSTYK - Wymuszenie wyświetlania nawet przy zerach!
             const sumaZakladow = wygrane + przegrane;
-            if (sumaZakladow > 0) {
-                const winRate = Math.round((wygrane / sumaZakladow) * 100);
-                const yieldPct = ((zyskKuponowy / sumaZakladow) * 100).toFixed(2);
-                
-                let yieldColor = yieldPct > 0 ? 'profit' : (yieldPct < 0 ? 'loss' : 'neutral');
-                let yieldZnak = yieldPct > 0 ? '+' : '';
+            
+            const winRate = sumaZakladow > 0 ? Math.round((wygrane / sumaZakladow) * 100) : 0;
+            const yieldPct = sumaZakladow > 0 ? ((zyskKuponowy / sumaZakladow) * 100).toFixed(2) : "0.00";
+            
+            let yieldColor = parseFloat(yieldPct) > 0 ? 'profit' : (parseFloat(yieldPct) < 0 ? 'loss' : 'neutral');
+            let yieldZnak = parseFloat(yieldPct) > 0 ? '+' : '';
 
-                const statsHtml = `
-                    <div class="stats-panel">
-                        <div class="stat-box">
-                            <div class="stat-value ${winRate >= 50 ? 'profit' : 'loss'}">${winRate}%</div>
-                            <div class="stat-label">Skuteczność</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-value ${yieldColor}">${yieldZnak}${yieldPct}%</div>
-                            <div class="stat-label">Yield (Zysk)</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-value neutral">${wygrane} - ${przegrane}</div>
-                            <div class="stat-label">Bilans (W-L)</div>
-                        </div>
+            const statsHtml = `
+                <div class="stats-panel">
+                    <div class="stat-box">
+                        <div class="stat-value ${winRate >= 50 && sumaZakladow > 0 ? 'profit' : (sumaZakladow === 0 ? 'neutral' : 'loss')}">${winRate}%</div>
+                        <div class="stat-label">Skuteczność</div>
                     </div>
-                `;
-                document.getElementById('stats-container').innerHTML = statsHtml;
-            }
+                    <div class="stat-box">
+                        <div class="stat-value ${yieldColor}">${yieldZnak}${yieldPct}%</div>
+                        <div class="stat-label">Yield (Zysk)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value neutral">${wygrane} - ${przegrane}</div>
+                        <div class="stat-label">Bilans (W-L)</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('stats-container').innerHTML = statsHtml;
 
         } catch (e) {
             document.getElementById('history').innerHTML = "<p style='color: #555;'>Błąd ładowania archiwum.</p>";
         }
-    } // <-- Tutaj brakowało klamry zamykającej funkcję
+    }
 
     fetchTypy();
     fetchHistory();
