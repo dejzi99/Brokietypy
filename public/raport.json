@@ -1,1 +1,1 @@
-{"mecze":[{"data":"18.03.2026","mecz":"Błąd Analizy AI","analiza":"Błąd modelu: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.","status":"błąd"}]}
+{"mecze":[{"data":"18.03.2026","mecz":"Błąd Analizy AI","analiza":"Błąd połączenia/modelu: models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.","status":"błąd"}]}
