@@ -63,54 +63,64 @@ async function run() {
   Wybierz 5 typów. Zwróć WYŁĄCZNIE JSON. Podaj fixture_id i bukmacherów (STS, Superbet, Fortuna).
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
 
-  // WODOODPORNY SYSTEM AUTO-WYKRYWANIA MODELU
-  const modeleDoTestu = [
-      "gemini-1.5-flash",
-      "gemini-1.5-flash-latest",
-      "gemini-1.5-pro",
-      "gemini-pro",
-      "gemini-2.5-flash-preview-09-2025"
-  ];
-
   let cleanJson = null;
-  let lastError = "Nieznany błąd";
-
-  console.log("Rozpoczynam łączenie z AI. Testuję listę dostępnych modeli...");
-
-  for (const model of modeleDoTestu) {
-      try {
-          console.log(`Testuję model: ${model}...`);
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-          
-          const response = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-          });
-
-          const resData = await response.json();
-
-          if (response.ok && resData.candidates && resData.candidates[0].content) {
-              console.log(`✅ Sukces! Znalazłem działający model: ${model}`);
-              let rawText = resData.candidates[0].content.parts[0].text;
-              const start = rawText.indexOf('{');
-              const end = rawText.lastIndexOf('}') + 1;
-              cleanJson = rawText.substring(start, end);
-              break; // Mamy dane, wychodzimy z pętli!
-          } else {
-              console.log(`❌ Model ${model} niedostępny. Błąd:`, resData.error?.message);
-              lastError = resData.error?.message || "Błąd odpowiedzi API";
-          }
-      } catch (e) {
-          console.log(`❌ Błąd przy modelu ${model}:`, e.message);
-          lastError = e.message;
-      }
-  }
 
   try {
-      if (!cleanJson) {
-          throw new Error("Wszystkie modele w Twoim regionie/kluczu API zawiodły. Ostatni błąd: " + lastError);
+      if (!geminiKey) throw new Error("Brak klucza GEMINI_API_KEY w Secrets!");
+
+      console.log("Krok 1: Pytam serwery Google o listę dostępnych modeli dla Twojego klucza API...");
+      
+      const modelsUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`;
+      const modelsRes = await fetch(modelsUrl);
+      const modelsData = await modelsRes.json();
+
+      if (modelsData.error) {
+          throw new Error(`Błąd odczytu klucza API z Google: ${modelsData.error.message}. Upewnij się, że poprawnie zapisałeś klucz.`);
       }
+
+      let selectedModel = "";
+      if (modelsData.models && Array.isArray(modelsData.models)) {
+          // Filtrujemy tylko te modele, które potrafią generować tekst
+          const availableModels = modelsData.models
+              .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"))
+              .map(m => m.name.replace('models/', ''));
+
+          console.log("Modele do których masz dostęp na nowym kluczu:", availableModels.join(", "));
+
+          // Wybieramy najlepszy dostępny na koncie
+          if (availableModels.includes("gemini-1.5-flash")) selectedModel = "gemini-1.5-flash";
+          else if (availableModels.includes("gemini-1.5-pro")) selectedModel = "gemini-1.5-pro";
+          else if (availableModels.includes("gemini-2.0-flash")) selectedModel = "gemini-2.0-flash";
+          else if (availableModels.includes("gemini-pro")) selectedModel = "gemini-pro";
+          else if (availableModels.length > 0) selectedModel = availableModels[0]; // Bierzemy cokolwiek co zadziała
+      }
+
+      if (!selectedModel) {
+          throw new Error("Twój nowy klucz API nie posiada uprawnień do żadnego modelu generującego tekst.");
+      }
+
+      console.log(`Krok 2: Używam pewnego modelu prosto z Twojej listy: ${selectedModel}`);
+      const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${geminiKey}`;
+
+      const response = await fetch(generateUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+      });
+
+      const resData = await response.json();
+
+      if (response.ok && resData.candidates && resData.candidates[0].content) {
+          console.log(`✅ Sukces! Wygenerowano analizy.`);
+          let rawText = resData.candidates[0].content.parts[0].text;
+          const start = rawText.indexOf('{');
+          const end = rawText.lastIndexOf('}') + 1;
+          cleanJson = rawText.substring(start, end);
+      } else {
+          throw new Error(resData.error?.message || "Odpowiedź nie zawierała danych JSON.");
+      }
+
+      if (!cleanJson) throw new Error("Błąd przy parsowaniu danych z AI.");
 
       const generatedData = JSON.parse(cleanJson);
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
@@ -130,13 +140,13 @@ async function run() {
       }
 
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-      console.log("✅ Raport i Historia zaktualizowane.");
+      console.log("✅ Raport i Historia zapisane poprawnie.");
 
   } catch (e) {
       console.error("Błąd krytyczny:", e.message);
       fs.writeFileSync(filePath, JSON.stringify({
           error: e.message,
-          mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Awaria AI: " + e.message, status: "błąd" }]
+          mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Szczegóły awarii: " + e.message, status: "błąd" }]
       }));
   }
 }
