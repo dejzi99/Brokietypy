@@ -23,8 +23,10 @@ async function run() {
         const response = await fetch(url, options);
         if (response.ok) return await response.json();
         
+        const errData = await response.json();
+        console.log(`Próba ${i+1} nieudana. Status: ${response.status}. Serwer mówi:`, JSON.stringify(errData));
+
         if (response.status !== 429 && response.status < 500) {
-            const errData = await response.json();
             throw new Error(errData.error?.message || `Błąd HTTP ${response.status}`);
         }
       } catch (e) {
@@ -68,8 +70,8 @@ async function run() {
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}]}]}`;
 
   try {
-    // ZMIENIONY MODEL NA STABILNY: gemini-1.5-flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    // UŻYWAMY STABILNEGO ENDPOINTU v1 ZAMIAST v1beta
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
     
     const resData = await fetchWithRetry(url, {
       method: 'POST',
@@ -101,7 +103,7 @@ async function run() {
     }
   } catch (e) {
     fs.writeFileSync(filePath, JSON.stringify({
-      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd modelu: " + e.message, status: "błąd" }]
+      mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy AI", analiza: "Błąd połączenia/modelu: " + e.message, status: "błąd" }]
     }));
   }
 }
