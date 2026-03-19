@@ -2,5 +2,130 @@
   {
     "data": "18.03.2026",
     "mecze": []
+  },
+  {
+    "data": "19.03.2026",
+    "mecze": [
+      {
+        "fixture_id": "1528346",
+        "data": "19.03.2026",
+        "godzina": "18:45",
+        "mecz": "Lyon vs Celta Vigo (UEFA Europa League)",
+        "typ": "Lyon (1)",
+        "kurs": "1.88",
+        "analiza": "Lyon, grający u siebie, w ostatnich meczach prezentuje solidną formę, zwłaszcza w ofensywie. Celta Vigo miewa problemy na wyjazdach, co może być kluczowe w meczu europejskim. Spodziewam się dominacji gospodarzy i ich zwycięstwa, aby zbudować przewagę przed rewanżem.",
+        "status": "oczekujący",
+        "bukmacherzy": [
+          {
+            "nazwa": "STS",
+            "kurs": "1.85"
+          },
+          {
+            "nazwa": "Superbet",
+            "kurs": "1.88"
+          },
+          {
+            "nazwa": "Fortuna",
+            "kurs": "1.90"
+          }
+        ]
+      },
+      {
+        "fixture_id": "1528342",
+        "data": "19.03.2026",
+        "godzina": "21:00",
+        "mecz": "Aston Villa vs Lille (UEFA Europa League)",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "1.75",
+        "analiza": "Obie drużyny znane są z ofensywnego stylu gry i posiadają w składach zawodników potrafiących zaskoczyć. Mecz pucharowy z europejską stawką powinien obfitować w dynamiczne akcje i szanse bramkowe, a ich wzajemny styl gry sprzyja otwartej wymianie ciosów. Oczekuję co najmniej trzech bramek w tym spotkaniu.",
+        "status": "oczekujący",
+        "bukmacherzy": [
+          {
+            "nazwa": "STS",
+            "kurs": "1.73"
+          },
+          {
+            "nazwa": "Superbet",
+            "kurs": "1.75"
+          },
+          {
+            "nazwa": "Fortuna",
+            "kurs": "1.76"
+          }
+        ]
+      },
+      {
+        "fixture_id": "1528343",
+        "data": "19.03.2026",
+        "godzina": "21:00",
+        "mecz": "AS Roma vs Bologna (UEFA Europa League)",
+        "typ": "Obie drużyny strzelą (BTTS)",
+        "kurs": "1.70",
+        "analiza": "Roma u siebie jest zawsze groźna w ofensywie, ale Bologna pod wodzą Thiago Motty (jeśli nadal prowadzi zespół w 2026) to zespół, który potrafi zaskoczyć i ma swoją siłę ofensywną. Ich ostatnie mecze często kończyły się wymianą ciosów. Spodziewam się otwartego spotkania z bramkami po obu stronach.",
+        "status": "oczekujący",
+        "bukmacherzy": [
+          {
+            "nazwa": "STS",
+            "kurs": "1.68"
+          },
+          {
+            "nazwa": "Superbet",
+            "kurs": "1.70"
+          },
+          {
+            "nazwa": "Fortuna",
+            "kurs": "1.72"
+          }
+        ]
+      },
+      {
+        "fixture_id": "1528344",
+        "data": "19.03.2026",
+        "godzina": "21:00",
+        "mecz": "FC Porto vs VfB Stuttgart (UEFA Europa League)",
+        "typ": "FC Porto (1)",
+        "kurs": "1.78",
+        "analiza": "Porto to doświadczony europejski gracz, a ich stadion jest prawdziwą twierdzą, gdzie rzadko tracą punkty w europejskich pucharach. Stuttgart, choć zyskuje na sile w Bundeslidze, na wyjazdach w Europie może mieć trudności z tak wymagającym rywalem. Stawiam na doświadczenie i przewagę własnego boiska Portugalczyków.",
+        "status": "oczekujący",
+        "bukmacherzy": [
+          {
+            "nazwa": "STS",
+            "kurs": "1.75"
+          },
+          {
+            "nazwa": "Superbet",
+            "kurs": "1.78"
+          },
+          {
+            "nazwa": "Fortuna",
+            "kurs": "1.80"
+          }
+        ]
+      },
+      {
+        "fixture_id": "1528345",
+        "data": "19.03.2026",
+        "godzina": "21:00",
+        "mecz": "Real Betis vs Panathinaikos (UEFA Europa League)",
+        "typ": "Real Betis (1)",
+        "kurs": "1.65",
+        "analiza": "Betis, grając u siebie w Hiszpanii, jest zdecydowanym faworytem tego spotkania. Ich forma domowa w La Liga oraz europejskie doświadczenie dają im przewagę nad greckim rywalem. Panathinaikos, choć z ambicjami, prawdopodobnie nie zdoła powstrzymać ofensywy gospodarzy. Spodziewam się komfortowego zwycięstwa Betisu.",
+        "status": "oczekujący",
+        "bukmacherzy": [
+          {
+            "nazwa": "STS",
+            "kurs": "1.63"
+          },
+          {
+            "nazwa": "Superbet",
+            "kurs": "1.65"
+          },
+          {
+            "nazwa": "Fortuna",
+            "kurs": "1.67"
+          }
+        ]
+      }
+    ]
   }
 ]
