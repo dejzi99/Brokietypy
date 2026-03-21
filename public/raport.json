@@ -1,90 +1,18 @@
 {
   "mecze": [
     {
-      "fixture_id": "1379270",
-      "data": "20.03.2026",
-      "godzina": "21:00",
-      "mecz": "Bournemouth vs Manchester United",
-      "typ": "Obie drużyny strzelą gola (BTTS)",
-      "kurs": "1.75",
-      "analiza": "Manchester United, mimo wysokich aspiracji, często ma problemy z utrzymaniem czystego konta, zwłaszcza na wyjazdach. Bournemouth gra u siebie i potrafi zaskoczyć ofensywnie. Oczekujemy otwartego spotkania z bramkami po obu stronach.",
+      "fixture_id": "1379271",
+      "data": "21.03.2026",
+      "godzina": "13:30",
+      "mecz": "Brighton vs Liverpool",
+      "typ": "Liverpool wygra",
+      "kurs": "1.68",
+      "analiza": "Liverpool, wciąż w walce o tytuł Premier League, nie może pozwolić sobie na stratę punktów w tym spotkaniu. Brighton, choć potrafi zaskoczyć na własnym stadionie, będzie miało trudności z powstrzymaniem rozpędzonej ofensywy The Reds. Oczekujemy dominacji gości i pewnego zwycięstwa, co umocni ich pozycję w ligowej tabeli.",
       "status": "oczekujący",
       "bukmacherzy": [
         {
           "nazwa": "STS",
-          "kurs": "1.72"
-        },
-        {
-          "nazwa": "Superbet",
-          "kurs": "1.78"
-        },
-        {
-          "nazwa": "Fortuna",
-          "kurs": "1.75"
-        }
-      ]
-    },
-    {
-      "fixture_id": "1391108",
-      "data": "20.03.2026",
-      "godzina": "21:00",
-      "mecz": "Villarreal vs Real Sociedad",
-      "typ": "Poniżej 2.5 gola",
-      "kurs": "1.80",
-      "analiza": "To będzie starcie dwóch drużyn, które cenią sobie organizację defensywną. Zarówno Villarreal, jak i Real Sociedad potrafią kontrolować przebieg meczu, co często prowadzi do taktycznych, niskobramkowych spotkań. Spodziewamy się zaciętej walki w środku pola i małej liczby bramek.",
-      "status": "oczekujący",
-      "bukmacherzy": [
-        {
-          "nazwa": "STS",
-          "kurs": "1.77"
-        },
-        {
-          "nazwa": "Superbet",
-          "kurs": "1.82"
-        },
-        {
-          "nazwa": "Fortuna",
-          "kurs": "1.80"
-        }
-      ]
-    },
-    {
-      "fixture_id": "1388548",
-      "data": "20.03.2026",
-      "godzina": "20:30",
-      "mecz": "RB Leipzig vs 1899 Hoffenheim",
-      "typ": "RB Leipzig wygra i Powyżej 2.5 gola",
-      "kurs": "1.95",
-      "analiza": "RB Leipzig na własnym stadionie to jedna z najsilniejszych ofensywnie drużyn w Bundeslidze. Hoffenheim, choć potrafi strzelać, ma problemy z obroną, szczególnie na wyjazdach. Oczekujemy dominacji gospodarzy i wielu bramek.",
-      "status": "oczekujący",
-      "bukmacherzy": [
-        {
-          "nazwa": "STS",
-          "kurs": "1.90"
-        },
-        {
-          "nazwa": "Superbet",
-          "kurs": "1.98"
-        },
-        {
-          "nazwa": "Fortuna",
-          "kurs": "1.95"
-        }
-      ]
-    },
-    {
-      "fixture_id": "1378156",
-      "data": "20.03.2026",
-      "godzina": "18:30",
-      "mecz": "Cagliari vs Napoli",
-      "typ": "Napoli wygra",
-      "kurs": "1.65",
-      "analiza": "Napoli, nawet jeśli przechodzi przez okres wahań formy, wciąż posiada indywidualności zdolne do przesądzenia o wyniku meczu. Cagliari, walczące o utrzymanie, może być trudnym rywalem u siebie, ale przewaga jakościowa powinna leżeć po stronie gości.",
-      "status": "oczekujący",
-      "bukmacherzy": [
-        {
-          "nazwa": "STS",
-          "kurs": "1.62"
+          "kurs": "1.65"
         },
         {
           "nazwa": "Superbet",
@@ -92,31 +20,103 @@
         },
         {
           "nazwa": "Fortuna",
-          "kurs": "1.65"
+          "kurs": "1.67"
         }
       ]
     },
     {
-      "fixture_id": "1387933",
-      "data": "20.03.2026",
-      "godzina": "20:45",
-      "mecz": "Lens vs Angers",
-      "typ": "Lens wygra",
-      "kurs": "1.55",
-      "analiza": "Lens to regularny kandydat do walki o europejskie puchary, szczególnie silny na swoim boisku. Angers, jako zespół niżej notowany, będzie miał trudne zadanie w starciu z dobrze zorganizowaną i ofensywną drużyną gospodarzy. Oczekujemy pewnego zwycięstwa Lens.",
+      "fixture_id": "1388543",
+      "data": "21.03.2026",
+      "godzina": "15:30",
+      "mecz": "Bayern München vs Union Berlin",
+      "typ": "Bayern München wygra i Powyżej 2.5 gola",
+      "kurs": "1.52",
+      "analiza": "Bayern na własnym stadionie to absolutna potęga i maszyna do zdobywania bramek, rzadko traci punkty. Union Berlin, mimo swojej charakterystycznej solidności i organizacji defensywnej, prawdopodobnie nie zdoła powstrzymać ofensywy Bawarczyków, co powinno przełożyć się na kilka bramek w meczu. Spodziewamy się otwartego spotkania z dużą ilością trafień.",
       "status": "oczekujący",
       "bukmacherzy": [
         {
           "nazwa": "STS",
-          "kurs": "1.53"
+          "kurs": "1.50"
         },
         {
           "nazwa": "Superbet",
-          "kurs": "1.58"
+          "kurs": "1.52"
         },
         {
           "nazwa": "Fortuna",
-          "kurs": "1.55"
+          "kurs": "1.51"
+        }
+      ]
+    },
+    {
+      "fixture_id": "1378161",
+      "data": "21.03.2026",
+      "godzina": "18:00",
+      "mecz": "AC Milan vs Torino",
+      "typ": "AC Milan wygra",
+      "kurs": "1.72",
+      "analiza": "AC Milan wciąż walczy o pozycję w czołówce Serie A i miejsce w Lidze Mistrzów. Torino to niewygodny i fizycznie grający rywal, ale Rossoneri na San Siro są znacznie silniejsi i posiadają większą jakość w składzie. Powinni udowodnić swoją przewagę, zdobywając kluczowe trzy punkty i utrzymując presję na rywalach.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.70"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.72"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.71"
+        }
+      ]
+    },
+    {
+      "fixture_id": "1379272",
+      "data": "21.03.2026",
+      "godzina": "18:30",
+      "mecz": "Everton vs Chelsea",
+      "typ": "Chelsea wygra",
+      "kurs": "1.88",
+      "analiza": "Chelsea potrzebuje zwycięstwa, aby utrzymać się w wyścigu o europejskie puchary w Premier League. Everton, choć na Goodison Park zawsze jest groźny i waleczny, ma mniejsze zasoby kadrowe i często boryka się z problemami ze skutecznością. Spodziewamy się zaciętej walki, ale ostatecznie górą powinni być goście z Londynu, wykorzystując swoją przewagę techniczną.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.85"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.88"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.87"
+        }
+      ]
+    },
+    {
+      "fixture_id": "1387937",
+      "data": "21.03.2026",
+      "godzina": "21:05",
+      "mecz": "Nice vs Paris Saint Germain",
+      "typ": "Paris Saint Germain wygra",
+      "kurs": "1.45",
+      "analiza": "PSG dominuje w Ligue 1 i rzadko przegrywa z niżej notowanymi rywalami, zwłaszcza gdy gra o ważne punkty. Nicea, mimo że potrafi grać solidnie u siebie, będzie stawiać opór, ale indywidualna jakość i głębia składu zawodników Paryżan jest zbyt duża, aby gospodarze mogli myśleć o zwycięstwie. Spodziewamy się pewnej wygranej lidera ligi.",
+      "status": "oczekujący",
+      "bukmacherzy": [
+        {
+          "nazwa": "STS",
+          "kurs": "1.43"
+        },
+        {
+          "nazwa": "Superbet",
+          "kurs": "1.45"
+        },
+        {
+          "nazwa": "Fortuna",
+          "kurs": "1.44"
         }
       ]
     }
