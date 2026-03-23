@@ -10,7 +10,6 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  // Wymuszenie strefy czasowej polskiej (Warszawa), aby Github nie mylił dni
   const dzisiajPl = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
   const dataDlaApi = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
 
@@ -31,6 +30,33 @@ async function run() {
     return null;
   }
 
+  // Funkcja wysyłająca powiadomienie na Telegram
+  async function sendTelegramMessage(message) {
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+      
+      if (!botToken || !chatId) {
+          console.log("⚠️ Brak kluczy Telegram (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID). Pomijam wysyłanie wiadomości.");
+          return;
+      }
+
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      try {
+          const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+          });
+          if (res.ok) {
+              console.log("✅ Wysłano powiadomienie na Telegram!");
+          } else {
+              console.log("❌ Błąd Telegrama:", await res.text());
+          }
+      } catch (e) {
+          console.error("❌ Problem z połączeniem z Telegramem:", e.message);
+      }
+  }
+
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
 
@@ -47,7 +73,7 @@ async function run() {
         
         if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
 
-        // SORTOWANIE PRIORYTETOWE: Liga Mistrzów (2), LE (3) i Top 5 lig lądują na samej górze listy!
+        // Priorytet dla najważniejszych lig i Ligi Mistrzów
         const topLigi = [2, 3, 39, 140, 135, 78, 61];
         wybraneMecze.sort((a, b) => {
             const aTop = topLigi.includes(a.league.id) ? 0 : 1;
@@ -55,7 +81,6 @@ async function run() {
             return aTop - bTop;
         });
 
-        // Poszerzamy limit do 45 i pokazujemy AI status meczu
         listaDoAnalizy = wybraneMecze.slice(0, 45).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name}) | Status: ${match.fixture.status.short}`;
@@ -68,43 +93,34 @@ async function run() {
     console.log("Problem z danymi sportowymi:", e.message);
   }
 
-  // Wzmocniony prompt z priorytetem na "NS" i Ligę Mistrzów
+  // Wzmocniony prompt - tylko jeden kurs i długa analiza!
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto PRAWDZIWA i JEDYNA lista meczów na dzisiaj:
   ${listaDoAnalizy || 'BRAK MECZÓW.'}
   
   ZASADY ABSOLUTNE:
   1. ZABRANIAM wymyślania meczów, których nie ma na powyższej liście.
-  2. Wybierz 5 najciekawszych meczów, które mają status "NS" (Not Started). Priorytetowo potraktuj Ligę Mistrzów (UEFA Champions League) oraz topowe ligi.
+  2. Wybierz 5 najciekawszych meczów (status NS). Priorytet: Liga Mistrzów i topowe ligi.
   3. Jeśli lista to "BRAK MECZÓW", zwróć JSON z pustą tablicą "mecze": [].
-  4. Zwróć WYŁĄCZNIE czysty JSON. Podaj dokładne fixture_id z listy oraz kursy dla STS, Superbet, Fortuna.
+  4. Pole "analiza" MUSI być szczegółowe. Napisz krótki akapit (3-4 zdania), wspominając np. o formie, kontuzjach, taktyce i uzasadnieniu typu.
+  5. Zwróć WYŁĄCZNIE czysty JSON. Podaj jeden uśredniony "kurs".
   
-  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis", "status": "oczekujący", "bukmacherzy": [{"nazwa": "STS", "kurs": "1.75"}, {"nazwa": "Superbet", "kurs": "1.80"}, {"nazwa": "Fortuna", "kurs": "1.78"}]}]}`;
+  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Szczegółowy opis z argumentami...", "status": "oczekujący"}]}`;
 
   let cleanJson = null;
 
   try {
       if (!geminiKey) throw new Error("Brak klucza GEMINI_API_KEY w Secrets!");
 
-      console.log("Krok 1: Pobieram listę modeli dla Twojego klucza...");
-      
       const modelsUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`;
       const modelsRes = await fetch(modelsUrl);
       const modelsData = await modelsRes.json();
-
-      if (modelsData.error) {
-          throw new Error(`Błąd odczytu klucza API z Google: ${modelsData.error.message}`);
-      }
 
       let availableModels = [];
       if (modelsData.models && Array.isArray(modelsData.models)) {
           availableModels = modelsData.models
               .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"))
               .map(m => m.name.replace('models/', ''));
-      }
-
-      if (availableModels.length === 0) {
-          throw new Error("Twój nowy klucz API nie posiada uprawnień do generowania tekstu.");
       }
 
       const preferredOrder = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro", "gemini-1.0-pro", "gemini-2.0-flash"];
@@ -117,7 +133,6 @@ async function run() {
           if (!modelsToTry.includes(am)) modelsToTry.push(am);
       }
 
-      console.log("Krok 2: Będę testował modele po kolei:", modelsToTry.join(", "));
       let lastError = "Nieznany błąd";
 
       for (const model of modelsToTry) {
@@ -142,7 +157,7 @@ async function run() {
                   break; 
               } else {
                   lastError = resData.error?.message || "Błąd limitu";
-                  console.log(`⚠️ Model ${model} odrzucił zapytanie (Prawdopodobnie brak limitów). Szukam dalej... Odrzucenie: ${lastError}`);
+                  console.log(`⚠️ Model ${model} odrzucił zapytanie. Szukam dalej...`);
               }
           } catch (e) {
               lastError = e.message;
@@ -155,6 +170,7 @@ async function run() {
       const generatedData = JSON.parse(cleanJson);
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
       
+      // Zapis do historii
       let historia = [];
       if (fs.existsSync(historyPath)) {
           try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) { historia = []; }
@@ -172,6 +188,19 @@ async function run() {
       fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
       console.log("✅ Raport i Historia zapisane poprawnie.");
 
+      // FORMOWANIE I WYSYŁANIE WIADOMOŚCI TELEGRAM
+      if (generatedData.mecze && generatedData.mecze.length > 0) {
+          let tgMessage = `🔥 <b>NOWE TYPY NA DZIŚ (${dzisiajPl})</b> 🔥\n\n`;
+          generatedData.mecze.forEach(m => {
+              if(m.status !== 'błąd') {
+                  tgMessage += `⚽ <b>${m.mecz}</b>\n⏰ ${m.godzina}\n🎯 Typ: <b>${m.typ}</b>\n📈 Kurs: ${m.kurs}\n\n`;
+              }
+          });
+          tgMessage += `Więcej szczegółów i pełne analizy na stronie! 💸`;
+          
+          await sendTelegramMessage(tgMessage);
+      }
+
   } catch (e) {
       console.error("Błąd krytyczny:", e.message);
       fs.writeFileSync(filePath, JSON.stringify({
@@ -182,3 +211,4 @@ async function run() {
 }
 
 run();
+
