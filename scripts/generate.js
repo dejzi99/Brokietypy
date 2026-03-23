@@ -68,13 +68,14 @@ async function run() {
     });
 
     if (apiData && apiData.response && apiData.response.length > 0) {
-        const szerokieLigi = [2, 3, 848, 15, 39, 40, 140, 135, 78, 61, 88, 94, 106, 71, 253, 203];
+        // Dodane ID dla reprezentacji: 1 (MŚ), 4 (Euro), 5 (Liga Narodów), 9 (Copa America), 10 (Towarzyskie), 30/32/34 (Kwalifikacje)
+        const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 848];
         let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id));
         
         if (wybraneMecze.length === 0) wybraneMecze = apiData.response; 
 
-        // Priorytet dla najważniejszych lig i Ligi Mistrzów
-        const topLigi = [2, 3, 39, 140, 135, 78, 61];
+        // Priorytet na samej górze: Liga Mistrzów (2) oraz wszystkie główne mecze reprezentacyjne!
+        const topLigi = [1, 2, 3, 4, 5, 9, 10, 30, 32, 34, 39, 61, 78, 135, 140];
         wybraneMecze.sort((a, b) => {
             const aTop = topLigi.includes(a.league.id) ? 0 : 1;
             const bTop = topLigi.includes(b.league.id) ? 0 : 1;
@@ -211,4 +212,3 @@ async function run() {
 }
 
 run();
-
