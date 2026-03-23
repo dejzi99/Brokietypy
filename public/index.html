@@ -40,8 +40,11 @@
     /* Cards */
     .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 15px; text-align: left; border: 1px solid #222; }
     .history-card { opacity: 0.9; }
-    .match-row { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #222; padding: 15px 0; }
+    
+    /* Zmodyfikowany wygląd wiersza pod rozwijaną analizę */
+    .match-row { display: block; border-bottom: 1px solid #222; padding: 15px 0; }
     .match-row:last-child { border-bottom: none; }
+    .match-header { display: flex; justify-content: space-between; align-items: flex-start; }
     
     .pick-box { background: var(--accent); color: #000; padding: 8px 15px; border-radius: 6px; font-weight: 900; font-size: 16px; min-width: 100px; text-align: center; }
     .pick-box.pending { background: var(--pending); }
@@ -49,11 +52,16 @@
     .pick-box.loss { background: var(--error); color: #fff; }
 
     .meta { color: #555; font-size: 11px; margin-bottom: 3px; font-weight: bold; }
-    .reason { color: #999; font-size: 13px; margin-top: 8px; line-height: 1.4; border-left: 2px solid #333; padding-left: 10px; }
-
-    /* Zwykły, pojedynczy kurs */
     .odds-badge { font-size: 14px; font-weight: bold; color: var(--text-dim); margin-top: 8px; text-align: right; }
     
+    /* Rozwijana Analiza */
+    .toggle-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    .toggle-btn:hover { background: #222; border-color: #666; }
+    .analysis-content { display: none; margin-top: 15px; padding: 15px; background: #111417; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #bbb; font-size: 13px; line-height: 1.6; }
+    .analysis-content.show { display: block; animation: fadeIn 0.3s; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
     #error-display { color: var(--error); font-weight: bold; margin: 20px 0; display: none; background: rgba(255,68,68,0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--error); text-align: left; }
 </style>
 </head>
@@ -80,11 +88,9 @@
 </div>
 
 <script>
-    // Funkcja do przełączania zakładek
     function switchTab(tabId, btnElement) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        
         document.getElementById(tabId).classList.add('active');
         btnElement.classList.add('active');
     }
@@ -110,19 +116,21 @@
             data.mecze.forEach(m => {
                 if (m.status === 'błąd') return;
                 
-                // Formatyzowanie kursu
                 let kursStr = m.kurs ? `@${m.kurs}` : '';
 
                 html += `
                     <div class="match-row">
-                        <div style="flex: 1; padding-right: 15px;">
-                            <div class="meta">${m.godzina || 'DZIŚ'} • PIŁKA NOŻNA</div>
-                            <div style="font-size: 17px; font-weight: bold;">${m.mecz}</div>
-                            <div class="reason">${m.analiza || 'Analiza w trakcie...'}</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="pick-box">${m.typ || 'Typ'}</div>
-                            <div class="odds-badge">${kursStr}</div>
+                        <div class="match-header">
+                            <div style="flex: 1; padding-right: 15px;">
+                                <div class="meta">${m.godzina || 'DZIŚ'} • PIŁKA NOŻNA</div>
+                                <div style="font-size: 17px; font-weight: bold;">${m.mecz}</div>
+                                <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('show')">Czytaj Analizę 🔍</button>
+                                <div class="analysis-content">${m.analiza || 'Brak szczegółowej analizy.'}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="pick-box">${m.typ || 'Typ'}</div>
+                                <div class="odds-badge">${kursStr}</div>
+                            </div>
                         </div>
                     </div>`;
             });
@@ -166,15 +174,17 @@
 
                     dzienHtml += `
                         <div class="match-row" style="opacity: 0.8; font-size: 0.9em;">
-                            <div style="flex: 1;">
-                                <strong>${m.mecz || 'Mecz'}</strong><br>
-                                <small>${m.typ || 'Typ'}</small>
-                            </div>
-                            <div style="text-align: right;">
-                                <div class="pick-box ${statusClass}" style="min-width: 80px; font-size: 11px; padding: 5px;">
-                                    ${(m.status || 'Oczekujący').toUpperCase()}
+                            <div class="match-header">
+                                <div style="flex: 1;">
+                                    <strong>${m.mecz || 'Mecz'}</strong><br>
+                                    <small>${m.typ || 'Typ'}</small>
                                 </div>
-                                <div class="odds-badge" style="font-size: 12px; margin-top: 4px;">@${m.kurs || '-'}</div>
+                                <div style="text-align: right;">
+                                    <div class="pick-box ${statusClass}" style="min-width: 80px; font-size: 11px; padding: 5px;">
+                                        ${(m.status || 'Oczekujący').toUpperCase()}
+                                    </div>
+                                    <div class="odds-badge" style="font-size: 12px; margin-top: 4px;">@${m.kurs || '-'}</div>
+                                </div>
                             </div>
                         </div>`;
                 });
