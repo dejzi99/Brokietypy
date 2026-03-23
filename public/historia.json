@@ -389,7 +389,7 @@
         "typ": "Real Madrid wygra",
         "kurs": "1.85",
         "analiza": "Derby Madrytu to zawsze emocjonujące starcie, ale Real w ostatnich latach często dominuje na własnym stadionie. Forma Królewskich jest stabilna, a siła ofensywna z Bellinghamem i Viniciusem powinna przełamać defensywę Atleti. Typujemy zwycięstwo gospodarzy, biorąc pod uwagę ich przewagę w jakości i wsparcie Santiago Bernabéu.",
-        "status": "oczekujący",
+        "status": "wygrana",
         "bukmacherzy": [
           {
             "nazwa": "STS",
@@ -413,7 +413,7 @@
         "typ": "Powyżej 2.5 gola",
         "kurs": "1.70",
         "analiza": "Derby Tyne-Wear to zawsze intensywne spotkanie, gdzie emocje często przekładają się na otwartą grę. Newcastle, grające u siebie, będzie chciało dominować, a Sunderland, jako zacięty rywal, z pewnością nie odpuści. Spodziewamy się wielu akcji podbramkowych i co najmniej trzech goli, biorąc pod uwagę ofensywny styl obu drużyn w derbach.",
-        "status": "oczekujący",
+        "status": "wygrana",
         "bukmacherzy": [
           {
             "nazwa": "STS",
@@ -437,7 +437,7 @@
         "typ": "Barcelona wygra z handicapem -1.5",
         "kurs": "1.95",
         "analiza": "Barcelona, grająca na Camp Nou, to zawsze faworyt przeciwko niżej notowanym rywalom. Rayo Vallecano jest znane z solidnej obrony, ale w tym meczu przewaga jakościowa Barcelony powinna być zbyt duża. Spodziewamy się komfortowego zwycięstwa gospodarzy z przewagą co najmniej dwóch bramek.",
-        "status": "oczekujący",
+        "status": "przegrana",
         "bukmacherzy": [
           {
             "nazwa": "STS",
@@ -461,7 +461,7 @@
         "typ": "Inter wygra",
         "kurs": "2.10",
         "analiza": "Inter, jako pretendent do tytułu, musi zdobywać punkty w trudnych wyjazdach. Fiorentina potrafi być nieprzewidywalna, zwłaszcza u siebie, ale obecna forma i głębia składu Interu dają im przewagę. Spodziewamy się zaciętego spotkania, ale ostatecznie zwycięstwo gości dzięki ich większej skuteczności i doświadczeniu.",
-        "status": "oczekujący",
+        "status": "przegrana",
         "bukmacherzy": [
           {
             "nazwa": "STS",
@@ -485,7 +485,7 @@
         "typ": "Obie drużyny strzelą gola (BTTS)",
         "kurs": "1.80",
         "analiza": "Mecz dwóch drużyn aspirujących do czołówki Ligue 1. Zarówno Marsylia, jak i Lille posiadają solidne ataki i potrafią stwarzać zagrożenie. Spodziewamy się otwartej gry z obu stron, co powinno zaowocować golami po obu stronach. To spotkanie ma potencjał na remis lub minimalne zwycięstwo którejś z drużyn, ale z pewnością z golami.",
-        "status": "oczekujący",
+        "status": "wygrana",
         "bukmacherzy": [
           {
             "nazwa": "STS",
@@ -502,5 +502,9 @@
         ]
       }
     ]
+  },
+  {
+    "data": "23.03.2026",
+    "mecze": []
   }
 ]
