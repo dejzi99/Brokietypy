@@ -506,5 +506,60 @@
   {
     "data": "23.03.2026",
     "mecze": []
+  },
+  {
+    "data": "24.03.2026",
+    "mecze": [
+      {
+        "fixture_id": "1534900",
+        "data": "24.03.2026",
+        "godzina": "13:00",
+        "mecz": "Al Wahda vs Al Shouleh",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "1.75",
+        "analiza": "Mecze w Saudi Premier League często charakteryzują się otwartą grą i ofensywnym nastawieniem obu drużyn. Al Wahda, grając na własnym stadionie, będzie dążyć do dominacji, natomiast Al Shouleh pokazało w ostatnich spotkaniach, że potrafi skutecznie kontratakować. Brak kluczowych kontuzji po obu stronach oraz historia wzajemnych pojedynków wskazują na wysokie prawdopodobieństwo wielu bramek, co czyni typ 'Powyżej 2.5 gola' bardzo atrakcyjnym. Spodziewamy się dynamicznego spotkania z wieloma okazjami strzeleckimi.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1434133",
+        "data": "24.03.2026",
+        "godzina": "14:00",
+        "mecz": "Huddersfield Town U21 vs Queens Park Rangers U21",
+        "typ": "Huddersfield Town U21 Wygra",
+        "kurs": "1.90",
+        "analiza": "Mecze U21 to często test formy przyszłych talentów, gdzie dominacja na własnym boisku odgrywa znaczącą rolę. Huddersfield U21 w ostatnich tygodniach prezentuje stabilną formę, szczególnie w ofensywie, co sugeruje ich przewagę. QPR U21 miewa problemy z utrzymaniem konsekwencji przez pełne 90 minut, co może być wykorzystane przez gospodarzy. Spodziewam się, że lepsza organizacja i determinacja Huddersfield U21 doprowadzą do zwycięstwa.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1434134",
+        "data": "24.03.2026",
+        "godzina": "14:00",
+        "mecz": "Wigan Athletic U21 vs Bristol City U21",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "1.65",
+        "analiza": "Spotkania w Professional Development League U21 słyną z dynamicznego i ofensywnego stylu gry, gdzie rozwój indywidualnych umiejętności jest priorytetem. Zarówno Wigan U21, jak i Bristol City U21, wykazują tendencję do tworzenia wielu sytuacji bramkowych, jednocześnie nie zawsze prezentując solidną defensywę. Brak rygorów taktycznych często prowadzi do otwartego meczu z wieloma trafieniami. Prognozujemy mecz z minimum trzema bramkami, biorąc pod uwagę charakter tych rozgrywek.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1434135",
+        "data": "24.03.2026",
+        "godzina": "14:00",
+        "mecz": "Hull City U21 vs Swansea City U21",
+        "typ": "Obie Drużyny Strzelą (BTS)",
+        "kurs": "1.55",
+        "analiza": "Charakterystyka ligi U21 sprzyja ofensywnej piłce i testowaniu młodych talentów, co często skutkuje bramkami po obu stronach. Zarówno Hull U21, jak i Swansea U21, posiadają zawodników zdolnych do zdobywania goli, a ich formacje defensywne bywają mniej zorganizowane niż w seniorskich rozgrywkach. Spodziewamy się, że obie drużyny będą aktywnie szukać goli, a otwarta gra doprowadzi do sytuacji, w której zarówno gospodarze, jak i goście, wpiszą się na listę strzelców.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1434136",
+        "data": "24.03.2026",
+        "godzina": "14:00",
+        "mecz": "Peterborough United U21 vs Watford U21",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "1.70",
+        "analiza": "Mecze w Professional Development League U21 są często widowiskowe i pełne goli, co wynika z mniejszej presji na wynik i większego nacisku na ofensywny rozwój graczy. Peterborough U21 i Watford U21 to drużyny, które zazwyczaj grają w otwarty sposób, stwarzając wiele okazji bramkowych. Spodziewamy się, że ich spotkanie będzie kontynuacją tej tendencji, z dużą liczbą strzałów i skuteczną finalizacją. Typ 'Powyżej 2.5 gola' jest w tym kontekście bardzo prawdopodobny.",
+        "status": "oczekujący"
+      }
+    ]
   }
 ]
