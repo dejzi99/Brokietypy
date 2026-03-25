@@ -518,7 +518,7 @@
         "typ": "Powyżej 2.5 gola",
         "kurs": "1.75",
         "analiza": "Mecze w Saudi Premier League często charakteryzują się otwartą grą i ofensywnym nastawieniem obu drużyn. Al Wahda, grając na własnym stadionie, będzie dążyć do dominacji, natomiast Al Shouleh pokazało w ostatnich spotkaniach, że potrafi skutecznie kontratakować. Brak kluczowych kontuzji po obu stronach oraz historia wzajemnych pojedynków wskazują na wysokie prawdopodobieństwo wielu bramek, co czyni typ 'Powyżej 2.5 gola' bardzo atrakcyjnym. Spodziewamy się dynamicznego spotkania z wieloma okazjami strzeleckimi.",
-        "status": "oczekujący"
+        "status": "wygrana"
       },
       {
         "fixture_id": "1434133",
@@ -528,7 +528,7 @@
         "typ": "Huddersfield Town U21 Wygra",
         "kurs": "1.90",
         "analiza": "Mecze U21 to często test formy przyszłych talentów, gdzie dominacja na własnym boisku odgrywa znaczącą rolę. Huddersfield U21 w ostatnich tygodniach prezentuje stabilną formę, szczególnie w ofensywie, co sugeruje ich przewagę. QPR U21 miewa problemy z utrzymaniem konsekwencji przez pełne 90 minut, co może być wykorzystane przez gospodarzy. Spodziewam się, że lepsza organizacja i determinacja Huddersfield U21 doprowadzą do zwycięstwa.",
-        "status": "oczekujący"
+        "status": "wygrana"
       },
       {
         "fixture_id": "1434134",
@@ -538,7 +538,7 @@
         "typ": "Powyżej 2.5 gola",
         "kurs": "1.65",
         "analiza": "Spotkania w Professional Development League U21 słyną z dynamicznego i ofensywnego stylu gry, gdzie rozwój indywidualnych umiejętności jest priorytetem. Zarówno Wigan U21, jak i Bristol City U21, wykazują tendencję do tworzenia wielu sytuacji bramkowych, jednocześnie nie zawsze prezentując solidną defensywę. Brak rygorów taktycznych często prowadzi do otwartego meczu z wieloma trafieniami. Prognozujemy mecz z minimum trzema bramkami, biorąc pod uwagę charakter tych rozgrywek.",
-        "status": "oczekujący"
+        "status": "wygrana"
       },
       {
         "fixture_id": "1434135",
@@ -548,7 +548,7 @@
         "typ": "Obie Drużyny Strzelą (BTS)",
         "kurs": "1.55",
         "analiza": "Charakterystyka ligi U21 sprzyja ofensywnej piłce i testowaniu młodych talentów, co często skutkuje bramkami po obu stronach. Zarówno Hull U21, jak i Swansea U21, posiadają zawodników zdolnych do zdobywania goli, a ich formacje defensywne bywają mniej zorganizowane niż w seniorskich rozgrywkach. Spodziewamy się, że obie drużyny będą aktywnie szukać goli, a otwarta gra doprowadzi do sytuacji, w której zarówno gospodarze, jak i goście, wpiszą się na listę strzelców.",
-        "status": "oczekujący"
+        "status": "wygrana"
       },
       {
         "fixture_id": "1434136",
@@ -558,6 +558,101 @@
         "typ": "Powyżej 2.5 gola",
         "kurs": "1.70",
         "analiza": "Mecze w Professional Development League U21 są często widowiskowe i pełne goli, co wynika z mniejszej presji na wynik i większego nacisku na ofensywny rozwój graczy. Peterborough U21 i Watford U21 to drużyny, które zazwyczaj grają w otwarty sposób, stwarzając wiele okazji bramkowych. Spodziewamy się, że ich spotkanie będzie kontynuacją tej tendencji, z dużą liczbą strzałów i skuteczną finalizacją. Typ 'Powyżej 2.5 gola' jest w tym kontekście bardzo prawdopodobny.",
+        "status": "wygrana"
+      }
+    ]
+  },
+  {
+    "data": "25.03.2026",
+    "mecze": [
+      {
+        "fixture_id": "1536901",
+        "data": "08:00",
+        "godzina": "21:00",
+        "mecz": "Vietnam U23 vs Korea DPR U23 (Friendlies)",
+        "typ": "Wynik",
+        "kurs": "1.60",
+        "analiza": "Vietnam U23, wciąż w fazie rozwoju, mierzy się z Korea DPR U23, które są silną drużyną.  Vietnam ma potencjał do wygranej, szczególnie jeśli uda im się skutecznie wykorzystać swoje umiejętności w ofensywie. Korea DPR U23, z kolei, jest solidną drużyną, która może wygrać, jeśli Korea DPR U23 nie będzie w stanie skutecznie kontrolować gry.  Mecz jest FT, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Vietnam U23 ma dobry start, ale Korea DPR U23 jest bardzo silna i może zaskoczyć.  Warto obserwować, czy Vietnam nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Uzbekistan U19, nie wykazało się wystarczająco dobrze.  Kurs 1.60 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1526254",
+        "data": "11:00",
+        "godzina": "23:00",
+        "mecz": "Kazakhstan vs Comoros (Friendlies)",
+        "typ": "CANC",
+        "kurs": "1.50",
+        "analiza": "Mecz z Comoros to bardzo ciekawa okazja dla Kazachstanu, którzy mogą zyskać na morale i pozycji w tabeli. Comoros, choć słabszy, ma potencjał do zaskoczenia.  Kazachstan, w przeciwnym razie, może mieć trudności z utrzymaniem pozycji w tabeli.  Mecz jest CANC, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Kazachstan ma dobry start, ale Comoros jest bardzo silny.  Kurs 1.50 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy Comoros nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Uzbekistan U19, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1537178",
+        "data": "11:00",
+        "godzina": "23:00",
+        "mecz": "Uzbekistan U19 vs Japan U19 (Friendlies)",
+        "typ": "FT",
+        "kurs": "1.70",
+        "analiza": "Mecz z Japonią U19 to bardzo ciekawa okazja dla Uzbekistan U19, którzy mogą zyskać na morale i pozycji w tabeli. Japonia U19 jest silną drużyną, ale Uzbekistan U19 ma potencjał do wygranej.  Uzbekistan U19, w przeciwnym razie, może mieć trudności z utrzymaniem pozycji w tabeli.  Mecz jest FT, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Uzbekistan U19 ma dobry start, ale Japonia U19 jest bardzo silna.  Kurs 1.70 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy Uzbekistan U19 nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z China PR U23, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1536902",
+        "data": "12:35",
+        "godzina": "23:00",
+        "mecz": "China PR U23 vs Thailand U23 (Friendlies)",
+        "typ": "1H",
+        "kurs": "1.65",
+        "analiza": "Mecz z Thailand U23 to bardzo ciekawa okazja dla China PR U23, którzy mogą zyskać na morale i pozycji w tabeli. Thailand U23 jest słabsza, ale China PR U23 ma silną pozycję w tabeli.  Mecz jest 1H, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  China PR U23 ma dobry start, ale Thailand U23 jest bardzo silna.  Kurs 1.65 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy China PR U23 nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z England U18, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1536903",
+        "data": "13:00",
+        "godzina": "23:00",
+        "mecz": "England U18 vs Bulgaria U18 (Friendlies)",
+        "typ": "NS",
+        "kurs": "1.75",
+        "analiza": "Mecz z Bulgaria U18 to bardzo ciekawa okazja dla England U18, którzy mogą zyskać na morale i pozycji w tabeli. Bulgaria U18 jest słabsza, ale England U18 ma dobry start.  Mecz jest NS, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  England U18 ma dobry start, ale Bulgaria U18 jest bardzo silna.  Kurs 1.75 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy England U18 nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Vietnam U23, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1537177",
+        "data": "14:30",
+        "godzina": "23:00",
+        "mecz": "Bhutan U23 vs Tajikistan U23 (Friendlies)",
+        "typ": "NS",
+        "kurs": "1.80",
+        "analiza": "Mecz z Tajikistan U23 to bardzo ciekawa okazja dla Bhutan U23, którzy mogą zyskać na morale i pozycji w tabeli. Tajikistan U23 jest słabszy, ale Bhutan U23 ma dobry start.  Mecz jest NS, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Bhutan U23 ma dobry start, ale Tajikistan U23 jest bardzo silna.  Kurs 1.80 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy Bhutan U23 nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Kyrgyzstan vs Equatorial Guinea, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1537176",
+        "data": "19:00",
+        "godzina": "00:00",
+        "mecz": "Portugal U18 vs Morocco U18 (Friendlies)",
+        "typ": "NS",
+        "kurs": "1.90",
+        "analiza": "Mecz z Morzem U18 to bardzo ciekawa okazja dla Portugal U18, którzy mogą zyskać na morale i pozycji w tabeli. Morze U18 jest słabsze, ale Portugal U18 ma dobry start.  Mecz jest NS, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Portugal U18 ma dobry start, ale Morze U18 jest bardzo silna.  Kurs 1.90 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy Portugal U18 nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Uzbekistan U19, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1536904",
+        "data": "15:00",
+        "godzina": "02:00",
+        "mecz": "Kyrgyzstan vs Equatorial Guinea (Friendlies)",
+        "typ": "NS",
+        "kurs": "1.70",
+        "analiza": "Mecz z Equatorial Guinea to bardzo ciekawa okazja dla Kyrgyzstan U23, którzy mogą zyskać na morale i pozycji w tabeli. Equatorial Guinea jest słabszy, ale Kyrgyzstan U23 ma dobry start.  Mecz jest NS, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Kyrgyzstan U23 ma dobry start, ale Equatorial Guinea jest bardzo silna.  Kurs 1.70 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy Kyrgyzstan U23 nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Thailand U23, nie wykazało się wystarczająco dobrze.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1537175",
+        "data": "23:00",
+        "godzina": "04:00",
+        "mecz": "Congo DR vs Bermuda (Friendlies)",
+        "typ": "NS",
+        "kurs": "1.85",
+        "analiza": "Mecz z Bermuda to bardzo ciekawa okazja dla Congo DR, którzy mogą zyskać na morale i pozycji w tabeli. Bermuda jest słabszy, ale Congo DR ma dobry start.  Mecz jest NS, co oznacza, że nie ma żadnych istotnych zmian w wynikach.  Congo DR ma dobry start, ale Bermuda jest bardzo silna.  Kurs 1.85 sugeruje, że jest to bardzo ciekawy mecz, który może się rozwinąć do wygranej, ale nie jest to wysoce prawdopodobny wynik.  Warto obserwować, czy Congo DR nie zdoła wygrać, ponieważ w ostatnich meczach, w tym w meczu z Tajikistan U23, nie wykazało się wystarczająco dobrze.",
         "status": "oczekujący"
       }
     ]
