@@ -51,7 +51,7 @@ async function run() {
     if (apiData && apiData.response && apiData.response.length > 0) {
         const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 848];
         
-        // SZTYWNY FILTR: Tylko mecze ze statusem 'NS' (Nierozpoczęte) trafiają do AI!
+        // Filtr: Tylko nierozpoczęte mecze (NS)
         let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id) && match.fixture.status.short === 'NS');
         if (wybraneMecze.length === 0) wybraneMecze = apiData.response.filter(match => match.fixture.status.short === 'NS'); 
 
@@ -69,16 +69,18 @@ async function run() {
     }
   } catch (e) { console.log("Problem z API-Sports:", e.message); }
 
-  // ULEPSZONY PROMPT: Zakaz wpisywania statusów!
+  // PROMPT Z ZABEZPIECZENIAMI ANTY-HALUCYNACYJNYMI
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto PRAWDZIWA i JEDYNA lista meczów na dzisiaj (tylko nierozpoczęte):
   ${listaDoAnalizy || 'BRAK MECZÓW.'}
   
-  ZASADY ABSOLUTNE:
-  1. Wybierz 5 najciekawszych meczów.
-  2. W polu "typ" MUSISZ wpisać konkretny zakład (np. "Wygrana 1", "Powyżej 2.5 gola", "Obie strzelą"). ZABRANIAM wpisywania skrótów takich jak "NS", "FT" czy "1H"!
-  3. Pole "analiza" MUSI być szczegółowe (3-4 zdania z argumentami).
-  4. Zwróć WYŁĄCZNIE czysty JSON.
+  ZASADY ABSOLUTNE (ZŁAMANIE GROZI BŁĘDEM KRYTYCZNYM):
+  1. ZABRANIAM zmyślania meczów, których nie ma na liście.
+  2. Jeśli na liście widzisz "BRAK MECZÓW.", MUSISZ zwrócić wyłącznie pusty obiekt JSON: {"mecze": []}.
+  3. Jeśli mecze są dostępne, wybierz maksymalnie 5 najciekawszych.
+  4. W polu "typ" wpisz konkretny zakład (np. "Wygrana 1", "Powyżej 2.5 gola"). ZAKAZ wpisywania statusów typu "NS", "FT", "1H".
+  5. Pole "analiza" musi mieć 3-4 zdania argumentacji.
+  6. Zwróć WYŁĄCZNIE czysty JSON.
   
   Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis...", "status": "oczekujący"}]}`;
 
@@ -109,7 +111,7 @@ async function run() {
           } catch (e) {}
       }
 
-      if (!cleanJson) throw new Error("Wszystkie modele mają zablokowane limity.");
+      if (!cleanJson) throw new Error("Brak odpowiedzi AI.");
 
       const generatedData = JSON.parse(cleanJson);
       fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
@@ -117,9 +119,13 @@ async function run() {
       let historia = [];
       if (fs.existsSync(historyPath)) { try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) { historia = []; } }
       const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze };
-      if (dzisiejszyIndex !== -1) { historia[dzisiejszyIndex] = nowyWpis; } else { historia.push(nowyWpis); }
-      fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
+      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze || [] }; // Zabezpieczenie na wypadek pustej tablicy
+      
+      // Zapisujemy do historii tylko, jeśli są jakieś mecze (żeby nie psuć widoku)
+      if (nowyWpis.mecze.length > 0) {
+          if (dzisiejszyIndex !== -1) { historia[dzisiejszyIndex] = nowyWpis; } else { historia.push(nowyWpis); }
+          fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
+      }
 
       if (generatedData.mecze && generatedData.mecze.length > 0) {
           let tgMessage = `🔥 <b>NOWE TYPY NA DZIŚ (${dzisiajPl})</b> 🔥\n\n`;
