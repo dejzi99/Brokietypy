@@ -564,57 +564,6 @@
   },
   {
     "data": "26.03.2026",
-    "mecze": [
-      {
-        "fixture_id": "1487925",
-        "data": "26.03.2026",
-        "godzina": "20:45",
-        "mecz": "Italy vs Northern Ireland (World Cup - Qualification Europe)",
-        "typ": "Italy wygra handicap -1.5",
-        "kurs": "1.80",
-        "analiza": "Włochy, jako jedna z czołowych reprezentacji Europy, w meczach kwalifikacyjnych na własnym terenie zazwyczaj dominują słabszych rywali. Możemy spodziewać się agresywnego pressingu od pierwszych minut i szybkiego dążenia do strzelenia bramki. Północna Irlandia, choć waleczna, ma ograniczone możliwości ofensywne, co w połączeniu z defensywną solidnością Włoch prawdopodobnie zaowocuje pewnym zwycięstwem gospodarzy z przewagą co najmniej dwóch bramek. Ich obecna forma i głębia składu sprawiają, że są zdecydowanym faworytem.",
-        "status": "oczekujący"
-      },
-      {
-        "fixture_id": "1487926",
-        "data": "26.03.2026",
-        "godzina": "20:45",
-        "mecz": "Poland vs Albania (World Cup - Qualification Europe)",
-        "typ": "Poniżej 2.5 gola",
-        "kurs": "1.80",
-        "analiza": "Spotkania Polski z Albanią, zwłaszcza w eliminacjach, często charakteryzują się dużą intensywnością i taktyczną ostrożnością. Obie drużyny mają solidne defensywy, a ich ataki potrafią być nieskuteczne przeciwko dobrze zorganizowanym obronom. Spodziewamy się wyrównanego meczu, gdzie nikt nie będzie chciał ryzykować, co może skutkować małą liczbą klarownych sytuacji i ostatecznie niskim wynikiem. Forma obu ekip wskazuje na to, że priorytetem będzie nie stracić bramki, co sprzyja underowi.",
-        "status": "oczekujący"
-      },
-      {
-        "fixture_id": "1487924",
-        "data": "26.03.2026",
-        "godzina": "20:45",
-        "mecz": "Denmark vs FYR Macedonia (World Cup - Qualification Europe)",
-        "typ": "Powyżej 2.5 gola",
-        "kurs": "1.80",
-        "analiza": "Dania, grając u siebie, jest znana ze swojego ofensywnego stylu i skuteczności, szczególnie przeciwko zespołom niżej notowanym. Macedonia Północna, mimo że potrafi zaskoczyć, często ma problemy z utrzymaniem solidnej defensywy przez cały mecz, zwłaszcza pod presją. Biorąc pod uwagę silny atak Danii i ich dążenie do dominacji w grupie, można oczekiwać, że stworzą wiele okazji bramkowych i strzelą co najmniej trzy gole, nawet jeśli Macedonia zdoła odpowiedzieć jedną bramką.",
-        "status": "oczekujący"
-      },
-      {
-        "fixture_id": "1487922",
-        "data": "26.03.2026",
-        "godzina": "18:00",
-        "mecz": "Türkiye vs Romania (World Cup - Qualification Europe)",
-        "typ": "Remis",
-        "kurs": "1.80",
-        "analiza": "To spotkanie zapowiada się na bardzo wyrównane. Turcja, choć ma potencjał, bywa niestabilna, a Rumunia często prezentuje się solidnie w meczach z silniejszymi rywalami, szczególnie jeśli potrafią zneutralizować ich kluczowych graczy. Obie drużyny będą szukać punktów w walce o awans, ale nie za wszelką cenę. Taktyczna ostrożność, twarda gra w środku pola i walka o każdy metr boiska sugerują podział punktów jako najbardziej prawdopodobny scenariusz, biorąc pod uwagę ich obecną formę.",
-        "status": "oczekujący"
-      },
-      {
-        "fixture_id": "1501815",
-        "data": "26.03.2026",
-        "godzina": "21:00",
-        "mecz": "Brazil vs France (Friendlies)",
-        "typ": "Obie drużyny strzelą (BTTS) - Tak",
-        "kurs": "1.80",
-        "analiza": "Mecz towarzyski pomiędzy Brazylią a Francją to starcie dwóch gigantów światowego futbolu, pełne indywidualności w ataku. Obie drużyny dysponują fantastycznymi ofensywnymi zawodnikami, którzy są w stanie stworzyć zagrożenie z każdej pozycji. Mimo że to mecz towarzyski, prestiż rywalizacji gwarantuje zaangażowanie. Spodziewamy się otwartej gry, gdzie każdy zespół będzie chciał udowodnić swoją wyższość, co zazwyczaj prowadzi do wymiany ciosów i bramek z obu stron. Defensywy mogą nie być tak zwarte jak w meczach o stawkę.",
-        "status": "oczekujący"
-      }
-    ]
+    "mecze": []
   }
 ]
