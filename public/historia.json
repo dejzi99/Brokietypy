@@ -564,6 +564,57 @@
   },
   {
     "data": "26.03.2026",
-    "mecze": []
+    "mecze": [
+      {
+        "fixture_id": "1001",
+        "data": "26.03.2026",
+        "godzina": "20:45",
+        "mecz": "Brazylia vs Anglia",
+        "typ": "Powyżej 2.5 gola",
+        "kurs": "1.95",
+        "analiza": "To spotkanie towarzyskie pomiędzy dwiema piłkarskimi potęgami zapowiada się niezwykle ofensywnie. Obie drużyny posiadają w swoich szeregach wybitnych napastników i lubią grać otwarty futbol, co często prowadzi do wielu bramek. Anglia pokazała ostatnio, że potrafi strzelać gole, ale również miewa luki w obronie, co stwarza szanse dla dynamicznej Brazylii.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1002",
+        "data": "26.03.2026",
+        "godzina": "20:30",
+        "mecz": "Niemcy vs Holandia",
+        "typ": "Obie drużyny strzelą gola",
+        "kurs": "1.70",
+        "analiza": "Klasyczne starcie europejskich gigantów, które zawsze dostarcza emocji i bramek. Zarówno Niemcy, jak i Holandia prezentują styl gry nastawiony na atak, dysponując utalentowanymi ofensywnymi zawodnikami. Ich ostatnie bezpośrednie konfrontacje często kończyły się trafieniami po obu stronach, co wskazuje na wysoką prawdopodobieństwo powtórki.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1003",
+        "data": "26.03.2026",
+        "godzina": "12:00",
+        "mecz": "Japonia vs Korea Południowa",
+        "typ": "Remis (X)",
+        "kurs": "3.20",
+        "analiza": "Azjatycki klasyk to zazwyczaj bardzo zacięte spotkanie, gdzie żadna ze stron nie chce ustąpić. Obie reprezentacje są w czołówce azjatyckiej piłki, prezentując zbliżony poziom organizacji i dyscypliny taktycznej. W meczach towarzyskich często brakuje dodatkowego ryzyka, a remis wydaje się być sprawiedliwym i prawdopodobnym wynikiem w starciu tak wyrównanych rywali.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1004",
+        "data": "26.03.2026",
+        "godzina": "02:00",
+        "mecz": "Meksyk vs Kolumbia",
+        "typ": "Wygrana Meksyku",
+        "kurs": "2.30",
+        "analiza": "Meksyk, grając często w Ameryce Północnej, ma zazwyczaj przewagę wsparcia kibiców, co stanowi istotny atut. Kolumbia w ostatnich latach bywała nieco niestabilna, podczas gdy Meksyk konsekwentnie utrzymuje wysoki poziom, zwłaszcza w meczach towarzyskich, budując pewność siebie. Ich aktualna forma i determinacja sugerują, że mogą zdominować to spotkanie.",
+        "status": "oczekujący"
+      },
+      {
+        "fixture_id": "1005",
+        "data": "26.03.2026",
+        "godzina": "18:00",
+        "mecz": "Egipt vs Senegal",
+        "typ": "Poniżej 2.5 gola",
+        "kurs": "1.65",
+        "analiza": "Starcia pomiędzy tymi dwoma afrykańskimi potęgami są zazwyczaj bardzo taktyczne i charakteryzują się dużą ostrożnością. Obie drużyny posiadają solidne defensywy i często priorytetem jest nie stracić bramki. Ich historia bezpośrednich spotkań sugeruje niską liczbę goli, jako że rywalizacja jest zacięta, a błędy kosztowne.",
+        "status": "oczekujący"
+      }
+    ]
   }
 ]
