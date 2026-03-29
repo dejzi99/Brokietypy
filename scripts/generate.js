@@ -38,13 +38,13 @@ async function run() {
       const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
       try {
           await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' }) });
-      } catch (e) { console.error("Błąd Telegrama:", e.message); }
+      } catch (e) {}
   }
 
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
     
-    // 1. POBIERANIE PIŁKI NOŻNEJ
+    console.log("Pobieram Piłkę Nożną...");
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
@@ -61,7 +61,7 @@ async function run() {
         }).join('\n');
     }
 
-    // 2. POBIERANIE KOSZYKÓWKI (TYLKO NBA - Liga ID 12)
+    console.log("Pobieram NBA...");
     const apiBasketball = await fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&timezone=Europe/Warsaw&league=12`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
@@ -88,11 +88,12 @@ async function run() {
   
   ZASADY ABSOLUTNE:
   1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej.
-  2. Jeśli obie listy są puste, zwróć pusty obiekt JSON: {"mecze": []}.
-  3. Wybierz maksymalnie 4 najciekawsze mecze z Piłki Nożnej i maksymalnie 2 najciekawsze mecze z NBA.
-  4. W polu "typ" wpisz konkretny zakład (zakaz wpisywania statusów typu "NS").
-  5. W polu "sport" MUSISZ wpisać "Pilka_Nozna" lub "NBA".
-  6. Zwróć WYŁĄCZNIE czysty JSON.
+  2. Jeśli na obu listach jest "BRAK MECZÓW", zwróć pusty JSON: {"mecze": []}.
+  3. Wybierz 5 najciekawszych meczów łącznie (np. 3 z Piłki Nożnej i 2 z NBA, w zależności od dostępności).
+  4. W polu "typ" wpisz konkretny zakład.
+  5. W polu "sport" MUSISZ wpisać dokładnie "Pilka_Nozna" lub "NBA".
+  6. W polu "analiza" wpisz szczegółowe uzasadnienie (3-4 zdania).
+  7. Zwróć WYŁĄCZNIE czysty JSON.
   
   Struktura: {"mecze": [{"sport": "NBA", "fixture_id": "123", "data": "${dzisiajPl}", "godzina": "02:00", "mecz": "Lakers vs Bulls", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis...", "status": "oczekujący"}]}`;
 
@@ -103,7 +104,7 @@ async function run() {
       const modelsRes = await fetch(modelsUrl);
       const modelsData = await modelsRes.json();
       let availableModels = (modelsData.models || []).filter(m => m.supportedGenerationMethods?.includes("generateContent")).map(m => m.name.replace('models/', ''));
-      const preferredOrder = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro", "gemini-1.0-pro"];
+      const preferredOrder = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro", "gemini-2.0-flash"];
       let modelsToTry = [...new Set([...preferredOrder, ...availableModels])];
 
       for (const model of modelsToTry) {
@@ -143,7 +144,7 @@ async function run() {
           generatedData.mecze.forEach(m => { 
               if(m.status !== 'błąd') {
                   const ikona = m.sport === 'NBA' ? '🏀' : '⚽';
-                  tgMessage += `${ikona} <b>${m.mecz}</b>\n🎯 Typ: <b>${m.typ}</b>\n📈 Kurs: ${m.kurs}\n\n`; 
+                  tgMessage += `${ikona} <b>${m.mecz}</b>\n⏰ ${m.godzina}\n🎯 Typ: <b>${m.typ}</b>\n📈 Kurs: ${m.kurs}\n\n`; 
               }
           });
           await sendTelegramMessage(tgMessage);
