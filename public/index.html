@@ -1,350 +1,370 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brokietypy | AI Betting Analytics</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Styl Matrix / Neon Green */
-        body {
-            background-color: #0f172a; /* Ciemny granat/czerń */
-            color: #f8fafc;
-        }
-        .neon-text {
-            color: #4ade80;
-            text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
-        }
-        .neon-border {
-            border: 1px solid #4ade80;
-            box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
-        }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Animacja ładowania */
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #4ade80;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BROKIETYPY | Statystyki</title>
+<style>
+    :root {
+        --bg: #0d0f12;
+        --card-bg: #161a1e;
+        --accent: #00ff66;
+        --text: #ffffff;
+        --text-dim: #888;
+        --error: #ff4444;
+        --pending: #ffaa00;
+    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; text-align: center; padding: 20px; margin: 0; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .green { color: var(--accent); text-transform: uppercase; }
+    h1 { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; margin: 20px 0; }
 
-        /* Ukrywanie elementów */
-        .hidden-safely { display: none !important; }
-    </style>
+    /* Bramka Logowania */
+    #login-screen { margin-top: 10vh; }
+    .login-input { width: 80%; max-width: 300px; padding: 15px; border-radius: 8px; border: 2px solid #333; background: #0d0f12; color: #fff; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 20px; outline: none; transition: 0.3s; }
+    .login-input:focus { border-color: var(--accent); }
+    .login-btn { background: var(--accent); color: #000; font-weight: 900; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 255, 102, 0.2); }
+    #login-error { color: var(--error); margin-top: 15px; font-weight: bold; display: none; }
+
+    /* Zakładki (Tabs) */
+    .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 15px; background: #1a1e24; border: 1px solid #333; color: var(--text-dim); border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
+    .tab-btn:hover { background: #22272e; }
+    .tab-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    
+    .tab-content { display: none; text-align: left; }
+    .tab-content.active { display: block; }
+
+    /* Filtry sportowe - mniejsze zakładki */
+    .sport-filters .tab-btn { padding: 10px; font-size: 13px; border-radius: 8px; }
+
+    /* Stats Panel */
+    .stats-panel { display: flex; justify-content: space-between; background: #1a1e24; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
+    .stat-box { flex: 1; text-align: center; border-right: 1px solid #333; }
+    .stat-box:last-child { border-right: none; }
+    .stat-value { font-size: 28px; font-weight: 900; }
+    .stat-label { color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+    
+    .profit { color: var(--accent); }
+    .loss { color: var(--error); }
+
+    /* Cards */
+    .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 15px; text-align: left; border: 1px solid #222; }
+    .history-card { opacity: 0.9; }
+    
+    .match-row { display: block; border-bottom: 1px solid #222; padding: 15px 0; }
+    .match-row:last-child { border-bottom: none; }
+    .match-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    
+    .pick-box { background: var(--accent); color: #000; padding: 8px 15px; border-radius: 6px; font-weight: 900; font-size: 16px; min-width: 100px; text-align: center; }
+    .pick-box.pending { background: var(--pending); }
+    .pick-box.win { background: var(--accent); }
+    .pick-box.loss { background: var(--error); color: #fff; }
+
+    .meta { color: #555; font-size: 11px; margin-bottom: 3px; font-weight: bold; text-transform: uppercase; }
+    .odds-badge { font-size: 14px; font-weight: bold; color: var(--text-dim); margin-top: 8px; text-align: right; }
+    
+    /* Rozwijana Analiza */
+    .toggle-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    .toggle-btn:hover { background: #222; border-color: #666; }
+    .analysis-content { display: none; margin-top: 15px; padding: 15px; background: #111417; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #bbb; font-size: 13px; line-height: 1.6; }
+    .analysis-content.show { display: block; animation: fadeIn 0.3s; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    #error-display { color: var(--error); font-weight: bold; margin: 20px 0; display: none; background: rgba(255,68,68,0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--error); text-align: left; }
+</style>
 </head>
-<body class="antialiased min-h-screen flex flex-col items-center">
+<body>
 
-    <!-- BRAMKA NA HASŁO -->
-    <div id="passwordGate" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900">
-        <div class="glass-panel p-8 rounded-2xl max-w-md w-full mx-4 text-center border border-green-500/30">
-            <div class="mb-6">
-                <i class="fa-solid fa-robot text-5xl neon-text mb-4"></i>
-                <h2 class="text-2xl font-bold mb-2">System AI Brokietypy</h2>
-                <p class="text-slate-400 text-sm">Dostęp tylko dla zweryfikowanych użytkowników. Wprowadź kod dostępu.</p>
-            </div>
-            <input type="password" id="passwordInput" placeholder="Wprowadź kod..." 
-                   class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white text-center mb-4 focus:outline-none focus:border-green-400 transition-colors">
-            <button onclick="checkPassword()" class="w-full bg-green-500 hover:bg-green-600 text-slate-900 font-bold py-3 rounded-lg transition-colors">
-                ODBLOKUJ DOSTĘP
-            </button>
-            <p id="passwordError" class="text-red-400 text-sm mt-3 hidden-safely">Nieprawidłowy kod dostępu!</p>
-        </div>
-    </div>
-
-    <!-- GŁÓWNA STRONA (Początkowo ukryta) -->
-    <div id="mainContent" class="hidden-safely w-full max-w-4xl px-4 py-8">
+<!-- BRAMKA LOGOWANIA -->
+<div id="login-screen" class="container">
+    <h1>BROKIE<span class="green">TYPY</span></h1>
+    <div class="card" style="text-align: center; max-width: 450px; margin: 0 auto;">
+        <h2 style="text-align: center; margin-top: 10px; border: none;">BRAMKA DOSTĘPU 🔒</h2>
+        <p style="color: var(--text-dim); margin-bottom: 30px;">Wprowadź tajny kod, aby odblokować dzisiejsze typy.</p>
         
-        <!-- NAGŁÓWEK -->
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
-                BROKIE<span class="neon-text">TYPY</span> AI
-            </h1>
-            <p class="text-slate-400">Algorytmiczna analiza rynków sportowych</p>
-        </header>
+        <input type="password" id="access-code" class="login-input" placeholder="Wpisz kod..." onkeypress="handleKeyPress(event)">
+        <br>
+        <button class="login-btn" onclick="verifyCode()">ODBLOKUJ DOSTĘP</button>
+        
+        <div id="login-error">Błędny kod dostępu! Spróbuj ponownie.</div>
+    </div>
+</div>
 
-        <!-- ZAKŁADKI / FILTRY SPORTÓW -->
-        <div class="flex justify-center gap-2 mb-8">
-            <button onclick="setSportFilter('All')" id="btn-All" class="filter-btn px-6 py-2 rounded-full font-bold bg-green-500 text-slate-900 transition-all">
-                Wszystko
-            </button>
-            <button onclick="setSportFilter('Pilka_Nozna')" id="btn-Pilka_Nozna" class="filter-btn px-6 py-2 rounded-full font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:border-green-500 transition-all">
-                ⚽ Piłka Nożna
-            </button>
-            <button onclick="setSportFilter('NBA')" id="btn-NBA" class="filter-btn px-6 py-2 rounded-full font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:border-green-500 transition-all">
-                🏀 NBA
-            </button>
-        </div>
+<!-- GŁÓWNA APLIKACJA (DOMYŚLNIE UKRYTA) -->
+<div id="main-app" class="container" style="display: none;">
+    <h1>BROKIE<span class="green">TYPY</span></h1>
 
-        <!-- STATYSTYKI -->
-        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <div class="glass-panel rounded-xl p-4 text-center">
-                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Skuteczność</p>
-                <p id="stat-winrate" class="text-2xl font-bold neon-text">0.0%</p>
-            </div>
-            <div class="glass-panel rounded-xl p-4 text-center">
-                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Yield</p>
-                <p id="stat-yield" class="text-2xl font-bold text-white">0.00%</p>
-            </div>
-            <div class="glass-panel rounded-xl p-4 text-center">
-                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Trafione</p>
-                <p id="stat-wins" class="text-2xl font-bold text-green-400">0</p>
-            </div>
-            <div class="glass-panel rounded-xl p-4 text-center">
-                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Przegrane</p>
-                <p id="stat-losses" class="text-2xl font-bold text-red-400">0</p>
-            </div>
-        </section>
-
-        <!-- TYPY NA DZIŚ -->
-        <section class="mb-12">
-            <div class="flex items-center gap-3 mb-6 border-b border-slate-700 pb-2">
-                <i class="fa-solid fa-bolt neon-text text-xl"></i>
-                <h2 class="text-2xl font-bold">Dzisiejsze Typy</h2>
-            </div>
-            <div id="todayContainer" class="space-y-4">
-                <div class="flex justify-center py-8"><div class="spinner"></div></div>
-            </div>
-        </section>
-
-        <!-- HISTORIA -->
-        <section>
-            <div class="flex items-center gap-3 mb-6 border-b border-slate-700 pb-2">
-                <i class="fa-solid fa-clock-rotate-left text-slate-400 text-xl"></i>
-                <h2 class="text-2xl font-bold text-slate-300">Historia Analiz</h2>
-            </div>
-            <div id="historyContainer" class="space-y-8">
-                <!-- Historia wstrzykiwana przez JS -->
-            </div>
-        </section>
-
+    <!-- ZAKŁADKI SPORTOWE -->
+    <div class="tabs sport-filters">
+        <button class="tab-btn active" id="btn-All" onclick="setSportFilter('All')">WSZYSTKO</button>
+        <button class="tab-btn" id="btn-Pilka_Nozna" onclick="setSportFilter('Pilka_Nozna')">⚽ PIŁKA NOŻNA</button>
+        <button class="tab-btn" id="btn-NBA" onclick="setSportFilter('NBA')">🏀 NBA</button>
     </div>
 
-    <script>
-        // === KONFIGURACJA HASŁA ===
-        const PRAWIDLOWE_HASLO = "KOD123"; // <-- TUTAJ ZMIENIASZ HASŁO DO STRONY
+    <!-- PANEL STATYSTYK -->
+    <div id="stats-container">
+        <!-- Generowane dynamicznie w JS -->
+    </div>
+    <div id="error-display"></div>
 
-        // Stan aplikacji
-        let appData = {
-            today: null,
-            history: [],
-            currentFilter: 'All' // 'All', 'Pilka_Nozna', 'NBA'
-        };
+    <!-- ZAKŁADKI GŁÓWNE (DZIŚ / HISTORIA) -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-dzis-btn" onclick="switchMainTab('tab-dzis', this)">DZISIEJSZE TYPY</button>
+        <button class="tab-btn" id="tab-historia-btn" onclick="switchMainTab('tab-historia', this)">HISTORIA KUPONÓW</button>
+    </div>
 
-        // --- BRAMKA NA HASŁO ---
-        function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            const errorMsg = document.getElementById('passwordError');
+    <div id="tab-dzis" class="tab-content active">
+        <div id="results">
+            <div class='card'>Ładowanie danych... ⏳</div>
+        </div>
+    </div>
+
+    <div id="tab-historia" class="tab-content">
+        <div id="history">
+            <div class='card'>Ładowanie historii... ⏳</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- KONFIGURACJA BRAMKI LOGOWANIA ---
+    const SECRET_CODE = "KOD123"; // <--- TUTAJ ZMIENIASZ HASŁO DO STRONY (np. BROKIE2026)
+
+    // Stan aplikacji
+    let appData = {
+        today: null,
+        history: [],
+        currentFilter: 'All' // 'All', 'Pilka_Nozna', 'NBA'
+    };
+
+    function verifyCode() {
+        const input = document.getElementById('access-code').value;
+        if (input === SECRET_CODE) {
+            localStorage.setItem('brokie_auth_passed', 'true');
+            unlockApp();
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+            document.getElementById('access-code').style.borderColor = 'var(--error)';
+        }
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') verifyCode();
+    }
+
+    function unlockApp() {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        loadData();
+    }
+
+    // Sprawdzanie przy starcie, czy użytkownik jest już zalogowany
+    window.onload = () => {
+        if (localStorage.getItem('brokie_auth_passed') === 'true') {
+            unlockApp();
+        }
+    };
+
+    // --- LOGIKA APLIKACJI ---
+
+    function switchMainTab(tabId, btnElement) {
+        document.getElementById('tab-dzis').classList.remove('active');
+        document.getElementById('tab-historia').classList.remove('active');
+        document.getElementById('tab-dzis-btn').classList.remove('active');
+        document.getElementById('tab-historia-btn').classList.remove('active');
+        
+        document.getElementById(tabId).classList.add('active');
+        btnElement.classList.add('active');
+    }
+
+    function setSportFilter(sport) {
+        appData.currentFilter = sport;
+        
+        // Aktualizacja wyglądu przycisków dyscyplin
+        document.getElementById('btn-All').classList.remove('active');
+        document.getElementById('btn-Pilka_Nozna').classList.remove('active');
+        document.getElementById('btn-NBA').classList.remove('active');
+        document.getElementById('btn-' + sport).classList.add('active');
+
+        calculateStats();
+        renderMatches();
+    }
+
+    function calculateStats() {
+        let wins = 0;
+        let losses = 0;
+        let totalStaked = 0;
+        let totalProfit = 0;
+
+        appData.history.forEach(day => {
+            if(!day.mecze) return;
             
-            if (input === PRAWIDLOWE_HASLO || sessionStorage.getItem('auth') === 'true') {
-                sessionStorage.setItem('auth', 'true');
-                document.getElementById('passwordGate').classList.add('hidden-safely');
-                document.getElementById('mainContent').classList.remove('hidden-safely');
-                loadData();
-            } else {
-                errorMsg.classList.remove('hidden-safely');
-            }
-        }
+            day.mecze.forEach(m => {
+                const matchSport = m.sport || 'Pilka_Nozna'; 
 
-        // Sprawdź czy użytkownik jest już zalogowany w tej sesji
-        if (sessionStorage.getItem('auth') === 'true') {
-            document.getElementById('passwordGate').classList.add('hidden-safely');
-            document.getElementById('mainContent').classList.remove('hidden-safely');
-            loadData();
-        }
+                // Filtrowanie
+                if (appData.currentFilter !== 'All' && matchSport !== appData.currentFilter) {
+                    return; 
+                }
 
-        // Obliczanie statystyk
-        function calculateStats() {
-            let wins = 0;
-            let losses = 0;
-            let totalStaked = 0;
-            let totalProfit = 0; // Zysk na czysto
+                if (m.status === 'wygrana') {
+                    wins++;
+                    totalStaked += 1;
+                    totalProfit += (parseFloat(String(m.kurs || 1).replace(',','.')) - 1); 
+                } else if (m.status === 'przegrana') {
+                    losses++;
+                    totalStaked += 1;
+                    totalProfit -= 1;
+                }
+            });
+        });
 
-            appData.history.forEach(day => {
-                if(!day.mecze) return;
-                
-                day.mecze.forEach(m => {
-                    // Kompatybilność wsteczna - jeśli stary mecz nie ma sportu, uznajemy go za piłkę
-                    const matchSport = m.sport || 'Pilka_Nozna'; 
+        const total = wins + losses;
+        const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
+        const yieldVal = totalStaked > 0 ? ((totalProfit / totalStaked) * 100).toFixed(2) : "0.00";
+        const yieldClass = parseFloat(yieldVal) >= 0 ? 'profit' : 'loss';
 
-                    // Filtrowanie dyscypliny
-                    if (appData.currentFilter !== 'All' && matchSport !== appData.currentFilter) {
-                        return; 
-                    }
+        document.getElementById('stats-container').innerHTML = `
+            <div class="stats-panel">
+                <div class="stat-box">
+                    <div class="stat-value">${winRate}%</div>
+                    <div class="stat-label">Skuteczność</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value ${yieldClass}">${yieldVal}%</div>
+                    <div class="stat-label">Yield</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${wins}-${losses}</div>
+                    <div class="stat-label">Bilans</div>
+                </div>
+            </div>`;
+    }
 
-                    if (m.status === 'wygrana') {
-                        wins++;
-                        totalStaked += 1; // Zakładamy płaską stawkę 1j
-                        totalProfit += (parseFloat(m.kurs) - 1); 
-                    } else if (m.status === 'przegrana') {
-                        losses++;
-                        totalStaked += 1;
-                        totalProfit -= 1;
-                    }
+    function renderMatches() {
+        // --- 1. RENDEROWANIE DZISIEJSZYCH TYPÓW ---
+        let dzisiejszeHTML = '';
+        if (appData.today && appData.today.mecze) {
+            const filteredToday = appData.today.mecze.filter(m => {
+                const matchSport = m.sport || 'Pilka_Nozna';
+                return appData.currentFilter === 'All' || matchSport === appData.currentFilter;
+            });
+
+            if (filteredToday.length > 0) {
+                dzisiejszeHTML = '<div class="card">';
+                filteredToday.forEach(m => {
+                    if (m.status === 'błąd') return;
+                    let kursStr = m.kurs ? `@${m.kurs}` : '';
+                    const matchSport = m.sport || 'Pilka_Nozna';
+                    const icon = matchSport === 'NBA' ? '🏀 NBA' : '⚽ PIŁKA NOŻNA';
+
+                    dzisiejszeHTML += `
+                        <div class="match-row">
+                            <div class="match-header">
+                                <div style="flex: 1; padding-right: 15px;">
+                                    <div class="meta">${m.godzina || 'DZIŚ'} • ${icon}</div>
+                                    <div style="font-size: 17px; font-weight: bold;">${m.mecz}</div>
+                                    <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('show')">Czytaj Analizę 🔍</button>
+                                    <div class="analysis-content">${m.analiza || 'Brak szczegółowej analizy.'}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="pick-box">${m.typ || 'Typ'}</div>
+                                    <div class="odds-badge">${kursStr}</div>
+                                </div>
+                            </div>
+                        </div>`;
                 });
-            });
-
-            const winRate = wins + losses > 0 ? ((wins / (wins + losses)) * 100).toFixed(1) : 0;
-            const yieldVal = totalStaked > 0 ? ((totalProfit / totalStaked) * 100).toFixed(2) : 0;
-
-            document.getElementById('stat-wins').innerText = wins;
-            document.getElementById('stat-losses').innerText = losses;
-            document.getElementById('stat-winrate').innerText = winRate + '%';
-            
-            const yieldEl = document.getElementById('stat-yield');
-            yieldEl.innerText = yieldVal + '%';
-            if(yieldVal > 0) yieldEl.className = "text-2xl font-bold text-green-400";
-            else if(yieldVal < 0) yieldEl.className = "text-2xl font-bold text-red-400";
-            else yieldEl.className = "text-2xl font-bold text-white";
+                dzisiejszeHTML += '</div>';
+            } else {
+                dzisiejszeHTML = "<div class='card' style='color:#555;'>Brak meczów z tej dyscypliny na dzisiaj.</div>";
+            }
+        } else {
+            dzisiejszeHTML = "<div class='card' style='color:#555;'>Czekamy na dzisiejsze typy... ⏳</div>";
         }
+        document.getElementById('results').innerHTML = dzisiejszeHTML;
 
-        // Filtrowanie Sportu (Zakładki)
-        function setSportFilter(sport) {
-            appData.currentFilter = sport;
+        // --- 2. RENDEROWANIE HISTORII ---
+        let historiaHTML = '';
+        const reversedHistory = [...appData.history].reverse(); 
+
+        reversedHistory.forEach(day => {
+            if(!day.mecze) return;
             
-            // Aktualizacja wyglądu przycisków
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-6 py-2 rounded-full font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:border-green-500 transition-all";
+            const filteredHistoryMecze = day.mecze.filter(m => {
+                const matchSport = m.sport || 'Pilka_Nozna';
+                return appData.currentFilter === 'All' || matchSport === appData.currentFilter;
             });
-            const activeBtn = document.getElementById('btn-' + sport);
-            activeBtn.className = "filter-btn px-6 py-2 rounded-full font-bold bg-green-500 text-slate-900 transition-all";
 
-            // Przelicz od nowa UI
+            if (filteredHistoryMecze.length > 0) {
+                let dzienHtml = `<div class="card history-card"><div class="meta" style="color:#fff; font-size:14px; margin-bottom:10px;">📅 ${day.data}</div>`;
+                
+                filteredHistoryMecze.forEach(m => {
+                    if (m.status === 'błąd') return;
+                    
+                    let statusClass = 'pending';
+                    if (m.status === 'wygrana') statusClass = 'win';
+                    if (m.status === 'przegrana') statusClass = 'loss';
+
+                    dzienHtml += `
+                        <div class="match-row" style="opacity: 0.8; font-size: 0.9em;">
+                            <div class="match-header">
+                                <div style="flex: 1;">
+                                    <strong>${m.mecz || 'Mecz'}</strong><br>
+                                    <small>${m.typ || 'Typ'}</small>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="pick-box ${statusClass}" style="min-width: 80px; font-size: 11px; padding: 5px;">
+                                        ${(m.status || 'Oczekujący').toUpperCase()}
+                                    </div>
+                                    <div class="odds-badge" style="font-size: 12px; margin-top: 4px;">@${m.kurs || '-'}</div>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+                dzienHtml += `</div>`;
+                historiaHTML += dzienHtml;
+            }
+        });
+
+        if (historiaHTML === '') {
+            historiaHTML = "<div class='card' style='color:#555;'>Archiwum dla tej dyscypliny jest puste.</div>";
+        }
+        document.getElementById('history').innerHTML = historiaHTML;
+    }
+
+    async function loadData() {
+        try {
+            const ts = new Date().getTime(); 
+            
+            const [raportRes, historiaRes] = await Promise.all([
+                fetch(`/raport.json?t=${ts}`).catch(() => null),
+                fetch(`/historia.json?t=${ts}`).catch(() => null)
+            ]);
+
+            if (raportRes && raportRes.ok) appData.today = await raportRes.json();
+            if (historiaRes && historiaRes.ok) {
+                const histData = await historiaRes.json();
+                if (Array.isArray(histData)) appData.history = histData;
+            }
+
+            if (appData.today && appData.today.error) {
+                const errBox = document.getElementById('error-display');
+                errBox.style.display = 'block';
+                errBox.innerHTML = `Błąd systemu AI ⚠️<br><small style="font-weight:normal">${appData.today.error}</small>`;
+            }
+
             calculateStats();
             renderMatches();
+
+        } catch (err) {
+            console.error("Błąd wczytywania danych:", err);
+            document.getElementById('results').innerHTML = "<div class='card' style='border-color: #444;'>Brak dzisiejszego raportu lub błąd odczytu bazy.</div>";
         }
+    }
+</script>
 
-        // Generowanie pojedynczej karty meczu
-        function createMatchCard(m) {
-            const matchSport = m.sport || 'Pilka_Nozna';
-            const icon = matchSport === 'NBA' ? '🏀' : '⚽';
-            
-            let statusBadge = `<span class="bg-slate-700 text-slate-300 px-2 py-1 rounded text-xs font-bold uppercase">Oczekujący</span>`;
-            if (m.status === 'wygrana') statusBadge = `<span class="bg-green-500/20 text-green-400 border border-green-500/50 px-2 py-1 rounded text-xs font-bold uppercase">Wygrana</span>`;
-            if (m.status === 'przegrana') statusBadge = `<span class="bg-red-500/20 text-red-400 border border-red-500/50 px-2 py-1 rounded text-xs font-bold uppercase">Przegrana</span>`;
-            if (m.status === 'błąd') statusBadge = `<span class="bg-orange-500/20 text-orange-400 border border-orange-500/50 px-2 py-1 rounded text-xs font-bold uppercase">Błąd API</span>`;
-
-            return `
-                <div class="glass-panel rounded-xl p-5 hover:border-green-500/50 transition-colors">
-                    <div class="flex justify-between items-start mb-3">
-                        <div class="flex items-center gap-2 text-slate-300 text-sm">
-                            <span>${icon}</span>
-                            <span>${m.godzina || ''}</span>
-                        </div>
-                        ${statusBadge}
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-4">${m.mecz}</h3>
-                    
-                    <div class="flex flex-col md:flex-row gap-4 mb-4">
-                        <div class="bg-slate-800/80 rounded-lg p-3 flex-1 border border-slate-700">
-                            <p class="text-xs text-slate-400 uppercase mb-1">Typ Algorytmu</p>
-                            <p class="font-bold text-green-400">${m.typ}</p>
-                        </div>
-                        <div class="bg-slate-800/80 rounded-lg p-3 w-full md:w-32 border border-slate-700 text-center">
-                            <p class="text-xs text-slate-400 uppercase mb-1">Kurs</p>
-                            <p class="font-bold text-white">${m.kurs}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700/50 text-sm text-slate-300 leading-relaxed">
-                        <p><span class="text-green-400 font-bold mr-1">> AI:</span> ${m.analiza}</p>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Renderowanie meczów
-        function renderMatches() {
-            const todayContainer = document.getElementById('todayContainer');
-            const historyContainer = document.getElementById('historyContainer');
-            
-            todayContainer.innerHTML = '';
-            historyContainer.innerHTML = '';
-
-            // Dzisiejsze
-            let dzisiejszeHTML = '';
-            if (appData.today && appData.today.mecze) {
-                const filteredToday = appData.today.mecze.filter(m => {
-                    const matchSport = m.sport || 'Pilka_Nozna';
-                    return appData.currentFilter === 'All' || matchSport === appData.currentFilter;
-                });
-
-                if (filteredToday.length > 0) {
-                    filteredToday.forEach(m => dzisiejszeHTML += createMatchCard(m));
-                } else {
-                    dzisiejszeHTML = `<p class="text-slate-500 text-center italic py-4">Brak typów na dziś dla wybranej dyscypliny.</p>`;
-                }
-            } else {
-                dzisiejszeHTML = `<p class="text-slate-500 text-center italic py-4">Algorytm w trakcie obliczeń...</p>`;
-            }
-            todayContainer.innerHTML = dzisiejszeHTML;
-
-            // Historia
-            let historiaHTML = '';
-            // Odwracamy historie zeby najnowsze dni byly wyzej
-            const reversedHistory = [...appData.history].reverse(); 
-
-            reversedHistory.forEach(day => {
-                if(!day.mecze) return;
-                
-                const filteredHistoryMecze = day.mecze.filter(m => {
-                    const matchSport = m.sport || 'Pilka_Nozna';
-                    return appData.currentFilter === 'All' || matchSport === appData.currentFilter;
-                });
-
-                if (filteredHistoryMecze.length > 0) {
-                    historiaHTML += `
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold text-slate-400 mb-4 ml-2 border-l-4 border-slate-600 pl-3">${day.data}</h3>
-                            <div class="space-y-4">
-                                ${filteredHistoryMecze.map(m => createMatchCard(m)).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-
-            if (historiaHTML === '') {
-                historiaHTML = `<p class="text-slate-500 text-center italic py-4">Brak meczów w historii dla tej dyscypliny.</p>`;
-            }
-            historyContainer.innerHTML = historiaHTML;
-        }
-
-        // Pobieranie danych JSON
-        async function loadData() {
-            try {
-                // Dodajemy timestamp, zeby przegladarka nie cachowala starych plikow
-                const ts = new Date().getTime(); 
-                
-                const [raportRes, historiaRes] = await Promise.all([
-                    fetch(`raport.json?t=${ts}`),
-                    fetch(`historia.json?t=${ts}`)
-                ]);
-
-                if (raportRes.ok) appData.today = await raportRes.json();
-                if (historiaRes.ok) appData.history = await historiaRes.json();
-
-                calculateStats();
-                renderMatches();
-
-            } catch (err) {
-                console.error("Błąd wczytywania danych:", err);
-                document.getElementById('todayContainer').innerHTML = `<p class="text-red-400 text-center py-4">Błąd wczytywania bazy danych AI.</p>`;
-            }
-        }
-
-        // Aktywacja inputa na enter
-        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') checkPassword();
-        });
-    </script>
 </body>
 </html>
