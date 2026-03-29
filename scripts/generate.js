@@ -12,16 +12,23 @@ async function run() {
 
   const dzisiaj = new Date();
   const dzisiajPl = dzisiaj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
-  const dataDlaApi = dzisiaj.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
+  const dataDlaApiFootball = dzisiaj.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
   
   const jutro = new Date(dzisiaj);
   jutro.setDate(jutro.getDate() + 1);
-  const jutroDlaApi = jutro.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
+
+  // Funkcja formatująca datę dla darmowego serwera ESPN (YYYYMMDD)
+  const getEspnDate = (d) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}${month}${day}`;
+  };
 
   let listaPilka = "";
   let listaNBA = "";
 
-  async function fetchSports(url, options, maxRetries = 3) {
+  async function fetchSports(url, options = {}, maxRetries = 3) {
     let delay = 1000;
     for (let i = 0; i < maxRetries; i++) {
       try {
@@ -49,9 +56,9 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
     
-    // --- 1. POBIERANIE PIŁKI NOŻNEJ ---
+    // --- 1. POBIERANIE PIŁKI NOŻNEJ (Zostaje na API-Sports, bo działa super) ---
     console.log("⚽ Pobieram Piłkę Nożną...");
-    const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
+    const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApiFootball}&timezone=Europe/Warsaw`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
     });
@@ -67,68 +74,38 @@ async function run() {
         }).join('\n');
     }
 
-    // --- 2. POBIERANIE NBA (Z DETEKTYWEM) ---
-    console.log(`🏀 Pobieram NBA dla dat: ${dataDlaApi} oraz ${jutroDlaApi}...`);
+    // --- 2. POBIERANIE NBA (Nowe, w 100% darmowe API serwera ESPN) ---
+    console.log(`🏀 Pobieram NBA z niezależnego serwera ESPN...`);
     
-    // Dodajemy na sztywno parametr season=2025, na wypadek gdyby API się gubiło
-    const reqOptionsNBA = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
-    const urlToday = `https://v2.nba.api-sports.io/games?date=${dataDlaApi}&season=2025`;
-    const urlTomorrow = `https://v2.nba.api-sports.io/games?date=${jutroDlaApi}&season=2025`;
-
-    const [apiNbaToday, apiNbaTomorrow] = await Promise.all([
-        fetchSports(urlToday, reqOptionsNBA),
-        fetchSports(urlTomorrow, reqOptionsNBA)
+    const [espnToday, espnTomorrow] = await Promise.all([
+        fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${getEspnDate(dzisiaj)}`),
+        fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${getEspnDate(jutro)}`)
     ]);
-
-    // DETEKTYW - zrzuca całą odpowiedź z API do logów!
-    console.log("🕵️ DIAGNOSTYKA API NBA (DZIŚ):", JSON.stringify(apiNbaToday).substring(0, 500));
 
     let wybraneNBA = [];
     
-    // POLUZOWANY FILTR: Przepuszcza wszystko, co nie ma statusu "Finished" (3, FT itp.)
-    const czyNierozpocozety = (match) => {
-        if (!match.status) return true;
-        const s = String(match.status.short).toUpperCase();
-        return s !== '3' && s !== 'FT' && s !== 'AOT' && s !== 'CANC'; 
-    };
-
-    if (apiNbaToday && apiNbaToday.response) {
-        console.log(`📊 Wszystkich meczów dzisiaj (przed filtrem): ${apiNbaToday.response.length}`);
-        if(apiNbaToday.response.length > 0) {
-            console.log("Przykładowy status dzisiejszego meczu NBA:", JSON.stringify(apiNbaToday.response[0].status));
-        }
-        wybraneNBA = wybraneNBA.concat(apiNbaToday.response.filter(czyNierozpocozety));
+    // Status 'pre' w ESPN oznacza nierozpoczęty mecz (Pre-game)
+    if (espnToday && espnToday.events) {
+        wybraneNBA = wybraneNBA.concat(espnToday.events.filter(e => e.status.type.state === 'pre'));
     }
-    
-    if (apiNbaTomorrow && apiNbaTomorrow.response) {
-        wybraneNBA = wybraneNBA.concat(apiNbaTomorrow.response.filter(czyNierozpocozety));
+    if (espnTomorrow && espnTomorrow.events) {
+        wybraneNBA = wybraneNBA.concat(espnTomorrow.events.filter(e => e.status.type.state === 'pre'));
     }
 
-    console.log(`✅ Znaleziono łącznie ${wybraneNBA.length} nierozpoczętych meczów NBA.`);
+    console.log(`✅ Serwer ESPN znalazł łącznie ${wybraneNBA.length} nierozpoczętych meczów NBA.`);
 
     if (wybraneNBA.length > 0) {
         listaNBA = wybraneNBA.slice(0, 15).map(match => {
-            let rawDateString = "";
-            if (match.date && typeof match.date === 'object') {
-                rawDateString = match.date.start || "";
-            } else if (typeof match.date === 'string') {
-                rawDateString = match.date;
-            }
-
-            let dataStr = "Dzisiaj/Jutro";
-            let godzinaStr = match.time || "Noc";
-
-            if (rawDateString) {
-                const meczObj = new Date(rawDateString);
-                dataStr = meczObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
-                godzinaStr = meczObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
-            }
-
-            return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.teams.home.name} vs ${match.teams.away.name}`;
+            const meczObj = new Date(match.date);
+            const dataStr = meczObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
+            const godzinaStr = meczObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
+            return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.name}`;
         }).join('\n');
+    } else {
+        console.log("⚠️ Brak meczów NBA na dzisiaj/jutro.");
     }
 
-  } catch (e) { console.log("❌ Problem z API-Sports (Pobieranie):", e.message); }
+  } catch (e) { console.log("❌ Problem z pobieraniem meczów:", e.message); }
 
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto dwie PRAWDZIWE listy nierozpoczętych meczów.
