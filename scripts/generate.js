@@ -67,7 +67,7 @@ async function run() {
         }).join('\n');
     }
 
-    // --- 2. POBIERANIE NBA (Nowe dedykowane API v2.nba.api-sports.io) ---
+    // --- 2. POBIERANIE NBA (Z poprawionym odczytem daty) ---
     console.log(`🏀 Pobieram NBA dla dat: ${dataDlaApi} oraz ${jutroDlaApi}...`);
     const reqOptionsNBA = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
     
@@ -78,7 +78,7 @@ async function run() {
 
     let wybraneNBA = [];
     
-    // Funkcja filtrująca mecze NBA, które jeszcze się nie zaczęły (status 1 to "Scheduled" w nowym API)
+    // Filtrowanie nierozpoczętych meczów
     const czyNierozpocozety = (match) => {
         if (!match.status) return true;
         return match.status.short === 1 || match.status.short === 'NS' || match.status.short === '1';
@@ -95,15 +95,30 @@ async function run() {
 
     if (wybraneNBA.length > 0) {
         listaNBA = wybraneNBA.slice(0, 15).map(match => {
-            const dataStr = match.date.substring(0, 10);
-            const godzinaStr = match.time || "Noc";
+            // BEZPIECZNY ODCZYT DATY Z NOWEGO API
+            let rawDateString = "";
+            if (match.date && typeof match.date === 'object') {
+                rawDateString = match.date.start || "";
+            } else if (typeof match.date === 'string') {
+                rawDateString = match.date;
+            }
+
+            let dataStr = "Dzisiaj/Jutro";
+            let godzinaStr = match.time || "Noc";
+
+            if (rawDateString) {
+                const meczObj = new Date(rawDateString);
+                dataStr = meczObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
+                godzinaStr = meczObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
+            }
+
             return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.teams.home.name} vs ${match.teams.away.name}`;
         }).join('\n');
     } else {
         console.log("⚠️ Pusta lista NBA z dedykowanego API.");
     }
 
-  } catch (e) { console.log("❌ Problem z API-Sports:", e.message); }
+  } catch (e) { console.log("❌ Problem z API-Sports (Pobieranie):", e.message); }
 
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto dwie PRAWDZIWE listy nierozpoczętych meczów.
