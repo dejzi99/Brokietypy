@@ -13,7 +13,8 @@ async function run() {
   const dzisiajPl = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
   const dataDlaApi = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
 
-  let listaDoAnalizy = "";
+  let listaPilka = "";
+  let listaNBA = "";
 
   async function fetchSports(url, options, maxRetries = 3) {
     let delay = 1000;
@@ -43,46 +44,57 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
     
-    const apiData = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
+    // 1. POBIERANIE PIŁKI NOŻNEJ
+    const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
     });
 
-    if (apiData && apiData.response && apiData.response.length > 0) {
+    if (apiFootball && apiFootball.response) {
         const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 848];
-        
-        // Filtr: Tylko nierozpoczęte mecze (NS)
-        let wybraneMecze = apiData.response.filter(match => szerokieLigi.includes(match.league.id) && match.fixture.status.short === 'NS');
-        if (wybraneMecze.length === 0) wybraneMecze = apiData.response.filter(match => match.fixture.status.short === 'NS'); 
+        let wybranePilka = apiFootball.response.filter(match => szerokieLigi.includes(match.league.id) && match.fixture.status.short === 'NS');
+        if (wybranePilka.length === 0) wybranePilka = apiFootball.response.filter(match => match.fixture.status.short === 'NS'); 
 
-        const topLigi = [1, 2, 3, 4, 5, 9, 10, 30, 32, 34, 39, 61, 78, 135, 140];
-        wybraneMecze.sort((a, b) => {
-            const aTop = topLigi.includes(a.league.id) ? 0 : 1;
-            const bTop = topLigi.includes(b.league.id) ? 0 : 1;
-            return aTop - bTop;
-        });
-
-        listaDoAnalizy = wybraneMecze.slice(0, 45).map(match => {
+        listaPilka = wybranePilka.slice(0, 30).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
     }
+
+    // 2. POBIERANIE KOSZYKÓWKI (TYLKO NBA - Liga ID 12)
+    const apiBasketball = await fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&timezone=Europe/Warsaw&league=12`, {
+      method: 'GET',
+      headers: { 'x-apisports-key': apiSportsKey }
+    });
+
+    if (apiBasketball && apiBasketball.response) {
+        let wybraneNBA = apiBasketball.response.filter(match => match.status.short === 'NS');
+        listaNBA = wybraneNBA.slice(0, 15).map(match => {
+            const godzina = new Date(match.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
+            return `ID: ${match.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name}`;
+        }).join('\n');
+    }
+
   } catch (e) { console.log("Problem z API-Sports:", e.message); }
 
-  // PROMPT Z ZABEZPIECZENIAMI ANTY-HALUCYNACYJNYMI
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Oto PRAWDZIWA i JEDYNA lista meczów na dzisiaj (tylko nierozpoczęte):
-  ${listaDoAnalizy || 'BRAK MECZÓW.'}
+  Oto dwie PRAWDZIWE listy nierozpoczętych meczów na dzisiaj.
   
-  ZASADY ABSOLUTNE (ZŁAMANIE GROZI BŁĘDEM KRYTYCZNYM):
-  1. ZABRANIAM zmyślania meczów, których nie ma na liście.
-  2. Jeśli na liście widzisz "BRAK MECZÓW.", MUSISZ zwrócić wyłącznie pusty obiekt JSON: {"mecze": []}.
-  3. Jeśli mecze są dostępne, wybierz maksymalnie 5 najciekawszych.
-  4. W polu "typ" wpisz konkretny zakład (np. "Wygrana 1", "Powyżej 2.5 gola"). ZAKAZ wpisywania statusów typu "NS", "FT", "1H".
-  5. Pole "analiza" musi mieć 3-4 zdania argumentacji.
+  PIŁKA NOŻNA:
+  ${listaPilka || 'BRAK MECZÓW PIŁKI NOŻNEJ.'}
+  
+  NBA (KOSZYKÓWKA):
+  ${listaNBA || 'BRAK MECZÓW NBA.'}
+  
+  ZASADY ABSOLUTNE:
+  1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej.
+  2. Jeśli obie listy są puste, zwróć pusty obiekt JSON: {"mecze": []}.
+  3. Wybierz maksymalnie 4 najciekawsze mecze z Piłki Nożnej i maksymalnie 2 najciekawsze mecze z NBA.
+  4. W polu "typ" wpisz konkretny zakład (zakaz wpisywania statusów typu "NS").
+  5. W polu "sport" MUSISZ wpisać "Pilka_Nozna" lub "NBA".
   6. Zwróć WYŁĄCZNIE czysty JSON.
   
-  Struktura: {"mecze": [{"fixture_id": "123", "data": "${dzisiajPl}", "godzina": "21:00", "mecz": "Drużyna A vs B", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis...", "status": "oczekujący"}]}`;
+  Struktura: {"mecze": [{"sport": "NBA", "fixture_id": "123", "data": "${dzisiajPl}", "godzina": "02:00", "mecz": "Lakers vs Bulls", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis...", "status": "oczekujący"}]}`;
 
   let cleanJson = null;
 
@@ -119,9 +131,8 @@ async function run() {
       let historia = [];
       if (fs.existsSync(historyPath)) { try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) { historia = []; } }
       const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze || [] }; // Zabezpieczenie na wypadek pustej tablicy
+      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze || [] }; 
       
-      // Zapisujemy do historii tylko, jeśli są jakieś mecze (żeby nie psuć widoku)
       if (nowyWpis.mecze.length > 0) {
           if (dzisiejszyIndex !== -1) { historia[dzisiejszyIndex] = nowyWpis; } else { historia.push(nowyWpis); }
           fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
@@ -129,12 +140,17 @@ async function run() {
 
       if (generatedData.mecze && generatedData.mecze.length > 0) {
           let tgMessage = `🔥 <b>NOWE TYPY NA DZIŚ (${dzisiajPl})</b> 🔥\n\n`;
-          generatedData.mecze.forEach(m => { if(m.status !== 'błąd') tgMessage += `⚽ <b>${m.mecz}</b>\n🎯 Typ: <b>${m.typ}</b>\n📈 Kurs: ${m.kurs}\n\n`; });
+          generatedData.mecze.forEach(m => { 
+              if(m.status !== 'błąd') {
+                  const ikona = m.sport === 'NBA' ? '🏀' : '⚽';
+                  tgMessage += `${ikona} <b>${m.mecz}</b>\n🎯 Typ: <b>${m.typ}</b>\n📈 Kurs: ${m.kurs}\n\n`; 
+              }
+          });
           await sendTelegramMessage(tgMessage);
       }
 
   } catch (e) {
-      fs.writeFileSync(filePath, JSON.stringify({ error: e.message, mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy", analiza: e.message, status: "błąd" }] }));
+      fs.writeFileSync(filePath, JSON.stringify({ error: e.message, mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy", analiza: e.message, status: "błąd", sport: "Brak" }] }));
   }
 }
 run();
