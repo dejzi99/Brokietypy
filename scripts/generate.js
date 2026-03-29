@@ -67,26 +67,39 @@ async function run() {
         }).join('\n');
     }
 
-    // --- 2. POBIERANIE NBA (Z poprawionym odczytem daty) ---
+    // --- 2. POBIERANIE NBA (Z DETEKTYWEM) ---
     console.log(`🏀 Pobieram NBA dla dat: ${dataDlaApi} oraz ${jutroDlaApi}...`);
-    const reqOptionsNBA = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
     
+    // Dodajemy na sztywno parametr season=2025, na wypadek gdyby API się gubiło
+    const reqOptionsNBA = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
+    const urlToday = `https://v2.nba.api-sports.io/games?date=${dataDlaApi}&season=2025`;
+    const urlTomorrow = `https://v2.nba.api-sports.io/games?date=${jutroDlaApi}&season=2025`;
+
     const [apiNbaToday, apiNbaTomorrow] = await Promise.all([
-        fetchSports(`https://v2.nba.api-sports.io/games?date=${dataDlaApi}`, reqOptionsNBA),
-        fetchSports(`https://v2.nba.api-sports.io/games?date=${jutroDlaApi}`, reqOptionsNBA)
+        fetchSports(urlToday, reqOptionsNBA),
+        fetchSports(urlTomorrow, reqOptionsNBA)
     ]);
+
+    // DETEKTYW - zrzuca całą odpowiedź z API do logów!
+    console.log("🕵️ DIAGNOSTYKA API NBA (DZIŚ):", JSON.stringify(apiNbaToday).substring(0, 500));
 
     let wybraneNBA = [];
     
-    // Filtrowanie nierozpoczętych meczów
+    // POLUZOWANY FILTR: Przepuszcza wszystko, co nie ma statusu "Finished" (3, FT itp.)
     const czyNierozpocozety = (match) => {
         if (!match.status) return true;
-        return match.status.short === 1 || match.status.short === 'NS' || match.status.short === '1';
+        const s = String(match.status.short).toUpperCase();
+        return s !== '3' && s !== 'FT' && s !== 'AOT' && s !== 'CANC'; 
     };
 
     if (apiNbaToday && apiNbaToday.response) {
+        console.log(`📊 Wszystkich meczów dzisiaj (przed filtrem): ${apiNbaToday.response.length}`);
+        if(apiNbaToday.response.length > 0) {
+            console.log("Przykładowy status dzisiejszego meczu NBA:", JSON.stringify(apiNbaToday.response[0].status));
+        }
         wybraneNBA = wybraneNBA.concat(apiNbaToday.response.filter(czyNierozpocozety));
     }
+    
     if (apiNbaTomorrow && apiNbaTomorrow.response) {
         wybraneNBA = wybraneNBA.concat(apiNbaTomorrow.response.filter(czyNierozpocozety));
     }
@@ -95,7 +108,6 @@ async function run() {
 
     if (wybraneNBA.length > 0) {
         listaNBA = wybraneNBA.slice(0, 15).map(match => {
-            // BEZPIECZNY ODCZYT DATY Z NOWEGO API
             let rawDateString = "";
             if (match.date && typeof match.date === 'object') {
                 rawDateString = match.date.start || "";
@@ -114,8 +126,6 @@ async function run() {
 
             return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.teams.home.name} vs ${match.teams.away.name}`;
         }).join('\n');
-    } else {
-        console.log("⚠️ Pusta lista NBA z dedykowanego API.");
     }
 
   } catch (e) { console.log("❌ Problem z API-Sports (Pobieranie):", e.message); }
