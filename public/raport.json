@@ -1,3 +1,26 @@
 {
-  "mecze": []
+  "mecze": [
+    {
+      "sport": "NBA",
+      "fixture_id": "401810937",
+      "data": "29.03.2026",
+      "godzina": "21:30",
+      "mecz": "LA Clippers at Milwaukee Bucks",
+      "typ": "Milwaukee Bucks -4.5 (handicap)",
+      "kurs": "1.90",
+      "analiza": "Bucks są niezwykle silni u siebie, a ich gwiazda Giannis Antetokounmpo jest trudny do zatrzymania. Clippers, mimo głębi składu, często mają problemy na wyjazdach przeciwko czołowym drużynom. Spodziewam się dominacji Bucks w strefie podkoszowej i skutecznego ataku, co pozwoli im pokryć ten handicap. Ich forma w ostatnich meczach u siebie jest imponująca.",
+      "status": "oczekujący"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810945",
+      "data": "30.03.2026",
+      "godzina": "04:00",
+      "mecz": "Golden State Warriors at Denver Nuggets",
+      "typ": "Powyżej 228.5 punktów (total)",
+      "kurs": "1.88",
+      "analiza": "Obydwie drużyny posiadają ofensywny potencjał i potrafią grać w szybkim tempie. Warriors, nawet na wyjeździe, opierają się na strzelcach, a Nuggets z Jokiciem w roli reżysera zdobywają wiele punktów. Historia bezpośrednich spotkań często obfituje w wysokie wyniki. Spodziewam się otwartego spotkania z wieloma punktami z obu stron.",
+      "status": "oczekujący"
+    }
+  ]
 }
