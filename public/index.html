@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BROKIETYPY | Statystyki</title>
+<title>Value Bets AI - BROKIETYPY</title>
 <style>
     :root {
         --bg: #0d0f12;
@@ -28,16 +28,12 @@
     #login-error { color: var(--error); margin-top: 15px; font-weight: bold; display: none; }
 
     /* Zakładki (Tabs) */
-    .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; }
-    .tab-btn { flex: 1; padding: 15px; background: #1a1e24; border: 1px solid #333; color: var(--text-dim); border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
+    .tabs { display: flex; gap: 10px; margin-top: 30px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 15px; background: #1a1e24; border: 1px solid #333; color: var(--text-dim); border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
     .tab-btn:hover { background: #22272e; }
     .tab-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
-    
     .tab-content { display: none; text-align: left; }
     .tab-content.active { display: block; }
-
-    /* Filtry sportowe - mniejsze zakładki */
-    .sport-filters .tab-btn { padding: 10px; font-size: 13px; border-radius: 8px; }
 
     /* Stats Panel */
     .stats-panel { display: flex; justify-content: space-between; background: #1a1e24; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
@@ -62,7 +58,7 @@
     .pick-box.win { background: var(--accent); }
     .pick-box.loss { background: var(--error); color: #fff; }
 
-    .meta { color: #555; font-size: 11px; margin-bottom: 3px; font-weight: bold; text-transform: uppercase; }
+    .meta { color: #555; font-size: 11px; margin-bottom: 3px; font-weight: bold; }
     .odds-badge { font-size: 14px; font-weight: bold; color: var(--text-dim); margin-top: 8px; text-align: right; }
     
     /* Rozwijana Analiza */
@@ -83,7 +79,7 @@
     <h1>BROKIE<span class="green">TYPY</span></h1>
     <div class="card" style="text-align: center; max-width: 450px; margin: 0 auto;">
         <h2 style="text-align: center; margin-top: 10px; border: none;">BRAMKA DOSTĘPU 🔒</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px;">Wprowadź tajny kod, aby odblokować dzisiejsze typy.</p>
+        <p style="color: var(--text-dim); margin-bottom: 30px;">Wprowadź tajny kod, aby odblokować dzisiejsze typy sztucznej inteligencji.</p>
         
         <input type="password" id="access-code" class="login-input" placeholder="Wpisz kod..." onkeypress="handleKeyPress(event)">
         <br>
@@ -97,47 +93,32 @@
 <div id="main-app" class="container" style="display: none;">
     <h1>BROKIE<span class="green">TYPY</span></h1>
 
-    <!-- ZAKŁADKI SPORTOWE -->
-    <div class="tabs sport-filters">
-        <button class="tab-btn active" id="btn-All" onclick="setSportFilter('All')">WSZYSTKO</button>
-        <button class="tab-btn" id="btn-Pilka_Nozna" onclick="setSportFilter('Pilka_Nozna')">⚽ PIŁKA NOŻNA</button>
-        <button class="tab-btn" id="btn-NBA" onclick="setSportFilter('NBA')">🏀 NBA</button>
-    </div>
-
-    <!-- PANEL STATYSTYK -->
-    <div id="stats-container">
-        <!-- Generowane dynamicznie w JS -->
-    </div>
+    <div id="stats-container"></div>
     <div id="error-display"></div>
 
-    <!-- ZAKŁADKI GŁÓWNE (DZIŚ / HISTORIA) -->
     <div class="tabs">
-        <button class="tab-btn active" id="tab-dzis-btn" onclick="switchMainTab('tab-dzis', this)">DZISIEJSZE TYPY</button>
-        <button class="tab-btn" id="tab-historia-btn" onclick="switchMainTab('tab-historia', this)">HISTORIA KUPONÓW</button>
+        <button class="tab-btn active" onclick="switchTab('tab-dzis', this)">DZISIEJSZE TYPY</button>
+        <button class="tab-btn" onclick="switchTab('tab-historia', this)">HISTORIA KUPONÓW</button>
     </div>
 
     <div id="tab-dzis" class="tab-content active">
-        <div id="results">
-            <div class='card'>Ładowanie danych... ⏳</div>
-        </div>
+        <div id="results">Ładowanie analizy AI...</div>
     </div>
 
     <div id="tab-historia" class="tab-content">
-        <div id="history">
-            <div class='card'>Ładowanie historii... ⏳</div>
-        </div>
+        <div id="history">Ładowanie historii...</div>
     </div>
 </div>
 
 <script>
     // --- KONFIGURACJA BRAMKI LOGOWANIA ---
-    const SECRET_CODE = "KOD123"; // <--- TUTAJ ZMIENIASZ HASŁO DO STRONY (np. BROKIE2026)
+    const SECRET_CODE = "BROKIE2026"; // <--- TUTAJ ZMIENIASZ HASŁO DO STRONY!
 
-    // Stan aplikacji
+    // Główna pamięć aplikacji do filtrowania
     let appData = {
         today: null,
         history: [],
-        currentFilter: 'All' // 'All', 'Pilka_Nozna', 'NBA'
+        currentFilter: 'All' // Zawsze startuje od 'All'
     };
 
     function verifyCode() {
@@ -158,41 +139,43 @@
     function unlockApp() {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('main-app').style.display = 'block';
-        loadData();
+        loadData(); // Pobiera dane z plików
     }
 
-    // Sprawdzanie przy starcie, czy użytkownik jest już zalogowany
     window.onload = () => {
         if (localStorage.getItem('brokie_auth_passed') === 'true') {
             unlockApp();
         }
     };
 
-    // --- LOGIKA APLIKACJI ---
-
-    function switchMainTab(tabId, btnElement) {
+    // Przełączanie między Dzisiejsze a Historia
+    function switchTab(tabId, btnElement) {
         document.getElementById('tab-dzis').classList.remove('active');
         document.getElementById('tab-historia').classList.remove('active');
-        document.getElementById('tab-dzis-btn').classList.remove('active');
-        document.getElementById('tab-historia-btn').classList.remove('active');
+        
+        // Zdejmujemy active tylko z tych dwóch głównych przycisków, ignorując przyciski od sportów
+        const mainBtns = document.querySelectorAll('.tabs:not(.sport-filters) .tab-btn');
+        mainBtns.forEach(btn => btn.classList.remove('active'));
         
         document.getElementById(tabId).classList.add('active');
         btnElement.classList.add('active');
     }
 
+    // Przełączanie między sportami (Piłka / NBA)
     function setSportFilter(sport) {
         appData.currentFilter = sport;
         
-        // Aktualizacja wyglądu przycisków dyscyplin
         document.getElementById('btn-All').classList.remove('active');
         document.getElementById('btn-Pilka_Nozna').classList.remove('active');
         document.getElementById('btn-NBA').classList.remove('active');
         document.getElementById('btn-' + sport).classList.add('active');
 
+        // Jak klikniesz inną dyscyplinę, na nowo liczy statystyki i mecze
         calculateStats();
         renderMatches();
     }
 
+    // Liczenie skuteczności i Yieldu
     function calculateStats() {
         let wins = 0;
         let losses = 0;
@@ -203,12 +186,10 @@
             if(!day.mecze) return;
             
             day.mecze.forEach(m => {
-                const matchSport = m.sport || 'Pilka_Nozna'; 
-
-                // Filtrowanie
-                if (appData.currentFilter !== 'All' && matchSport !== appData.currentFilter) {
-                    return; 
-                }
+                const matchSport = m.sport || 'Pilka_Nozna'; // Wsteczna kompatybilność ze starymi meczami
+                
+                // Ignoruj mecze, jeśli zaznaczyliśmy inny sport
+                if (appData.currentFilter !== 'All' && matchSport !== appData.currentFilter) return; 
 
                 if (m.status === 'wygrana') {
                     wins++;
@@ -244,10 +225,11 @@
             </div>`;
     }
 
+    // Wyświetlanie meczów na ekranie
     function renderMatches() {
-        // --- 1. RENDEROWANIE DZISIEJSZYCH TYPÓW ---
         let dzisiejszeHTML = '';
         if (appData.today && appData.today.mecze) {
+            // Filtrowanie dzisiejszych typów
             const filteredToday = appData.today.mecze.filter(m => {
                 const matchSport = m.sport || 'Pilka_Nozna';
                 return appData.currentFilter === 'All' || matchSport === appData.currentFilter;
@@ -279,14 +261,14 @@
                 });
                 dzisiejszeHTML += '</div>';
             } else {
-                dzisiejszeHTML = "<div class='card' style='color:#555;'>Brak meczów z tej dyscypliny na dzisiaj.</div>";
+                dzisiejszeHTML = "<div class='card' style='color:#555;'>Brak meczów na dzisiaj w wybranej dyscyplinie.</div>";
             }
         } else {
             dzisiejszeHTML = "<div class='card' style='color:#555;'>Czekamy na dzisiejsze typy... ⏳</div>";
         }
         document.getElementById('results').innerHTML = dzisiejszeHTML;
 
-        // --- 2. RENDEROWANIE HISTORII ---
+        // Filtrowanie historii
         let historiaHTML = '';
         const reversedHistory = [...appData.history].reverse(); 
 
@@ -337,11 +319,12 @@
 
     async function loadData() {
         try {
+            // Dodano parametr ucinający pamięć podręczną przeglądarki!
             const ts = new Date().getTime(); 
             
             const [raportRes, historiaRes] = await Promise.all([
-                fetch(`/raport.json?t=${ts}`).catch(() => null),
-                fetch(`/historia.json?t=${ts}`).catch(() => null)
+                fetch('/raport.json?t=' + ts).catch(() => null),
+                fetch('/historia.json?t=' + ts).catch(() => null)
             ]);
 
             if (raportRes && raportRes.ok) appData.today = await raportRes.json();
@@ -361,7 +344,7 @@
 
         } catch (err) {
             console.error("Błąd wczytywania danych:", err);
-            document.getElementById('results').innerHTML = "<div class='card' style='border-color: #444;'>Brak dzisiejszego raportu lub błąd odczytu bazy.</div>";
+            document.getElementById('results').innerHTML = "<div class='card' style='border-color: #444;'>Błąd odczytu bazy. Sprawdź GitHub Actions.</div>";
         }
     }
 </script>
