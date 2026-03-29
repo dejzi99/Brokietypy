@@ -67,35 +67,40 @@ async function run() {
         }).join('\n');
     }
 
-    // --- 2. POBIERANIE NBA (Z usuniętym timezone i dodanym sezonem) ---
+    // --- 2. POBIERANIE NBA (Nowe dedykowane API v2.nba.api-sports.io) ---
     console.log(`🏀 Pobieram NBA dla dat: ${dataDlaApi} oraz ${jutroDlaApi}...`);
-    const reqOptions = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
+    const reqOptionsNBA = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
     
-    const [apiBballToday, apiBballTomorrow] = await Promise.all([
-        fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&league=12&season=2025-2026`, reqOptions),
-        fetchSports(`https://v1.basketball.api-sports.io/games?date=${jutroDlaApi}&league=12&season=2025-2026`, reqOptions)
+    const [apiNbaToday, apiNbaTomorrow] = await Promise.all([
+        fetchSports(`https://v2.nba.api-sports.io/games?date=${dataDlaApi}`, reqOptionsNBA),
+        fetchSports(`https://v2.nba.api-sports.io/games?date=${jutroDlaApi}`, reqOptionsNBA)
     ]);
 
     let wybraneNBA = [];
-    if (apiBballToday && apiBballToday.response) {
-        wybraneNBA = wybraneNBA.concat(apiBballToday.response.filter(match => match.status.short === 'NS'));
-    } else {
-        console.log("⚠️ Błąd lub pusta odpowiedź API Dzisiaj:", JSON.stringify(apiBballToday || "Brak danych").substring(0, 150));
-    }
     
-    if (apiBballTomorrow && apiBballTomorrow.response) {
-        wybraneNBA = wybraneNBA.concat(apiBballTomorrow.response.filter(match => match.status.short === 'NS'));
+    // Funkcja filtrująca mecze NBA, które jeszcze się nie zaczęły (status 1 to "Scheduled" w nowym API)
+    const czyNierozpocozety = (match) => {
+        if (!match.status) return true;
+        return match.status.short === 1 || match.status.short === 'NS' || match.status.short === '1';
+    };
+
+    if (apiNbaToday && apiNbaToday.response) {
+        wybraneNBA = wybraneNBA.concat(apiNbaToday.response.filter(czyNierozpocozety));
+    }
+    if (apiNbaTomorrow && apiNbaTomorrow.response) {
+        wybraneNBA = wybraneNBA.concat(apiNbaTomorrow.response.filter(czyNierozpocozety));
     }
 
     console.log(`✅ Znaleziono łącznie ${wybraneNBA.length} nierozpoczętych meczów NBA.`);
 
     if (wybraneNBA.length > 0) {
         listaNBA = wybraneNBA.slice(0, 15).map(match => {
-            const meczDataObj = new Date(match.date);
-            const dataStr = meczDataObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
-            const godzinaStr = meczDataObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
+            const dataStr = match.date.substring(0, 10);
+            const godzinaStr = match.time || "Noc";
             return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.teams.home.name} vs ${match.teams.away.name}`;
         }).join('\n');
+    } else {
+        console.log("⚠️ Pusta lista NBA z dedykowanego API.");
     }
 
   } catch (e) { console.log("❌ Problem z API-Sports:", e.message); }
@@ -112,7 +117,7 @@ async function run() {
   ZASADY ABSOLUTNE:
   1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej w listach.
   2. MUSISZ WYBRAĆ dokładnie 3 najciekawsze mecze z PIŁKI NOŻNEJ oraz dokładnie 2 mecze z NBA.
-  3. WAŻNE: Jeśli powyższa lista NBA to "BRAK MECZÓW NBA.", zignoruj zasade o koszykówce i wytypuj 5 meczów z samej piłki nożnej. ABSOLUTNIE NIE ZMYŚLAJ MECZÓW KOSZYKÓWKI!
+  3. WAŻNE: Jeśli powyższa lista NBA to "BRAK MECZÓW NBA.", zignoruj zasade o koszykówce i wytypuj 5 meczów z samej piłki nożnej.
   4. W polu "typ" wpisz konkretny zakład bukmacherski.
   5. W polu "sport" wpisz ZAWSZE: "Pilka_Nozna" dla piłki i "NBA" dla koszykówki.
   6. W polu "analiza" napisz analityczne uzasadnienie (3-4 zdania).
