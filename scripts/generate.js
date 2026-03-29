@@ -10,8 +10,14 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  const dzisiajPl = new Date().toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
-  const dataDlaApi = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
+  // Data dzisiejsza i jutrzejsza (kluczowe dla nocnych meczów NBA!)
+  const dzisiaj = new Date();
+  const dzisiajPl = dzisiaj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
+  const dataDlaApi = dzisiaj.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
+  
+  const jutro = new Date(dzisiaj);
+  jutro.setDate(jutro.getDate() + 1);
+  const jutroDlaApi = jutro.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
 
   let listaPilka = "";
   let listaNBA = "";
@@ -44,6 +50,7 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
     
+    // --- 1. POBIERANIE PIŁKI NOŻNEJ (Tylko dzisiaj) ---
     console.log("Pobieram Piłkę Nożną...");
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
       method: 'GET',
@@ -61,24 +68,36 @@ async function run() {
         }).join('\n');
     }
 
+    // --- 2. POBIERANIE NBA (Dzisiaj + Jutro w nocy) ---
     console.log("Pobieram NBA...");
-    const apiBasketball = await fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&timezone=Europe/Warsaw&league=12`, {
-      method: 'GET',
-      headers: { 'x-apisports-key': apiSportsKey }
-    });
+    const reqOptions = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
+    
+    const [apiBballToday, apiBballTomorrow] = await Promise.all([
+        fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&timezone=Europe/Warsaw&league=12`, reqOptions),
+        fetchSports(`https://v1.basketball.api-sports.io/games?date=${jutroDlaApi}&timezone=Europe/Warsaw&league=12`, reqOptions)
+    ]);
 
-    if (apiBasketball && apiBasketball.response) {
-        let wybraneNBA = apiBasketball.response.filter(match => match.status.short === 'NS');
-        listaNBA = wybraneNBA.slice(0, 15).map(match => {
-            const godzina = new Date(match.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
-            return `ID: ${match.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name}`;
+    let wybraneNBA = [];
+    if (apiBballToday && apiBballToday.response) {
+        wybraneNBA = wybraneNBA.concat(apiBballToday.response.filter(match => match.status.short === 'NS'));
+    }
+    if (apiBballTomorrow && apiBballTomorrow.response) {
+        wybraneNBA = wybraneNBA.concat(apiBballTomorrow.response.filter(match => match.status.short === 'NS'));
+    }
+
+    if (wybraneNBA.length > 0) {
+        listaNBA = wybraneNBA.slice(0, 20).map(match => {
+            const meczDataObj = new Date(match.date);
+            const dataStr = meczDataObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
+            const godzinaStr = meczDataObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
+            return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.teams.home.name} vs ${match.teams.away.name}`;
         }).join('\n');
     }
 
   } catch (e) { console.log("Problem z API-Sports:", e.message); }
 
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Oto dwie PRAWDZIWE listy nierozpoczętych meczów na dzisiaj.
+  Oto dwie PRAWDZIWE listy nierozpoczętych meczów.
   
   PIŁKA NOŻNA:
   ${listaPilka || 'BRAK MECZÓW PIŁKI NOŻNEJ.'}
@@ -87,13 +106,13 @@ async function run() {
   ${listaNBA || 'BRAK MECZÓW NBA.'}
   
   ZASADY ABSOLUTNE:
-  1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej.
-  2. Jeśli na obu listach jest "BRAK MECZÓW", zwróć pusty JSON: {"mecze": []}.
-  3. Wybierz 5 najciekawszych meczów łącznie (np. 3 z Piłki Nożnej i 2 z NBA, w zależności od dostępności).
-  4. W polu "typ" wpisz konkretny zakład.
-  5. W polu "sport" MUSISZ wpisać dokładnie "Pilka_Nozna" lub "NBA".
-  6. W polu "analiza" wpisz szczegółowe uzasadnienie (3-4 zdania).
-  7. Zwróć WYŁĄCZNIE czysty JSON.
+  1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej w listach.
+  2. MUSISZ WYBRAĆ dokładnie 3 najciekawsze mecze z PIŁKI NOŻNEJ oraz dokładnie 2 mecze z NBA.
+  3. Jeśli lista NBA jest pusta, dobierz brakujące mecze z piłki nożnej (łącznie ma być 5).
+  4. W polu "typ" wpisz konkretny zakład bukmacherski (zakaz statusów typu "NS").
+  5. W polu "sport" wpisz ZAWSZE: "Pilka_Nozna" dla piłki i "NBA" dla koszykówki.
+  6. W polu "analiza" napisz analityczne uzasadnienie (3-4 zdania).
+  7. Zwróć WYŁĄCZNIE CZYSTY OBIEKT JSON.
   
   Struktura: {"mecze": [{"sport": "NBA", "fixture_id": "123", "data": "${dzisiajPl}", "godzina": "02:00", "mecz": "Lakers vs Bulls", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis...", "status": "oczekujący"}]}`;
 
