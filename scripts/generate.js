@@ -10,7 +10,6 @@ async function run() {
 
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-  // Data dzisiejsza i jutrzejsza (kluczowe dla nocnych meczów NBA!)
   const dzisiaj = new Date();
   const dzisiajPl = dzisiaj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
   const dataDlaApi = dzisiaj.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
@@ -50,8 +49,8 @@ async function run() {
   try {
     if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
     
-    // --- 1. POBIERANIE PIŁKI NOŻNEJ (Tylko dzisiaj) ---
-    console.log("Pobieram Piłkę Nożną...");
+    // --- 1. POBIERANIE PIŁKI NOŻNEJ ---
+    console.log("⚽ Pobieram Piłkę Nożną...");
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApi}&timezone=Europe/Warsaw`, {
       method: 'GET',
       headers: { 'x-apisports-key': apiSportsKey }
@@ -68,25 +67,30 @@ async function run() {
         }).join('\n');
     }
 
-    // --- 2. POBIERANIE NBA (Dzisiaj + Jutro w nocy) ---
-    console.log("Pobieram NBA...");
+    // --- 2. POBIERANIE NBA (Z usuniętym timezone i dodanym sezonem) ---
+    console.log(`🏀 Pobieram NBA dla dat: ${dataDlaApi} oraz ${jutroDlaApi}...`);
     const reqOptions = { method: 'GET', headers: { 'x-apisports-key': apiSportsKey } };
     
     const [apiBballToday, apiBballTomorrow] = await Promise.all([
-        fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&timezone=Europe/Warsaw&league=12`, reqOptions),
-        fetchSports(`https://v1.basketball.api-sports.io/games?date=${jutroDlaApi}&timezone=Europe/Warsaw&league=12`, reqOptions)
+        fetchSports(`https://v1.basketball.api-sports.io/games?date=${dataDlaApi}&league=12&season=2025-2026`, reqOptions),
+        fetchSports(`https://v1.basketball.api-sports.io/games?date=${jutroDlaApi}&league=12&season=2025-2026`, reqOptions)
     ]);
 
     let wybraneNBA = [];
     if (apiBballToday && apiBballToday.response) {
         wybraneNBA = wybraneNBA.concat(apiBballToday.response.filter(match => match.status.short === 'NS'));
+    } else {
+        console.log("⚠️ Błąd lub pusta odpowiedź API Dzisiaj:", JSON.stringify(apiBballToday || "Brak danych").substring(0, 150));
     }
+    
     if (apiBballTomorrow && apiBballTomorrow.response) {
         wybraneNBA = wybraneNBA.concat(apiBballTomorrow.response.filter(match => match.status.short === 'NS'));
     }
 
+    console.log(`✅ Znaleziono łącznie ${wybraneNBA.length} nierozpoczętych meczów NBA.`);
+
     if (wybraneNBA.length > 0) {
-        listaNBA = wybraneNBA.slice(0, 20).map(match => {
+        listaNBA = wybraneNBA.slice(0, 15).map(match => {
             const meczDataObj = new Date(match.date);
             const dataStr = meczDataObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
             const godzinaStr = meczDataObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
@@ -94,7 +98,7 @@ async function run() {
         }).join('\n');
     }
 
-  } catch (e) { console.log("Problem z API-Sports:", e.message); }
+  } catch (e) { console.log("❌ Problem z API-Sports:", e.message); }
 
   const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
   Oto dwie PRAWDZIWE listy nierozpoczętych meczów.
@@ -108,8 +112,8 @@ async function run() {
   ZASADY ABSOLUTNE:
   1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej w listach.
   2. MUSISZ WYBRAĆ dokładnie 3 najciekawsze mecze z PIŁKI NOŻNEJ oraz dokładnie 2 mecze z NBA.
-  3. Jeśli lista NBA jest pusta, dobierz brakujące mecze z piłki nożnej (łącznie ma być 5).
-  4. W polu "typ" wpisz konkretny zakład bukmacherski (zakaz statusów typu "NS").
+  3. WAŻNE: Jeśli powyższa lista NBA to "BRAK MECZÓW NBA.", zignoruj zasade o koszykówce i wytypuj 5 meczów z samej piłki nożnej. ABSOLUTNIE NIE ZMYŚLAJ MECZÓW KOSZYKÓWKI!
+  4. W polu "typ" wpisz konkretny zakład bukmacherski.
   5. W polu "sport" wpisz ZAWSZE: "Pilka_Nozna" dla piłki i "NBA" dla koszykówki.
   6. W polu "analiza" napisz analityczne uzasadnienie (3-4 zdania).
   7. Zwróć WYŁĄCZNIE CZYSTY OBIEKT JSON.
