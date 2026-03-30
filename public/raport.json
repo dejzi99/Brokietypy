@@ -2,24 +2,24 @@
   "mecze": [
     {
       "sport": "NBA",
-      "fixture_id": "401810937",
-      "data": "29.03.2026",
-      "godzina": "21:30",
-      "mecz": "LA Clippers at Milwaukee Bucks",
-      "typ": "Milwaukee Bucks -4.5 (handicap)",
+      "fixture_id": "401810950",
+      "data": "31.03.2026",
+      "godzina": "02:30",
+      "mecz": "Minnesota Timberwolves at Dallas Mavericks",
+      "typ": "Dallas Mavericks (-3.5)",
       "kurs": "1.90",
-      "analiza": "Bucks są niezwykle silni u siebie, a ich gwiazda Giannis Antetokounmpo jest trudny do zatrzymania. Clippers, mimo głębi składu, często mają problemy na wyjazdach przeciwko czołowym drużynom. Spodziewam się dominacji Bucks w strefie podkoszowej i skutecznego ataku, co pozwoli im pokryć ten handicap. Ich forma w ostatnich meczach u siebie jest imponująca.",
+      "analiza": "Starcie dwóch czołowych drużyn Konferencji Zachodniej, z dużymi aspiracjami na play-offy. Mavericks, grający u siebie, będą zmotywowani, aby umocnić swoją pozycję w tabeli, a ich ofensywa z Dončićiem i Irvingiem jest niezwykle trudna do zatrzymania. Timberwolves są silni defensywnie, ale w Dallas często brakuje im konsekwencji. Spodziewam się zaciętego, ale kontrolowanego zwycięstwa gospodarzy z pokryciem handicapu.",
       "status": "oczekujący"
     },
     {
       "sport": "NBA",
-      "fixture_id": "401810945",
-      "data": "30.03.2026",
-      "godzina": "04:00",
-      "mecz": "Golden State Warriors at Denver Nuggets",
-      "typ": "Powyżej 228.5 punktów (total)",
-      "kurs": "1.88",
-      "analiza": "Obydwie drużyny posiadają ofensywny potencjał i potrafią grać w szybkim tempie. Warriors, nawet na wyjeździe, opierają się na strzelcach, a Nuggets z Jokiciem w roli reżysera zdobywają wiele punktów. Historia bezpośrednich spotkań często obfituje w wysokie wyniki. Spodziewam się otwartego spotkania z wieloma punktami z obu stron.",
+      "fixture_id": "401858694",
+      "data": "01.04.2026",
+      "godzina": "02:00",
+      "mecz": "Dallas Mavericks at Milwaukee Bucks",
+      "typ": "Powyżej 235.5 punktów",
+      "kurs": "1.85",
+      "analiza": "To spotkanie ma ogromny potencjał ofensywny, gdzie zmierzą się dwie ekipy dysponujące czołówką ligi pod względem gwiazdorskiej siły. Luka Dončić i Giannis Antetokounmpo są w stanie sami generować punkty w niesamowitym tempie, a obie drużyny preferują szybkie tempo gry. Choć potrafią bronić, ich skłonność do wymian ciosów sugeruje wysoką liczbę punktów. Spodziewam się, że linia punktowa zostanie przekroczona.",
       "status": "oczekujący"
     }
   ]
