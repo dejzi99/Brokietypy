@@ -2,24 +2,24 @@
   "mecze": [
     {
       "sport": "NBA",
-      "fixture_id": "401810950",
-      "data": "31.03.2026",
-      "godzina": "02:30",
-      "mecz": "Minnesota Timberwolves at Dallas Mavericks",
-      "typ": "Dallas Mavericks (-3.5)",
-      "kurs": "1.90",
-      "analiza": "Starcie dwóch czołowych drużyn Konferencji Zachodniej, z dużymi aspiracjami na play-offy. Mavericks, grający u siebie, będą zmotywowani, aby umocnić swoją pozycję w tabeli, a ich ofensywa z Dončićiem i Irvingiem jest niezwykle trudna do zatrzymania. Timberwolves są silni defensywnie, ale w Dallas często brakuje im konsekwencji. Spodziewam się zaciętego, ale kontrolowanego zwycięstwa gospodarzy z pokryciem handicapu.",
-      "status": "oczekujący"
-    },
-    {
-      "sport": "NBA",
       "fixture_id": "401858694",
       "data": "01.04.2026",
       "godzina": "02:00",
       "mecz": "Dallas Mavericks at Milwaukee Bucks",
-      "typ": "Powyżej 235.5 punktów",
+      "typ": "Milwaukee Bucks -4.5",
+      "kurs": "1.90",
+      "analiza": "To starcie między dwoma pretendentami do tytułu MVP, Luką Dončićem i Giannisem Antetokounmpo, zapowiada intensywną walkę. Bucks, grając u siebie, zazwyczaj prezentują silną obronę i mają głęboki skład. Ich zdolność do dominacji pod koszem i kontrolowania tempa często daje im przewagę nad ofensywnymi Mavericks. Oczekujemy, że Milwaukee pokryje spread.",
+      "status": "oczekujący"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810958",
+      "data": "01.04.2026",
+      "godzina": "04:30",
+      "mecz": "Cleveland Cavaliers at Los Angeles Lakers",
+      "typ": "Powyżej 228.5 punktów",
       "kurs": "1.85",
-      "analiza": "To spotkanie ma ogromny potencjał ofensywny, gdzie zmierzą się dwie ekipy dysponujące czołówką ligi pod względem gwiazdorskiej siły. Luka Dončić i Giannis Antetokounmpo są w stanie sami generować punkty w niesamowitym tempie, a obie drużyny preferują szybkie tempo gry. Choć potrafią bronić, ich skłonność do wymian ciosów sugeruje wysoką liczbę punktów. Spodziewam się, że linia punktowa zostanie przekroczona.",
+      "analiza": "Zarówno Cavaliers, jak i Lakers posiadają dynamiczne ofensywy zdolne do zdobywania wielu punktów. Lakers, szczególnie grając u siebie, często przyspieszają tempo gry, podczas gdy Cleveland potrafi skutecznie utrzymywać wysoki poziom scoringu. Potencjalne luki w obronie po obu stronach mogą prowadzić do otwartego meczu. Zakład na powyżej wydaje się tu mocną opcją.",
       "status": "oczekujący"
     }
   ]
