@@ -2,24 +2,24 @@
   "mecze": [
     {
       "sport": "NBA",
-      "fixture_id": "401858694",
-      "data": "01.04.2026",
-      "godzina": "02:00",
-      "mecz": "Dallas Mavericks at Milwaukee Bucks",
-      "typ": "Milwaukee Bucks -4.5",
-      "kurs": "1.90",
-      "analiza": "To starcie między dwoma pretendentami do tytułu MVP, Luką Dončićem i Giannisem Antetokounmpo, zapowiada intensywną walkę. Bucks, grając u siebie, zazwyczaj prezentują silną obronę i mają głęboki skład. Ich zdolność do dominacji pod koszem i kontrolowania tempa często daje im przewagę nad ofensywnymi Mavericks. Oczekujemy, że Milwaukee pokryje spread.",
+      "fixture_id": "401810961",
+      "data": "2.04.2026",
+      "godzina": "01:30",
+      "mecz": "Boston Celtics vs Miami Heat",
+      "typ": "Boston Celtics ML",
+      "kurs": "1.70",
+      "analiza": "Historyczna rywalizacja między tymi drużynami gwarantuje zacięte spotkanie, jednak Celtics zazwyczaj prezentują stabilniejszą formę w kluczowych momentach sezonu zasadniczego. Ich głębia składu i konsekwencja w obronie dają im przewagę nad Heat. Mimo że Miami gra u siebie, Celtics są faworytem do zwycięstwa.",
       "status": "oczekujący"
     },
     {
       "sport": "NBA",
-      "fixture_id": "401810958",
-      "data": "01.04.2026",
-      "godzina": "04:30",
-      "mecz": "Cleveland Cavaliers at Los Angeles Lakers",
+      "fixture_id": "401810971",
+      "data": "3.04.2026",
+      "godzina": "03:30",
+      "mecz": "Los Angeles Lakers vs Oklahoma City Thunder",
       "typ": "Powyżej 228.5 punktów",
-      "kurs": "1.85",
-      "analiza": "Zarówno Cavaliers, jak i Lakers posiadają dynamiczne ofensywy zdolne do zdobywania wielu punktów. Lakers, szczególnie grając u siebie, często przyspieszają tempo gry, podczas gdy Cleveland potrafi skutecznie utrzymywać wysoki poziom scoringu. Potencjalne luki w obronie po obu stronach mogą prowadzić do otwartego meczu. Zakład na powyżej wydaje się tu mocną opcją.",
+      "kurs": "1.90",
+      "analiza": "Starce Lakers z Thunder to pojedynek dwóch ofensywnie usposobionych drużyn. OKC, z ich młodym i dynamicznym składem, grają w szybkim tempie, a Lakers, z doświadczonymi strzelcami, również potrafią nabijać punkty. Obie ekipy mają tendencję do wysokich wyników, co sugeruje mecz z dużą liczbą punktów.",
       "status": "oczekujący"
     }
   ]
