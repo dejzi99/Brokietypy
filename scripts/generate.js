@@ -13,11 +13,9 @@ async function run() {
   const dzisiaj = new Date();
   const dzisiajPl = dzisiaj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
   const dataDlaApiFootball = dzisiaj.toLocaleString('sv-SE', { timeZone: 'Europe/Warsaw' }).substring(0, 10);
-  
   const jutro = new Date(dzisiaj);
   jutro.setDate(jutro.getDate() + 1);
 
-  // Funkcja formatująca datę dla darmowego serwera ESPN (YYYYMMDD)
   const getEspnDate = (d) => {
       const year = d.getFullYear();
       const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -25,163 +23,126 @@ async function run() {
       return `${year}${month}${day}`;
   };
 
-  let listaPilka = "";
-  let listaNBA = "";
-
   async function fetchSports(url, options = {}, maxRetries = 3) {
     let delay = 1000;
     for (let i = 0; i < maxRetries; i++) {
       try {
         const response = await fetch(url, options);
         if (response.ok) return await response.json();
-      } catch (e) {
-        if (i === maxRetries - 1) throw e;
-      }
+      } catch (e) { if (i === maxRetries - 1) throw e; }
       await new Promise(resolve => setTimeout(resolve, delay));
       delay *= 2; 
     }
     return null;
   }
 
-  async function sendTelegramMessage(message) {
-      const botToken = process.env.TELEGRAM_BOT_TOKEN;
-      const chatId = process.env.TELEGRAM_CHAT_ID;
-      if (!botToken || !chatId) return;
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-      try {
-          await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' }) });
-      } catch (e) {}
+  // --- FUNKCJA ROZLICZAJĄCA (SETTLER) ---
+  async function settleHistory() {
+    if (!fs.existsSync(historyPath)) return;
+    console.log("🔍 Sprawdzam wyniki oczekujących meczów...");
+    let historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+    let zmiana = false;
+
+    for (let dzien of historia) {
+      for (let m of dzien.mecze) {
+        if (m.status === 'oczekujący' || m.status === 'NS') {
+          if (m.sport === 'Pilka_Nozna' && m.fixture_id) {
+            const res = await fetchSports(`https://v3.football.api-sports.io/fixtures?id=${m.fixture_id}`, {
+              headers: { 'x-apisports-key': apiSportsKey }
+            });
+            if (res && res.response?.[0]) {
+              const f = res.response[0];
+              if (f.fixture.status.short === 'FT') {
+                m.wynik = `${f.goals.home}-${f.goals.away}`;
+                m.status = 'zakończony'; // AI lub Ty możesz to potem oznaczyć jako win/loss
+                zmiana = true;
+              }
+            }
+          } else if (m.sport === 'NBA' && m.fixture_id) {
+            // Dla NBA sprawdzamy wynik na ESPN (uproszczone dla stabilności)
+            const matchDate = m.data.split('.').reverse().join(''); // format YYYYMMDD
+            const res = await fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${matchDate}`);
+            const event = res?.events?.find(e => e.id == m.fixture_id || e.name.includes(m.mecz.split(' vs ')[0]));
+            if (event && event.status.type.state === 'post') {
+              const s = event.competitions[0].competitors;
+              m.wynik = `${s[0].score}-${s[1].score}`;
+              m.status = 'zakończony';
+              zmiana = true;
+            }
+          }
+        }
+      }
+    }
+    if (zmiana) fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
   }
 
   try {
-    if (!apiSportsKey) throw new Error("Brak klucza APISPORTS_KEY!");
-    
-    // --- 1. POBIERANIE PIŁKI NOŻNEJ (Zostaje na API-Sports, bo działa super) ---
+    await settleHistory();
+
+    // --- POBIERANIE PIŁKI (ROZSZERZONE LIGI) ---
     console.log("⚽ Pobieram Piłkę Nożną...");
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApiFootball}&timezone=Europe/Warsaw`, {
-      method: 'GET',
-      headers: { 'x-apisports-key': apiSportsKey }
+      method: 'GET', headers: { 'x-apisports-key': apiSportsKey }
     });
 
     if (apiFootball && apiFootball.response) {
-        const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 848];
+        // Dodano ID: 10 (Towarzyskie), 468 (Eliminacje MŚ Europa), 5 (Liga Narodów), 4 (ME), 1 (MŚ)
+        const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 468, 848];
         let wybranePilka = apiFootball.response.filter(match => szerokieLigi.includes(match.league.id) && match.fixture.status.short === 'NS');
-        if (wybranePilka.length === 0) wybranePilka = apiFootball.response.filter(match => match.fixture.status.short === 'NS'); 
+        if (wybranePilka.length < 10) wybranePilka = apiFootball.response.filter(match => match.fixture.status.short === 'NS'); 
 
-        listaPilka = wybranePilka.slice(0, 30).map(match => {
+        listaPilka = wybranePilka.slice(0, 40).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
     }
 
-    // --- 2. POBIERANIE NBA (Nowe, w 100% darmowe API serwera ESPN) ---
-    console.log(`🏀 Pobieram NBA z niezależnego serwera ESPN...`);
-    
+    // --- POBIERANIE NBA ---
+    console.log(`🏀 Pobieram NBA z ESPN...`);
     const [espnToday, espnTomorrow] = await Promise.all([
         fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${getEspnDate(dzisiaj)}`),
         fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${getEspnDate(jutro)}`)
     ]);
 
     let wybraneNBA = [];
-    
-    // Status 'pre' w ESPN oznacza nierozpoczęty mecz (Pre-game)
-    if (espnToday && espnToday.events) {
-        wybraneNBA = wybraneNBA.concat(espnToday.events.filter(e => e.status.type.state === 'pre'));
-    }
-    if (espnTomorrow && espnTomorrow.events) {
-        wybraneNBA = wybraneNBA.concat(espnTomorrow.events.filter(e => e.status.type.state === 'pre'));
-    }
-
-    console.log(`✅ Serwer ESPN znalazł łącznie ${wybraneNBA.length} nierozpoczętych meczów NBA.`);
+    if (espnToday?.events) wybraneNBA = wybraneNBA.concat(espnToday.events.filter(e => e.status.type.state === 'pre'));
+    if (espnTomorrow?.events) wybraneNBA = wybraneNBA.concat(espnTomorrow.events.filter(e => e.status.type.state === 'pre'));
 
     if (wybraneNBA.length > 0) {
         listaNBA = wybraneNBA.slice(0, 15).map(match => {
             const meczObj = new Date(match.date);
-            const dataStr = meczObj.toLocaleDateString('pl-PL', { timeZone: 'Europe/Warsaw' });
             const godzinaStr = meczObj.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
-            return `ID: ${match.id} | Data: ${dataStr} ${godzinaStr} | ${match.name}`;
+            return `ID: ${match.id} | ${godzinaStr} | ${match.name}`;
         }).join('\n');
-    } else {
-        console.log("⚠️ Brak meczów NBA na dzisiaj/jutro.");
     }
 
-  } catch (e) { console.log("❌ Problem z pobieraniem meczów:", e.message); }
+    const promptText = `Jesteś elitarnym analitykiem. Dzisiejsza data: ${dzisiajPl}. 
+    Analizuj TYLKO mecze z list:
+    PIŁKA: ${listaPilka || 'Brak'}
+    NBA: ${listaNBA || 'Brak'}
+    ZASADY: 1. Wybierz dokładnie 3 z piłki i 2 z NBA. 2. Podaj konkretny typ (1, X, 2, over/under). 3. Napisz 3-4 zdania analizy.
+    Zwróć TYLKO czysty JSON: {"mecze": [{"sport": "NBA/Pilka_Nozna", "fixture_id": "id", "mecz": "A vs B", "typ": "X", "kurs": "1.90", "analiza": "...", "status": "oczekujący", "data": "${dzisiajPl}", "godzina": "HH:MM"}]}`;
 
-  const promptText = `Jesteś elitarnym analitykiem bukmacherskim. Dzisiejsza data: ${dzisiajPl}.
-  Oto dwie PRAWDZIWE listy nierozpoczętych meczów.
-  
-  PIŁKA NOŻNA:
-  ${listaPilka || 'BRAK MECZÓW PIŁKI NOŻNEJ.'}
-  
-  NBA (KOSZYKÓWKA):
-  ${listaNBA || 'BRAK MECZÓW NBA.'}
-  
-  ZASADY ABSOLUTNE:
-  1. ZABRANIAM zmyślania meczów. Analizuj tylko te podane powyżej w listach.
-  2. MUSISZ WYBRAĆ dokładnie 3 najciekawsze mecze z PIŁKI NOŻNEJ oraz dokładnie 2 mecze z NBA.
-  3. WAŻNE: Jeśli powyższa lista NBA to "BRAK MECZÓW NBA.", zignoruj zasade o koszykówce i wytypuj 5 meczów z samej piłki nożnej.
-  4. W polu "typ" wpisz konkretny zakład bukmacherski.
-  5. W polu "sport" wpisz ZAWSZE: "Pilka_Nozna" dla piłki i "NBA" dla koszykówki.
-  6. W polu "analiza" napisz analityczne uzasadnienie (3-4 zdania).
-  7. Zwróć WYŁĄCZNIE CZYSTY OBIEKT JSON.
-  
-  Struktura: {"mecze": [{"sport": "NBA", "fixture_id": "123", "data": "${dzisiajPl}", "godzina": "02:00", "mecz": "Lakers vs Bulls", "typ": "Wynik", "kurs": "1.80", "analiza": "Opis...", "status": "oczekujący"}]}`;
+    const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    const response = await fetch(generateUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+    });
+    const resData = await response.json();
+    const rawText = resData.candidates[0].content.parts[0].text;
+    const cleanJson = rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1);
+    const generatedData = JSON.parse(cleanJson);
 
-  let cleanJson = null;
-
-  try {
-      const modelsUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`;
-      const modelsRes = await fetch(modelsUrl);
-      const modelsData = await modelsRes.json();
-      let availableModels = (modelsData.models || []).filter(m => m.supportedGenerationMethods?.includes("generateContent")).map(m => m.name.replace('models/', ''));
-      const preferredOrder = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro", "gemini-2.0-flash"];
-      let modelsToTry = [...new Set([...preferredOrder, ...availableModels])];
-
-      for (const model of modelsToTry) {
-          try {
-              const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-              const response = await fetch(generateUrl, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-              });
-              const resData = await response.json();
-              if (response.ok && resData.candidates?.[0]?.content) {
-                  let rawText = resData.candidates[0].content.parts[0].text;
-                  cleanJson = rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1);
-                  break; 
-              }
-          } catch (e) {}
-      }
-
-      if (!cleanJson) throw new Error("Brak odpowiedzi AI.");
-
-      const generatedData = JSON.parse(cleanJson);
-      fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
-      
-      let historia = [];
-      if (fs.existsSync(historyPath)) { try { historia = JSON.parse(fs.readFileSync(historyPath, 'utf8')); } catch (e) { historia = []; } }
-      const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-      const nowyWpis = { data: dzisiajPl, mecze: generatedData.mecze || [] }; 
-      
-      if (nowyWpis.mecze.length > 0) {
-          if (dzisiejszyIndex !== -1) { historia[dzisiejszyIndex] = nowyWpis; } else { historia.push(nowyWpis); }
-          fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-      }
-
-      if (generatedData.mecze && generatedData.mecze.length > 0) {
-          let tgMessage = `🔥 <b>NOWE TYPY NA DZIŚ (${dzisiajPl})</b> 🔥\n\n`;
-          generatedData.mecze.forEach(m => { 
-              if(m.status !== 'błąd') {
-                  const ikona = m.sport === 'NBA' ? '🏀' : '⚽';
-                  tgMessage += `${ikona} <b>${m.mecz}</b>\n⏰ ${m.godzina}\n🎯 Typ: <b>${m.typ}</b>\n📈 Kurs: ${m.kurs}\n\n`; 
-              }
-          });
-          await sendTelegramMessage(tgMessage);
-      }
+    fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
+    
+    let historia = [];
+    if (fs.existsSync(historyPath)) historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+    historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
+    fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); // Trzymaj ostatnie 30 dni
 
   } catch (e) {
-      fs.writeFileSync(filePath, JSON.stringify({ error: e.message, mecze: [{ data: dzisiajPl, mecz: "Błąd Analizy", analiza: e.message, status: "błąd", sport: "Brak" }] }));
+    console.error("❌ Błąd:", e.message);
   }
 }
 run();
