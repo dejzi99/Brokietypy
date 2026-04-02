@@ -43,14 +43,13 @@ async function run() {
     let historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
     let meczeDoOceny = [];
 
-    // Krok 1: Pobieramy suche wyniki zakończonych meczów
     for (let dzien of historia) {
       if (!dzien.mecze) continue;
       for (let m of dzien.mecze) {
         const status = m.status ? m.status.toLowerCase() : '';
         if (status === 'oczekujący' || status === 'ns') {
           try {
-            const sportType = m.sport || 'Pilka_Nozna'; // Wsteczna kompatybilność ze starymi meczami!
+            const sportType = m.sport || 'Pilka_Nozna';
             console.log(`⏱ Sprawdzam: ${m.mecz} (${sportType})`);
 
             if (sportType === 'Pilka_Nozna' && m.fixture_id && m.fixture_id !== "0") {
@@ -65,7 +64,7 @@ async function run() {
                 console.log(`⚽ Znaleziono wynik piłki: ${m.wynik}`);
               }
             } else if (sportType === 'NBA' && m.fixture_id && m.fixture_id !== "0") {
-              // Nowe bezpieczne pobieranie wyników NBA z ESPN
+              // Nowe super-bezpieczne pobieranie NBA z uwzględnieniem stref czasowych USA (-1 dzień)
               let dateQuery = "";
               const parts = m.data.match(/\d+/g);
               if (parts && parts.length >= 3) {
@@ -77,17 +76,41 @@ async function run() {
               
               if (dateQuery) {
                   const dateObj = new Date(dateQuery.substring(0,4), parseInt(dateQuery.substring(4,6))-1, dateQuery.substring(6,8));
+                  
+                  // Ze względu na nockę pobieramy 3 dni (wczoraj dla USA, dziś i jutro)
+                  const dateObjPrev = new Date(dateObj);
+                  dateObjPrev.setDate(dateObjPrev.getDate() - 1);
+                  const dateQueryPrev = `${dateObjPrev.getFullYear()}${String(dateObjPrev.getMonth()+1).padStart(2,'0')}${String(dateObjPrev.getDate()).padStart(2,'0')}`;
+                  
                   dateObj.setDate(dateObj.getDate() + 1);
                   const dateQueryNext = `${dateObj.getFullYear()}${String(dateObj.getMonth()+1).padStart(2,'0')}${String(dateObj.getDate()).padStart(2,'0')}`;
 
-                  const [res1, res2] = await Promise.all([
+                  const [resPrev, res1, res2] = await Promise.all([
+                      fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryPrev}`),
                       fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQuery}`),
                       fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryNext}`)
                   ]);
 
-                  let event = null;
-                  if (res1?.events) event = res1.events.find(e => String(e.id) === String(m.fixture_id));
-                  if (!event && res2?.events) event = res2.events.find(e => String(e.id) === String(m.fixture_id));
+                  // Inteligentne szukanie drużyny (np. wyciąga słowo "Lakers" i "Thunder")
+                  const getTeamKey = (teamStr) => {
+                      const words = teamStr.trim().split(' ');
+                      return words[words.length - 1].toLowerCase();
+                  };
+
+                  const isMatch = (e) => {
+                      if (String(e.id) === String(m.fixture_id)) return true;
+                      const n = e.name.toLowerCase();
+                      const matchParts = m.mecz.toLowerCase().replace(/at/g, 'vs').split('vs').map(p => p.trim());
+                      if (matchParts.length >= 2) {
+                          const t1 = getTeamKey(matchParts[0]);
+                          const t2 = getTeamKey(matchParts[1]);
+                          return n.includes(t1) && n.includes(t2);
+                      }
+                      return false;
+                  };
+
+                  const allEvents = [...(resPrev?.events || []), ...(res1?.events || []), ...(res2?.events || [])];
+                  const event = allEvents.find(isMatch);
 
                   if (event && event.status.type.state === 'post') {
                       const s = event.competitions[0].competitors;
@@ -104,7 +127,6 @@ async function run() {
       }
     }
 
-    // Krok 2: Prosimy AI o rozliczenie kuponów
     if (meczeDoOceny.length > 0) {
       console.log(`🤖 AI Sędzia ocenia ${meczeDoOceny.length} rozegranych meczów...`);
       const prompt = `Jesteś matematycznym sędzią bukmacherskim. Poniżej masz listę zakończonych meczów. Znasz typ bukmacherski oraz oficjalny wynik meczu (Gospodarz-Gość).
@@ -112,32 +134,41 @@ async function run() {
       Dane: ${JSON.stringify(meczeDoOceny.map(m => ({id: m.fixture_id, typ: m.typ, wynik: m.wynik})))}
       Zwróć TYLKO czysty obiekt JSON: {"oceny": [{"id": "ID_MECZU", "status": "wygrana"}, {"id": "INNE_ID", "status": "przegrana"}]}`;
 
-      try {
-        const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
-        const aiRes = await fetch(generateUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-        const aiData = await aiRes.json();
-        
-        if (aiData.candidates && aiData.candidates[0].content) {
-            let rawText = aiData.candidates[0].content.parts[0].text;
-            let cleanJson = JSON.parse(rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1));
+      const modeleDoTestu = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-1.0-pro"];
+      let zaktualizowano = false;
 
-            let zaktualizowano = false;
-            for (let dzien of historia) {
-                if (!dzien.mecze) continue;
-                for (let m of dzien.mecze) {
-                    const ocena = cleanJson.oceny?.find(o => String(o.id) === String(m.fixture_id));
-                    if (ocena && m.wynik) {
-                        m.status = ocena.status;
-                        if(!m.analiza.includes('[Wynik:')) m.analiza += ` [Wynik: ${m.wynik}]`;
-                        zaktualizowano = true;
-                        console.log(`✅ Zmieniono status meczu ${m.mecz} na: ${m.status}`);
+      for (const model of modeleDoTestu) {
+          try {
+            const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+            const aiRes = await fetch(generateUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+            const aiData = await aiRes.json();
+            
+            if (aiData.candidates && aiData.candidates[0].content) {
+                let rawText = aiData.candidates[0].content.parts[0].text;
+                let cleanJson = JSON.parse(rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1));
+
+                for (let dzien of historia) {
+                    if (!dzien.mecze) continue;
+                    for (let m of dzien.mecze) {
+                        const ocena = cleanJson.oceny?.find(o => String(o.id) === String(m.fixture_id));
+                        if (ocena && m.wynik) {
+                            m.status = ocena.status;
+                            if(!m.analiza.includes('[Wynik:')) m.analiza += ` [Wynik: ${m.wynik}]`;
+                            zaktualizowano = true;
+                            console.log(`✅ Zmieniono status meczu ${m.mecz} na: ${m.status}`);
+                        }
                     }
                 }
+                break;
+            } else {
+                console.log(`⚠️ Sędzia AI (Model: ${model}) odrzucił prośbę. Błąd Google:`, JSON.stringify(aiData));
             }
-            if (zaktualizowano) fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-            console.log("💾 Zapisano nową historię z rozliczonymi kuponami.");
-        }
-      } catch(e) { console.log("❌ Błąd AI podczas oceniania kuponów:", e.message); }
+          } catch(e) { console.log(`⚠️ Błąd sieci Sędziego:`, e.message); }
+      }
+      if (zaktualizowano) {
+          fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
+          console.log("💾 Zapisano nową historię z rozliczonymi kuponami.");
+      }
     } else {
       console.log("ℹ️ Żaden z oczekujących meczów nie został jeszcze zakończony (lub API nie podało wyniku).");
     }
@@ -147,14 +178,13 @@ async function run() {
   await settleHistory();
 
   try {
-    // --- POBIERANIE PIŁKI (ROZSZERZONE LIGI - W tym mecze Reprezentacji) ---
+    // --- POBIERANIE PIŁKI ---
     console.log("⚽ Pobieram Piłkę Nożną...");
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApiFootball}&timezone=Europe/Warsaw`, {
       method: 'GET', headers: { 'x-apisports-key': apiSportsKey }
     });
 
     if (apiFootball && apiFootball.response) {
-        // ID: 10 (Towarzyskie), 468 (Eliminacje MŚ Europa), 5 (Liga Narodów), 4 (ME), 1 (MŚ), 34 (World Cup Qualifiers)
         const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 468, 848];
         let wybranePilka = apiFootball.response.filter(match => szerokieLigi.includes(match.league.id) && match.fixture.status.short === 'NS');
         if (wybranePilka.length < 5) wybranePilka = apiFootball.response.filter(match => match.fixture.status.short === 'NS'); 
@@ -199,7 +229,7 @@ async function run() {
     
     Zwróć TYLKO czysty JSON: {"mecze": [{"sport": "Pilka_Nozna", "fixture_id": "123", "mecz": "A vs B", "typ": "X", "kurs": "1.90", "analiza": "...", "status": "oczekujący", "data": "${dzisiajPl}", "godzina": "HH:MM"}]}`;
 
-    const modeleDoTestu = ["gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
+    const modeleDoTestu = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-1.0-pro"];
     let zapisanoNowe = false;
 
     for (const model of modeleDoTestu) {
@@ -232,12 +262,12 @@ async function run() {
                 fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); 
                 console.log(`✅ NOWE TYPY ZOSTAŁY ZAPISANE! (Model: ${model})`);
                 zapisanoNowe = true;
-                break; // Sukces, przerywamy pętlę modeli
+                break; 
             } else {
-                console.error(`❌ Odpowiedź z modelu ${model} była pusta, sprawdzam kolejny...`);
+                console.error(`❌ Model AI ${model} odrzucił prośbę. Błąd Google:`, JSON.stringify(resData));
             }
         } catch (e) {
-            console.error(`❌ Błąd łączenia z modelem ${model}...`);
+            console.error(`❌ Błąd połączenia z modelem ${model}...`);
         }
     }
     
