@@ -199,35 +199,50 @@ async function run() {
     
     Zwróć TYLKO czysty JSON: {"mecze": [{"sport": "Pilka_Nozna", "fixture_id": "123", "mecz": "A vs B", "typ": "X", "kurs": "1.90", "analiza": "...", "status": "oczekujący", "data": "${dzisiajPl}", "godzina": "HH:MM"}]}`;
 
-    const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
-    const response = await fetch(generateUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-    });
-    
-    const resData = await response.json();
-    if (resData.candidates && resData.candidates[0].content) {
-        const rawText = resData.candidates[0].content.parts[0].text;
-        const cleanJson = rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1);
-        const generatedData = JSON.parse(cleanJson);
+    const modeleDoTestu = ["gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
+    let zapisanoNowe = false;
 
-        fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
-        
-        let historia = [];
-        if (fs.existsSync(historyPath)) historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
-        
-        const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
-        if (dzisiejszyIndex !== -1) {
-            historia[dzisiejszyIndex] = { data: dzisiajPl, mecze: generatedData.mecze };
-        } else {
-            historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
+    for (const model of modeleDoTestu) {
+        try {
+            const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+            const response = await fetch(generateUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+            });
+            
+            const resData = await response.json();
+            if (resData.candidates && resData.candidates[0].content) {
+                const rawText = resData.candidates[0].content.parts[0].text;
+                const cleanJson = rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1);
+                const generatedData = JSON.parse(cleanJson);
+
+                fs.writeFileSync(filePath, JSON.stringify(generatedData, null, 2));
+                
+                let historia = [];
+                if (fs.existsSync(historyPath)) historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+                
+                const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
+                if (dzisiejszyIndex !== -1) {
+                    historia[dzisiejszyIndex] = { data: dzisiajPl, mecze: generatedData.mecze };
+                } else {
+                    historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
+                }
+                
+                fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); 
+                console.log(`✅ NOWE TYPY ZOSTAŁY ZAPISANE! (Model: ${model})`);
+                zapisanoNowe = true;
+                break; // Sukces, przerywamy pętlę modeli
+            } else {
+                console.error(`❌ Odpowiedź z modelu ${model} była pusta, sprawdzam kolejny...`);
+            }
+        } catch (e) {
+            console.error(`❌ Błąd łączenia z modelem ${model}...`);
         }
-        
-        fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); 
-        console.log("✅ NOWE TYPY ZOSTAŁY ZAPISANE!");
-    } else {
-        console.error("❌ Błąd AI:", resData.error?.message || "Pusta odpowiedź");
+    }
+    
+    if (!zapisanoNowe) {
+        console.error("❌ WSZYSTKIE modele AI zawiodły.");
     }
 
   } catch (e) {
