@@ -2,25 +2,58 @@
   "mecze": [
     {
       "sport": "NBA",
-      "fixture_id": "401810961",
+      "fixture_id": "401810969",
+      "mecz": "Phoenix Suns at Charlotte Hornets",
+      "typ": "Phoenix Suns -8.5 (handicap)",
+      "kurs": "1.90",
+      "analiza": "Phoenix Suns, z ich trójką gwiazd (Durant, Booker, Beal), są drużyną aspirującą do mistrzostwa, posiadającą ogromny potencjał ofensywny. Charlotte Hornets to zespół w fazie przebudowy, zazwyczaj plasujący się w dolnych rejonach tabeli Konferencji Wschodniej, zmagający się z brakami w głębi składu i obronie. Różnica w talencie i stawkach meczowych jest ogromna, co powinno przełożyć się na dominację Suns i komfortowe zwycięstwo z wysoką przewagą punktową. Ich ofensywa powinna z łatwością przełamać obronę Szerszeni.",
+      "status": "oczekujący",
       "data": "2.04.2026",
-      "godzina": "01:30",
-      "mecz": "Boston Celtics vs Miami Heat",
-      "typ": "Boston Celtics ML",
-      "kurs": "1.70",
-      "analiza": "Historyczna rywalizacja między tymi drużynami gwarantuje zacięte spotkanie, jednak Celtics zazwyczaj prezentują stabilniejszą formę w kluczowych momentach sezonu zasadniczego. Ich głębia składu i konsekwencja w obronie dają im przewagę nad Heat. Mimo że Miami gra u siebie, Celtics są faworytem do zwycięstwa.",
-      "status": "oczekujący"
+      "godzina": "01:00"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810970",
+      "mecz": "Minnesota Timberwolves at Detroit Pistons",
+      "typ": "Minnesota Timberwolves -10.5 (handicap)",
+      "kurs": "1.90",
+      "analiza": "Minnesota Timberwolves to czołowa drużyna Konferencji Zachodniej, znana z jednej z najlepszych obron w lidze oraz silnego duetu Towns-Edwards. Detroit Pistons natomiast to od lat jeden z najsłabszych zespołów NBA, zmagający się z licznymi problemami kadrowymi i brakiem spójności w grze. Oczekuje się, że Timberwolves wykorzystają swoją przewagę pod każdym względem, aby zapewnić sobie łatwe zwycięstwo na wyjeździe. Ich dominująca obrona powinna skutecznie stłamsić ograniczoną ofensywę Pistons.",
+      "status": "oczekujący",
+      "data": "2.04.2026",
+      "godzina": "01:00"
     },
     {
       "sport": "NBA",
       "fixture_id": "401810971",
-      "data": "3.04.2026",
-      "godzina": "03:30",
-      "mecz": "Los Angeles Lakers vs Oklahoma City Thunder",
-      "typ": "Powyżej 228.5 punktów",
+      "mecz": "Los Angeles Lakers at Oklahoma City Thunder",
+      "typ": "Oklahoma City Thunder -4.5 (handicap)",
       "kurs": "1.90",
-      "analiza": "Starce Lakers z Thunder to pojedynek dwóch ofensywnie usposobionych drużyn. OKC, z ich młodym i dynamicznym składem, grają w szybkim tempie, a Lakers, z doświadczonymi strzelcami, również potrafią nabijać punkty. Obie ekipy mają tendencję do wysokich wyników, co sugeruje mecz z dużą liczbą punktów.",
-      "status": "oczekujący"
+      "analiza": "Oklahoma City Thunder to dynamiczny, młody zespół walczący o czołowe miejsca na Zachodzie, napędzany przez kandydata do MVP, Shai Gilgeous-Alexandra. Los Angeles Lakers, mimo obecności LeBrona Jamesa i Anthony'ego Davisa, często borykają się z niestabilnością formy, szczególnie w meczach wyjazdowych. OKC grając u siebie, wykorzysta swoją energię i szybkość, by narzucić własne tempo gry. Przewidujemy, że Thunder zapewnią sobie zwycięstwo z bezpieczną przewagą kilku punktów, wykorzystując swoją głębię składu i lepszą skuteczność w decydujących momentach.",
+      "status": "oczekujący",
+      "data": "2.04.2026",
+      "godzina": "03:30"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810981",
+      "mecz": "Boston Celtics at Milwaukee Bucks",
+      "typ": "Powyżej 235.5 punktów (suma meczu)",
+      "kurs": "1.90",
+      "analiza": "To starcie gigantów Konferencji Wschodniej, obu z potężnymi ofensywami i gwiazdami takimi jak Jayson Tatum i Giannis Antetokounmpo. Historycznie, mecze między Celtics a Bucks są niezwykle zacięte i często obfitują w punkty, ze względu na ich zdolność do szybkiego zdobywania koszy. Obie drużyny potrafią narzucić wysokie tempo i posiadają wiele opcji w ataku. Biorąc pod uwagę stawkę meczu i talent ofensywny obu ekip, spodziewamy się otwartego spotkania z dużą liczbą punktów.",
+      "status": "oczekujący",
+      "data": "2.04.2026",
+      "godzina": "02:00"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810983",
+      "mecz": "New Orleans Pelicans at Sacramento Kings",
+      "typ": "New Orleans Pelicans (Money Line)",
+      "kurs": "2.10",
+      "analiza": "Pelicans i Kings to dwie drużyny walczące o miejsce w play-offach, co gwarantuje zacięty pojedynek. New Orleans, z Zionem Williamsonem i Brandonem Ingramem, ma potencjał, by pokonać każdą drużynę, gdy ich gwiazdy są w formie. Choć Sacramento jest silne u siebie, Pelicans często potrafią wygrywać kluczowe mecze na wyjeździe przeciwko bezpośrednim rywalom. Spodziewamy się bardzo wyrównanego spotkania, ale Pelicans, z ich atletyzmem i zdolnością do tworzenia punktów w trudnych sytuacjach, mogą przechylić szalę zwycięstwa na swoją stronę.",
+      "status": "oczekujący",
+      "data": "2.04.2026",
+      "godzina": "04:00"
     }
   ]
 }

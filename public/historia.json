@@ -585,8 +585,9 @@
         "mecz": "Golden State Warriors at Denver Nuggets",
         "typ": "Powyżej 228.5 punktów (total)",
         "kurs": "1.88",
-        "analiza": "Obydwie drużyny posiadają ofensywny potencjał i potrafią grać w szybkim tempie. Warriors, nawet na wyjeździe, opierają się na strzelcach, a Nuggets z Jokiciem w roli reżysera zdobywają wiele punktów. Historia bezpośrednich spotkań często obfituje w wysokie wyniki. Spodziewam się otwartego spotkania z wieloma punktami z obu stron.",
-        "status": "oczekujący"
+        "analiza": "Obydwie drużyny posiadają ofensywny potencjał i potrafią grać w szybkim tempie. Warriors, nawet na wyjeździe, opierają się na strzelcach, a Nuggets z Jokiciem w roli reżysera zdobywają wiele punktów. Historia bezpośrednich spotkań często obfituje w wysokie wyniki. Spodziewam się otwartego spotkania z wieloma punktami z obu stron. [Wynik: 116-93]",
+        "status": "przegrana",
+        "wynik": "116-93"
       }
     ]
   },
@@ -601,8 +602,9 @@
         "mecz": "Minnesota Timberwolves at Dallas Mavericks",
         "typ": "Dallas Mavericks (-3.5)",
         "kurs": "1.90",
-        "analiza": "Starcie dwóch czołowych drużyn Konferencji Zachodniej, z dużymi aspiracjami na play-offy. Mavericks, grający u siebie, będą zmotywowani, aby umocnić swoją pozycję w tabeli, a ich ofensywa z Dončićiem i Irvingiem jest niezwykle trudna do zatrzymania. Timberwolves są silni defensywnie, ale w Dallas często brakuje im konsekwencji. Spodziewam się zaciętego, ale kontrolowanego zwycięstwa gospodarzy z pokryciem handicapu.",
-        "status": "oczekujący"
+        "analiza": "Starcie dwóch czołowych drużyn Konferencji Zachodniej, z dużymi aspiracjami na play-offy. Mavericks, grający u siebie, będą zmotywowani, aby umocnić swoją pozycję w tabeli, a ich ofensywa z Dončićiem i Irvingiem jest niezwykle trudna do zatrzymania. Timberwolves są silni defensywnie, ale w Dallas często brakuje im konsekwencji. Spodziewam się zaciętego, ale kontrolowanego zwycięstwa gospodarzy z pokryciem handicapu. [Wynik: 94-124]",
+        "status": "przegrana",
+        "wynik": "94-124"
       },
       {
         "sport": "NBA",
@@ -612,8 +614,9 @@
         "mecz": "Dallas Mavericks at Milwaukee Bucks",
         "typ": "Powyżej 235.5 punktów",
         "kurs": "1.85",
-        "analiza": "To spotkanie ma ogromny potencjał ofensywny, gdzie zmierzą się dwie ekipy dysponujące czołówką ligi pod względem gwiazdorskiej siły. Luka Dončić i Giannis Antetokounmpo są w stanie sami generować punkty w niesamowitym tempie, a obie drużyny preferują szybkie tempo gry. Choć potrafią bronić, ich skłonność do wymian ciosów sugeruje wysoką liczbę punktów. Spodziewam się, że linia punktowa zostanie przekroczona.",
-        "status": "oczekujący"
+        "analiza": "To spotkanie ma ogromny potencjał ofensywny, gdzie zmierzą się dwie ekipy dysponujące czołówką ligi pod względem gwiazdorskiej siły. Luka Dončić i Giannis Antetokounmpo są w stanie sami generować punkty w niesamowitym tempie, a obie drużyny preferują szybkie tempo gry. Choć potrafią bronić, ich skłonność do wymian ciosów sugeruje wysoką liczbę punktów. Spodziewam się, że linia punktowa zostanie przekroczona. [Wynik: 123-99]",
+        "status": "przegrana",
+        "wynik": "123-99"
       }
     ]
   },
@@ -628,8 +631,9 @@
         "mecz": "Dallas Mavericks at Milwaukee Bucks",
         "typ": "Milwaukee Bucks -4.5",
         "kurs": "1.90",
-        "analiza": "To starcie między dwoma pretendentami do tytułu MVP, Luką Dončićem i Giannisem Antetokounmpo, zapowiada intensywną walkę. Bucks, grając u siebie, zazwyczaj prezentują silną obronę i mają głęboki skład. Ich zdolność do dominacji pod koszem i kontrolowania tempa często daje im przewagę nad ofensywnymi Mavericks. Oczekujemy, że Milwaukee pokryje spread.",
-        "status": "oczekujący"
+        "analiza": "To starcie między dwoma pretendentami do tytułu MVP, Luką Dončićem i Giannisem Antetokounmpo, zapowiada intensywną walkę. Bucks, grając u siebie, zazwyczaj prezentują silną obronę i mają głęboki skład. Ich zdolność do dominacji pod koszem i kontrolowania tempa często daje im przewagę nad ofensywnymi Mavericks. Oczekujemy, że Milwaukee pokryje spread. [Wynik: 123-99]",
+        "status": "przegrana",
+        "wynik": "123-99"
       },
       {
         "sport": "NBA",
@@ -639,8 +643,9 @@
         "mecz": "Cleveland Cavaliers at Los Angeles Lakers",
         "typ": "Powyżej 228.5 punktów",
         "kurs": "1.85",
-        "analiza": "Zarówno Cavaliers, jak i Lakers posiadają dynamiczne ofensywy zdolne do zdobywania wielu punktów. Lakers, szczególnie grając u siebie, często przyspieszają tempo gry, podczas gdy Cleveland potrafi skutecznie utrzymywać wysoki poziom scoringu. Potencjalne luki w obronie po obu stronach mogą prowadzić do otwartego meczu. Zakład na powyżej wydaje się tu mocną opcją.",
-        "status": "oczekujący"
+        "analiza": "Zarówno Cavaliers, jak i Lakers posiadają dynamiczne ofensywy zdolne do zdobywania wielu punktów. Lakers, szczególnie grając u siebie, często przyspieszają tempo gry, podczas gdy Cleveland potrafi skutecznie utrzymywać wysoki poziom scoringu. Potencjalne luki w obronie po obu stronach mogą prowadzić do otwartego meczu. Zakład na powyżej wydaje się tu mocną opcją. [Wynik: 127-113]",
+        "status": "wygrana",
+        "wynik": "127-113"
       }
     ]
   },
@@ -655,8 +660,9 @@
         "mecz": "Boston Celtics vs Miami Heat",
         "typ": "Boston Celtics ML",
         "kurs": "1.70",
-        "analiza": "Historyczna rywalizacja między tymi drużynami gwarantuje zacięte spotkanie, jednak Celtics zazwyczaj prezentują stabilniejszą formę w kluczowych momentach sezonu zasadniczego. Ich głębia składu i konsekwencja w obronie dają im przewagę nad Heat. Mimo że Miami gra u siebie, Celtics są faworytem do zwycięstwa.",
-        "status": "oczekujący"
+        "analiza": "Historyczna rywalizacja między tymi drużynami gwarantuje zacięte spotkanie, jednak Celtics zazwyczaj prezentują stabilniejszą formę w kluczowych momentach sezonu zasadniczego. Ich głębia składu i konsekwencja w obronie dają im przewagę nad Heat. Mimo że Miami gra u siebie, Celtics są faworytem do zwycięstwa. [Wynik: 129-147]",
+        "status": "przegrana",
+        "wynik": "129-147"
       },
       {
         "sport": "NBA",
@@ -668,6 +674,66 @@
         "kurs": "1.90",
         "analiza": "Starce Lakers z Thunder to pojedynek dwóch ofensywnie usposobionych drużyn. OKC, z ich młodym i dynamicznym składem, grają w szybkim tempie, a Lakers, z doświadczonymi strzelcami, również potrafią nabijać punkty. Obie ekipy mają tendencję do wysokich wyników, co sugeruje mecz z dużą liczbą punktów.",
         "status": "oczekujący"
+      }
+    ]
+  },
+  {
+    "data": "2.04.2026",
+    "mecze": [
+      {
+        "sport": "NBA",
+        "fixture_id": "401810969",
+        "mecz": "Phoenix Suns at Charlotte Hornets",
+        "typ": "Phoenix Suns -8.5 (handicap)",
+        "kurs": "1.90",
+        "analiza": "Phoenix Suns, z ich trójką gwiazd (Durant, Booker, Beal), są drużyną aspirującą do mistrzostwa, posiadającą ogromny potencjał ofensywny. Charlotte Hornets to zespół w fazie przebudowy, zazwyczaj plasujący się w dolnych rejonach tabeli Konferencji Wschodniej, zmagający się z brakami w głębi składu i obronie. Różnica w talencie i stawkach meczowych jest ogromna, co powinno przełożyć się na dominację Suns i komfortowe zwycięstwo z wysoką przewagą punktową. Ich ofensywa powinna z łatwością przełamać obronę Szerszeni.",
+        "status": "oczekujący",
+        "data": "2.04.2026",
+        "godzina": "01:00"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810970",
+        "mecz": "Minnesota Timberwolves at Detroit Pistons",
+        "typ": "Minnesota Timberwolves -10.5 (handicap)",
+        "kurs": "1.90",
+        "analiza": "Minnesota Timberwolves to czołowa drużyna Konferencji Zachodniej, znana z jednej z najlepszych obron w lidze oraz silnego duetu Towns-Edwards. Detroit Pistons natomiast to od lat jeden z najsłabszych zespołów NBA, zmagający się z licznymi problemami kadrowymi i brakiem spójności w grze. Oczekuje się, że Timberwolves wykorzystają swoją przewagę pod każdym względem, aby zapewnić sobie łatwe zwycięstwo na wyjeździe. Ich dominująca obrona powinna skutecznie stłamsić ograniczoną ofensywę Pistons.",
+        "status": "oczekujący",
+        "data": "2.04.2026",
+        "godzina": "01:00"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810971",
+        "mecz": "Los Angeles Lakers at Oklahoma City Thunder",
+        "typ": "Oklahoma City Thunder -4.5 (handicap)",
+        "kurs": "1.90",
+        "analiza": "Oklahoma City Thunder to dynamiczny, młody zespół walczący o czołowe miejsca na Zachodzie, napędzany przez kandydata do MVP, Shai Gilgeous-Alexandra. Los Angeles Lakers, mimo obecności LeBrona Jamesa i Anthony'ego Davisa, często borykają się z niestabilnością formy, szczególnie w meczach wyjazdowych. OKC grając u siebie, wykorzysta swoją energię i szybkość, by narzucić własne tempo gry. Przewidujemy, że Thunder zapewnią sobie zwycięstwo z bezpieczną przewagą kilku punktów, wykorzystując swoją głębię składu i lepszą skuteczność w decydujących momentach.",
+        "status": "oczekujący",
+        "data": "2.04.2026",
+        "godzina": "03:30"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810981",
+        "mecz": "Boston Celtics at Milwaukee Bucks",
+        "typ": "Powyżej 235.5 punktów (suma meczu)",
+        "kurs": "1.90",
+        "analiza": "To starcie gigantów Konferencji Wschodniej, obu z potężnymi ofensywami i gwiazdami takimi jak Jayson Tatum i Giannis Antetokounmpo. Historycznie, mecze między Celtics a Bucks są niezwykle zacięte i często obfitują w punkty, ze względu na ich zdolność do szybkiego zdobywania koszy. Obie drużyny potrafią narzucić wysokie tempo i posiadają wiele opcji w ataku. Biorąc pod uwagę stawkę meczu i talent ofensywny obu ekip, spodziewamy się otwartego spotkania z dużą liczbą punktów.",
+        "status": "oczekujący",
+        "data": "2.04.2026",
+        "godzina": "02:00"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810983",
+        "mecz": "New Orleans Pelicans at Sacramento Kings",
+        "typ": "New Orleans Pelicans (Money Line)",
+        "kurs": "2.10",
+        "analiza": "Pelicans i Kings to dwie drużyny walczące o miejsce w play-offach, co gwarantuje zacięty pojedynek. New Orleans, z Zionem Williamsonem i Brandonem Ingramem, ma potencjał, by pokonać każdą drużynę, gdy ich gwiazdy są w formie. Choć Sacramento jest silne u siebie, Pelicans często potrafią wygrywać kluczowe mecze na wyjeździe przeciwko bezpośrednim rywalom. Spodziewamy się bardzo wyrównanego spotkania, ale Pelicans, z ich atletyzmem i zdolnością do tworzenia punktów w trudnych sytuacjach, mogą przechylić szalę zwycięstwa na swoją stronę.",
+        "status": "oczekujący",
+        "data": "2.04.2026",
+        "godzina": "04:00"
       }
     ]
   }
