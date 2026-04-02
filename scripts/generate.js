@@ -45,41 +45,72 @@ async function run() {
 
     // Krok 1: Pobieramy suche wyniki zakończonych meczów
     for (let dzien of historia) {
+      if (!dzien.mecze) continue;
       for (let m of dzien.mecze) {
-        if (m.status === 'oczekujący' || m.status === 'NS') {
+        const status = m.status ? m.status.toLowerCase() : '';
+        if (status === 'oczekujący' || status === 'ns') {
           try {
-            if (m.sport === 'Pilka_Nozna' && m.fixture_id) {
+            const sportType = m.sport || 'Pilka_Nozna'; // Wsteczna kompatybilność ze starymi meczami!
+            console.log(`⏱ Sprawdzam: ${m.mecz} (${sportType})`);
+
+            if (sportType === 'Pilka_Nozna' && m.fixture_id && m.fixture_id !== "0") {
               const res = await fetchSports(`https://v3.football.api-sports.io/fixtures?id=${m.fixture_id}`, {
                 headers: { 'x-apisports-key': apiSportsKey }
               });
-              if (res?.response?.[0]?.fixture?.status?.short === 'FT' || res?.response?.[0]?.fixture?.status?.short === 'AET' || res?.response?.[0]?.fixture?.status?.short === 'PEN') {
+              const statusShort = res?.response?.[0]?.fixture?.status?.short;
+              if (['FT', 'AET', 'PEN'].includes(statusShort)) {
                 const f = res.response[0];
                 m.wynik = `${f.goals.home}-${f.goals.away}`;
                 meczeDoOceny.push(m);
+                console.log(`⚽ Znaleziono wynik piłki: ${m.wynik}`);
               }
-            } else if (m.sport === 'NBA' && m.fixture_id) {
-              const res = await fetchSports(`https://v2.nba.api-sports.io/games?id=${m.fixture_id}`, {
-                headers: { 'x-apisports-key': apiSportsKey }
-              });
-              // Status 3 to "Finished" w nowym API NBA
-              if (res?.response?.[0]?.status?.short === 3 || res?.response?.[0]?.status?.short === 'FT') {
-                const s = res.response[0].scores;
-                m.wynik = `${s.home.points}-${s.away.points}`;
-                meczeDoOceny.push(m);
+            } else if (sportType === 'NBA' && m.fixture_id && m.fixture_id !== "0") {
+              // Nowe bezpieczne pobieranie wyników NBA z ESPN
+              let dateQuery = "";
+              const parts = m.data.match(/\d+/g);
+              if (parts && parts.length >= 3) {
+                  const d = parts[0].padStart(2, '0');
+                  const mo = parts[1].padStart(2, '0');
+                  const y = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+                  dateQuery = `${y}${mo}${d}`;
+              }
+              
+              if (dateQuery) {
+                  const dateObj = new Date(dateQuery.substring(0,4), parseInt(dateQuery.substring(4,6))-1, dateQuery.substring(6,8));
+                  dateObj.setDate(dateObj.getDate() + 1);
+                  const dateQueryNext = `${dateObj.getFullYear()}${String(dateObj.getMonth()+1).padStart(2,'0')}${String(dateObj.getDate()).padStart(2,'0')}`;
+
+                  const [res1, res2] = await Promise.all([
+                      fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQuery}`),
+                      fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryNext}`)
+                  ]);
+
+                  let event = null;
+                  if (res1?.events) event = res1.events.find(e => String(e.id) === String(m.fixture_id));
+                  if (!event && res2?.events) event = res2.events.find(e => String(e.id) === String(m.fixture_id));
+
+                  if (event && event.status.type.state === 'post') {
+                      const s = event.competitions[0].competitors;
+                      const homeScore = s.find(c => c.homeAway === 'home')?.score || s[0].score;
+                      const awayScore = s.find(c => c.homeAway === 'away')?.score || s[1].score;
+                      m.wynik = `${homeScore}-${awayScore}`;
+                      meczeDoOceny.push(m);
+                      console.log(`🏀 Znaleziono wynik NBA: ${m.wynik}`);
+                  }
               }
             }
-          } catch(e) { console.log("Błąd sprawdzania wyniku dla ID:", m.fixture_id); }
+          } catch(e) { console.log(`⚠️ Błąd sprawdzania wyniku dla ID ${m.fixture_id}:`, e.message); }
         }
       }
     }
 
-    // Krok 2: Prosimy AI o rozliczenie kuponów (wygrana/przegrana) na podstawie wyników
+    // Krok 2: Prosimy AI o rozliczenie kuponów
     if (meczeDoOceny.length > 0) {
-      console.log(`🤖 AI Sędzia ocenia ${meczeDoOceny.length} starych meczów...`);
-      const prompt = `Jesteś sędzią bukmacherskim. Poniżej masz listę meczów. Znasz typ bukmacherski oraz oficjalny, końcowy wynik.
-      Rozlicz każdy z tych typów - czy jest wygrany czy przegrany.
+      console.log(`🤖 AI Sędzia ocenia ${meczeDoOceny.length} rozegranych meczów...`);
+      const prompt = `Jesteś matematycznym sędzią bukmacherskim. Poniżej masz listę zakończonych meczów. Znasz typ bukmacherski oraz oficjalny wynik meczu (Gospodarz-Gość).
+      Rozlicz każdy typ matematycznie, czy jest wygrany czy przegrany.
       Dane: ${JSON.stringify(meczeDoOceny.map(m => ({id: m.fixture_id, typ: m.typ, wynik: m.wynik})))}
-      Zwróć TYLKO czysty obiekt JSON w formacie: {"oceny": [{"id": "123", "status": "wygrana"}, {"id": "456", "status": "przegrana"}]}`;
+      Zwróć TYLKO czysty obiekt JSON: {"oceny": [{"id": "ID_MECZU", "status": "wygrana"}, {"id": "INNE_ID", "status": "przegrana"}]}`;
 
       try {
         const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
@@ -87,26 +118,32 @@ async function run() {
         const aiData = await aiRes.json();
         
         if (aiData.candidates && aiData.candidates[0].content) {
-            const rawText = aiData.candidates[0].content.parts[0].text;
-            const cleanJson = JSON.parse(rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1));
+            let rawText = aiData.candidates[0].content.parts[0].text;
+            let cleanJson = JSON.parse(rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1));
 
+            let zaktualizowano = false;
             for (let dzien of historia) {
+                if (!dzien.mecze) continue;
                 for (let m of dzien.mecze) {
-                    const ocena = cleanJson.oceny?.find(o => o.id == m.fixture_id);
+                    const ocena = cleanJson.oceny?.find(o => String(o.id) === String(m.fixture_id));
                     if (ocena && m.wynik) {
                         m.status = ocena.status;
-                        m.analiza += ` [Wynik: ${m.wynik}]`; // Dokleja wynik do analizy, żeby ładnie wyglądało
+                        if(!m.analiza.includes('[Wynik:')) m.analiza += ` [Wynik: ${m.wynik}]`;
+                        zaktualizowano = true;
+                        console.log(`✅ Zmieniono status meczu ${m.mecz} na: ${m.status}`);
                     }
                 }
             }
-            fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
-            console.log("✅ Pomyślnie zaktualizowano statusy w historii!");
+            if (zaktualizowano) fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
+            console.log("💾 Zapisano nową historię z rozliczonymi kuponami.");
         }
-      } catch(e) { console.log("Błąd AI podczas oceniania kuponów:", e.message); }
+      } catch(e) { console.log("❌ Błąd AI podczas oceniania kuponów:", e.message); }
+    } else {
+      console.log("ℹ️ Żaden z oczekujących meczów nie został jeszcze zakończony (lub API nie podało wyniku).");
     }
   }
 
-  // Odpalenie sędziego przed generowaniem nowych typów
+  // Odpalamy sędziego zanim pobierzemy nowe mecze
   await settleHistory();
 
   try {
@@ -180,7 +217,6 @@ async function run() {
         let historia = [];
         if (fs.existsSync(historyPath)) historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
         
-        // Zapis do historii (sprawdzamy czy dzisiejszy wpis już istnieje, żeby nie duplikować)
         const dzisiejszyIndex = historia.findIndex(h => h.data === dzisiajPl);
         if (dzisiejszyIndex !== -1) {
             historia[dzisiejszyIndex] = { data: dzisiajPl, mecze: generatedData.mecze };
@@ -188,7 +224,7 @@ async function run() {
             historia.push({ data: dzisiajPl, mecze: generatedData.mecze });
         }
         
-        fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); // Trzymaj ostatnie 30 dni
+        fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); 
         console.log("✅ NOWE TYPY ZOSTAŁY ZAPISANE!");
     } else {
         console.error("❌ Błąd AI:", resData.error?.message || "Pusta odpowiedź");
