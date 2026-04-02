@@ -36,7 +36,29 @@ async function run() {
     return null;
   }
 
-  // --- AUTOMATYCZNY SĘDZIA (ROZLICZANIE PIŁKI I NBA) ---
+  // --- 1. DYNAMICZNE POBIERANIE DOSTĘPNYCH MODELI AI ---
+  console.log("🔎 Skanuję dostępne modele Google Gemini...");
+  let modeleDoTestu = [];
+  try {
+      const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`);
+      const modelsData = await modelsRes.json();
+      if (modelsData.models) {
+          // Pobiera tylko te modele, które potrafią generować tekst
+          modeleDoTestu = modelsData.models
+              .filter(m => m.supportedGenerationMethods?.includes("generateContent"))
+              .map(m => m.name.replace('models/', ''));
+          console.log(`✅ Znaleziono ${modeleDoTestu.length} aktywnych modeli AI na Twoim koncie.`);
+      }
+  } catch (e) {
+      console.log("⚠️ Błąd pobierania listy modeli. Używam trybu awaryjnego.");
+  }
+  
+  // Jeśli Google nie odda listy, mamy spadochron
+  if (modeleDoTestu.length === 0) {
+      modeleDoTestu = ["gemini-pro", "gemini-1.0-pro"];
+  }
+
+  // --- 2. AUTOMATYCZNY SĘDZIA (ROZLICZANIE PIŁKI I NBA) ---
   async function settleHistory() {
     if (!fs.existsSync(historyPath)) return;
     console.log("🔍 Sprawdzam wyniki oczekujących meczów w historii...");
@@ -64,7 +86,6 @@ async function run() {
                 console.log(`⚽ Znaleziono wynik piłki: ${m.wynik}`);
               }
             } else if (sportType === 'NBA' && m.fixture_id && m.fixture_id !== "0") {
-              // Nowe super-bezpieczne pobieranie NBA z uwzględnieniem stref czasowych USA (-1 dzień)
               let dateQuery = "";
               const parts = m.data.match(/\d+/g);
               if (parts && parts.length >= 3) {
@@ -76,12 +97,9 @@ async function run() {
               
               if (dateQuery) {
                   const dateObj = new Date(dateQuery.substring(0,4), parseInt(dateQuery.substring(4,6))-1, dateQuery.substring(6,8));
-                  
-                  // Ze względu na nockę pobieramy 3 dni (wczoraj dla USA, dziś i jutro)
                   const dateObjPrev = new Date(dateObj);
                   dateObjPrev.setDate(dateObjPrev.getDate() - 1);
                   const dateQueryPrev = `${dateObjPrev.getFullYear()}${String(dateObjPrev.getMonth()+1).padStart(2,'0')}${String(dateObjPrev.getDate()).padStart(2,'0')}`;
-                  
                   dateObj.setDate(dateObj.getDate() + 1);
                   const dateQueryNext = `${dateObj.getFullYear()}${String(dateObj.getMonth()+1).padStart(2,'0')}${String(dateObj.getDate()).padStart(2,'0')}`;
 
@@ -91,7 +109,6 @@ async function run() {
                       fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryNext}`)
                   ]);
 
-                  // Inteligentne szukanie drużyny (np. wyciąga słowo "Lakers" i "Thunder")
                   const getTeamKey = (teamStr) => {
                       const words = teamStr.trim().split(' ');
                       return words[words.length - 1].toLowerCase();
@@ -134,7 +151,6 @@ async function run() {
       Dane: ${JSON.stringify(meczeDoOceny.map(m => ({id: m.fixture_id, typ: m.typ, wynik: m.wynik})))}
       Zwróć TYLKO czysty obiekt JSON: {"oceny": [{"id": "ID_MECZU", "status": "wygrana"}, {"id": "INNE_ID", "status": "przegrana"}]}`;
 
-      const modeleDoTestu = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-1.0-pro"];
       let zaktualizowano = false;
 
       for (const model of modeleDoTestu) {
@@ -159,11 +175,9 @@ async function run() {
                         }
                     }
                 }
-                break;
-            } else {
-                console.log(`⚠️ Sędzia AI (Model: ${model}) odrzucił prośbę. Błąd Google:`, JSON.stringify(aiData));
+                break; // Skoro ocenił poprawnie, przerywamy pętlę modeli
             }
-          } catch(e) { console.log(`⚠️ Błąd sieci Sędziego:`, e.message); }
+          } catch(e) {}
       }
       if (zaktualizowano) {
           fs.writeFileSync(historyPath, JSON.stringify(historia, null, 2));
@@ -178,7 +192,7 @@ async function run() {
   await settleHistory();
 
   try {
-    // --- POBIERANIE PIŁKI ---
+    // --- 3. POBIERANIE PIŁKI I NBA NA DZIŚ ---
     console.log("⚽ Pobieram Piłkę Nożną...");
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApiFootball}&timezone=Europe/Warsaw`, {
       method: 'GET', headers: { 'x-apisports-key': apiSportsKey }
@@ -195,7 +209,6 @@ async function run() {
         }).join('\n');
     }
 
-    // --- POBIERANIE NBA (ESPN) ---
     console.log(`🏀 Pobieram NBA z ESPN...`);
     const [espnToday, espnTomorrow] = await Promise.all([
         fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${getEspnDate(dzisiaj)}`),
@@ -229,9 +242,9 @@ async function run() {
     
     Zwróć TYLKO czysty JSON: {"mecze": [{"sport": "Pilka_Nozna", "fixture_id": "123", "mecz": "A vs B", "typ": "X", "kurs": "1.90", "analiza": "...", "status": "oczekujący", "data": "${dzisiajPl}", "godzina": "HH:MM"}]}`;
 
-    const modeleDoTestu = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-1.0-pro"];
     let zapisanoNowe = false;
 
+    // Próbujemy wszystkie dostępne modele po kolei
     for (const model of modeleDoTestu) {
         try {
             const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
@@ -260,19 +273,19 @@ async function run() {
                 }
                 
                 fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); 
-                console.log(`✅ NOWE TYPY ZOSTAŁY ZAPISANE! (Model: ${model})`);
+                console.log(`✅ NOWE TYPY ZOSTAŁY ZAPISANE! (Sukces na modelu: ${model})`);
                 zapisanoNowe = true;
-                break; 
+                break; // Mamy to, wychodzimy z pętli!
             } else {
-                console.error(`❌ Model AI ${model} odrzucił prośbę. Błąd Google:`, JSON.stringify(resData));
+                console.log(`❌ Model ${model} zawiódł, sprawdzam następny...`);
             }
         } catch (e) {
-            console.error(`❌ Błąd połączenia z modelem ${model}...`);
+            console.log(`❌ Błąd połączenia z modelem ${model}...`);
         }
     }
     
     if (!zapisanoNowe) {
-        console.error("❌ WSZYSTKIE modele AI zawiodły.");
+        console.error("❌ WSZYSTKIE pobrane modele AI zawiodły.");
     }
 
   } catch (e) {
