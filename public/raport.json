@@ -2,58 +2,58 @@
   "mecze": [
     {
       "sport": "NBA",
-      "fixture_id": "401810969",
-      "mecz": "Phoenix Suns at Charlotte Hornets",
-      "typ": "Phoenix Suns -8.5 (handicap)",
-      "kurs": "1.90",
-      "analiza": "Phoenix Suns, z ich trójką gwiazd (Durant, Booker, Beal), są drużyną aspirującą do mistrzostwa, posiadającą ogromny potencjał ofensywny. Charlotte Hornets to zespół w fazie przebudowy, zazwyczaj plasujący się w dolnych rejonach tabeli Konferencji Wschodniej, zmagający się z brakami w głębi składu i obronie. Różnica w talencie i stawkach meczowych jest ogromna, co powinno przełożyć się na dominację Suns i komfortowe zwycięstwo z wysoką przewagą punktową. Ich ofensywa powinna z łatwością przełamać obronę Szerszeni.",
+      "fixture_id": "401810975",
+      "mecz": "Indiana Pacers at Charlotte Hornets",
+      "typ": "Indiana Pacers (-4.5)",
+      "kurs": "1.85",
+      "analiza": "Pacers, nawet grając na wyjeździe, prezentują zazwyczaj wyższy poziom koszykówki niż Hornets. Oczekuje się, że siła ofensywna Pacers i ich zdolność do szybkiego zdobywania punktów pozwoli im na kontrolowanie meczu. Hornets, często zmagający się z brakami w defensywie, mogą mieć trudności z zatrzymaniem zróżnicowanego ataku rywali, co powinno przełożyć się na komfortowe zwycięstwo gości.",
       "status": "oczekujący",
-      "data": "2.04.2026",
+      "data": "3.04.2026",
       "godzina": "01:00"
     },
     {
       "sport": "NBA",
-      "fixture_id": "401810970",
-      "mecz": "Minnesota Timberwolves at Detroit Pistons",
-      "typ": "Minnesota Timberwolves -10.5 (handicap)",
-      "kurs": "1.90",
-      "analiza": "Minnesota Timberwolves to czołowa drużyna Konferencji Zachodniej, znana z jednej z najlepszych obron w lidze oraz silnego duetu Towns-Edwards. Detroit Pistons natomiast to od lat jeden z najsłabszych zespołów NBA, zmagający się z licznymi problemami kadrowymi i brakiem spójności w grze. Oczekuje się, że Timberwolves wykorzystają swoją przewagę pod każdym względem, aby zapewnić sobie łatwe zwycięstwo na wyjeździe. Ich dominująca obrona powinna skutecznie stłamsić ograniczoną ofensywę Pistons.",
+      "fixture_id": "401810978",
+      "mecz": "Chicago Bulls at New York Knicks",
+      "typ": "New York Knicks (Zwycięzca)",
+      "kurs": "1.50",
+      "analiza": "Knicks są zazwyczaj mocną drużyną na własnym parkiecie, wspieraną przez energiczną publiczność w Madison Square Garden. Ich solidna obrona i zorganizowany atak stanowią duże wyzwanie dla większości rywali. Bulls, pomimo momentów dobrej gry, często brakuje konsekwencji, by zagrozić czołowym zespołom w ich hali. Spodziewam się, że Knicks pewnie pokonają Bulls.",
       "status": "oczekujący",
-      "data": "2.04.2026",
-      "godzina": "01:00"
-    },
-    {
-      "sport": "NBA",
-      "fixture_id": "401810971",
-      "mecz": "Los Angeles Lakers at Oklahoma City Thunder",
-      "typ": "Oklahoma City Thunder -4.5 (handicap)",
-      "kurs": "1.90",
-      "analiza": "Oklahoma City Thunder to dynamiczny, młody zespół walczący o czołowe miejsca na Zachodzie, napędzany przez kandydata do MVP, Shai Gilgeous-Alexandra. Los Angeles Lakers, mimo obecności LeBrona Jamesa i Anthony'ego Davisa, często borykają się z niestabilnością formy, szczególnie w meczach wyjazdowych. OKC grając u siebie, wykorzysta swoją energię i szybkość, by narzucić własne tempo gry. Przewidujemy, że Thunder zapewnią sobie zwycięstwo z bezpieczną przewagą kilku punktów, wykorzystując swoją głębię składu i lepszą skuteczność w decydujących momentach.",
-      "status": "oczekujący",
-      "data": "2.04.2026",
-      "godzina": "03:30"
+      "data": "3.04.2026",
+      "godzina": "01:30"
     },
     {
       "sport": "NBA",
       "fixture_id": "401810981",
       "mecz": "Boston Celtics at Milwaukee Bucks",
-      "typ": "Powyżej 235.5 punktów (suma meczu)",
+      "typ": "Powyżej 232.5 punktów",
       "kurs": "1.90",
-      "analiza": "To starcie gigantów Konferencji Wschodniej, obu z potężnymi ofensywami i gwiazdami takimi jak Jayson Tatum i Giannis Antetokounmpo. Historycznie, mecze między Celtics a Bucks są niezwykle zacięte i często obfitują w punkty, ze względu na ich zdolność do szybkiego zdobywania koszy. Obie drużyny potrafią narzucić wysokie tempo i posiadają wiele opcji w ataku. Biorąc pod uwagę stawkę meczu i talent ofensywny obu ekip, spodziewamy się otwartego spotkania z dużą liczbą punktów.",
+      "analiza": "To starcie dwóch ofensywnie usposobionych drużyn z czołówki ligi, które często generują wysokie wyniki. Zarówno Celtics, jak i Bucks posiadają w swoich składach zawodników zdolnych do seryjnego zdobywania punktów. Ich ostatnie bezpośrednie konfrontacje również wskazywały na tendencję do dynamicznej i punktowanej gry. Wysoki tempo i skuteczność rzutowa obu zespołów sugerują przekroczenie ustalonej linii punktowej.",
       "status": "oczekujący",
-      "data": "2.04.2026",
+      "data": "3.04.2026",
       "godzina": "02:00"
     },
     {
       "sport": "NBA",
-      "fixture_id": "401810983",
-      "mecz": "New Orleans Pelicans at Sacramento Kings",
-      "typ": "New Orleans Pelicans (Money Line)",
-      "kurs": "2.10",
-      "analiza": "Pelicans i Kings to dwie drużyny walczące o miejsce w play-offach, co gwarantuje zacięty pojedynek. New Orleans, z Zionem Williamsonem i Brandonem Ingramem, ma potencjał, by pokonać każdą drużynę, gdy ich gwiazdy są w formie. Choć Sacramento jest silne u siebie, Pelicans często potrafią wygrywać kluczowe mecze na wyjeździe przeciwko bezpośrednim rywalom. Spodziewamy się bardzo wyrównanego spotkania, ale Pelicans, z ich atletyzmem i zdolnością do tworzenia punktów w trudnych sytuacjach, mogą przechylić szalę zwycięstwa na swoją stronę.",
+      "fixture_id": "401810984",
+      "mecz": "Washington Wizards at Miami Heat",
+      "typ": "Miami Heat (-8.5)",
+      "kurs": "1.88",
+      "analiza": "Heat są zazwyczaj zespołem o silnej obronie i zdyscyplinowanym ataku, szczególnie skuteczni u siebie. Wizards, zmagający się z problemami kadrowymi i brakiem stabilności, rzadko stanowią realne zagrożenie dla czołowych drużyn na ich parkiecie. Spodziewam się, że Heat wykorzystają przewagę własnego boiska i słabości rywala, aby odnieść przekonujące zwycięstwo z pokryciem handicapu.",
       "status": "oczekujący",
-      "data": "2.04.2026",
-      "godzina": "04:00"
+      "data": "3.04.2026",
+      "godzina": "21:00"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810985",
+      "mecz": "San Antonio Spurs at Denver Nuggets",
+      "typ": "Denver Nuggets (-11.5)",
+      "kurs": "1.90",
+      "analiza": "Nuggets to jeden z głównych faworytów ligi, z dominującym Jokicem i mocnym składem. Na własnym parkiecie w Denver są szczególnie trudni do pokonania, często rozbijając słabszych rywali. Spurs, będący w fazie przebudowy, zazwyczaj nie mają argumentów, by skutecznie przeciwstawić się tak silnemu zespołowi. Oczekuję jednostronnego meczu i wysokiego zwycięstwa Nuggets.",
+      "status": "oczekujący",
+      "data": "3.04.2026",
+      "godzina": "21:00"
     }
   ]
 }
