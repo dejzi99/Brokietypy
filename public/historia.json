@@ -723,10 +723,11 @@
         "mecz": "Boston Celtics at Milwaukee Bucks",
         "typ": "Powyżej 235.5 punktów (suma meczu)",
         "kurs": "1.90",
-        "analiza": "To starcie gigantów Konferencji Wschodniej, obu z potężnymi ofensywami i gwiazdami takimi jak Jayson Tatum i Giannis Antetokounmpo. Historycznie, mecze między Celtics a Bucks są niezwykle zacięte i często obfitują w punkty, ze względu na ich zdolność do szybkiego zdobywania koszy. Obie drużyny potrafią narzucić wysokie tempo i posiadają wiele opcji w ataku. Biorąc pod uwagę stawkę meczu i talent ofensywny obu ekip, spodziewamy się otwartego spotkania z dużą liczbą punktów.",
-        "status": "oczekujący",
+        "analiza": "To starcie gigantów Konferencji Wschodniej, obu z potężnymi ofensywami i gwiazdami takimi jak Jayson Tatum i Giannis Antetokounmpo. Historycznie, mecze między Celtics a Bucks są niezwykle zacięte i często obfitują w punkty, ze względu na ich zdolność do szybkiego zdobywania koszy. Obie drużyny potrafią narzucić wysokie tempo i posiadają wiele opcji w ataku. Biorąc pod uwagę stawkę meczu i talent ofensywny obu ekip, spodziewamy się otwartego spotkania z dużą liczbą punktów. [Wynik: 101-133]",
+        "status": "przegrana",
         "data": "2.04.2026",
-        "godzina": "02:00"
+        "godzina": "02:00",
+        "wynik": "101-133"
       },
       {
         "sport": "NBA",
@@ -734,10 +735,11 @@
         "mecz": "New Orleans Pelicans at Sacramento Kings",
         "typ": "New Orleans Pelicans (Money Line)",
         "kurs": "2.10",
-        "analiza": "Pelicans i Kings to dwie drużyny walczące o miejsce w play-offach, co gwarantuje zacięty pojedynek. New Orleans, z Zionem Williamsonem i Brandonem Ingramem, ma potencjał, by pokonać każdą drużynę, gdy ich gwiazdy są w formie. Choć Sacramento jest silne u siebie, Pelicans często potrafią wygrywać kluczowe mecze na wyjeździe przeciwko bezpośrednim rywalom. Spodziewamy się bardzo wyrównanego spotkania, ale Pelicans, z ich atletyzmem i zdolnością do tworzenia punktów w trudnych sytuacjach, mogą przechylić szalę zwycięstwa na swoją stronę.",
-        "status": "oczekujący",
+        "analiza": "Pelicans i Kings to dwie drużyny walczące o miejsce w play-offach, co gwarantuje zacięty pojedynek. New Orleans, z Zionem Williamsonem i Brandonem Ingramem, ma potencjał, by pokonać każdą drużynę, gdy ich gwiazdy są w formie. Choć Sacramento jest silne u siebie, Pelicans często potrafią wygrywać kluczowe mecze na wyjeździe przeciwko bezpośrednim rywalom. Spodziewamy się bardzo wyrównanego spotkania, ale Pelicans, z ich atletyzmem i zdolnością do tworzenia punktów w trudnych sytuacjach, mogą przechylić szalę zwycięstwa na swoją stronę. [Wynik: 117-113]",
+        "status": "wygrana",
         "data": "2.04.2026",
-        "godzina": "04:00"
+        "godzina": "04:00",
+        "wynik": "117-113"
       }
     ]
   },
@@ -750,10 +752,11 @@
         "mecz": "Indiana Pacers at Charlotte Hornets",
         "typ": "Indiana Pacers (-4.5)",
         "kurs": "1.85",
-        "analiza": "Pacers, nawet grając na wyjeździe, prezentują zazwyczaj wyższy poziom koszykówki niż Hornets. Oczekuje się, że siła ofensywna Pacers i ich zdolność do szybkiego zdobywania punktów pozwoli im na kontrolowanie meczu. Hornets, często zmagający się z brakami w defensywie, mogą mieć trudności z zatrzymaniem zróżnicowanego ataku rywali, co powinno przełożyć się na komfortowe zwycięstwo gości.",
-        "status": "oczekujący",
+        "analiza": "Pacers, nawet grając na wyjeździe, prezentują zazwyczaj wyższy poziom koszykówki niż Hornets. Oczekuje się, że siła ofensywna Pacers i ich zdolność do szybkiego zdobywania punktów pozwoli im na kontrolowanie meczu. Hornets, często zmagający się z brakami w defensywie, mogą mieć trudności z zatrzymaniem zróżnicowanego ataku rywali, co powinno przełożyć się na komfortowe zwycięstwo gości. [Wynik: 129-108]",
+        "status": "wygrana",
         "data": "3.04.2026",
-        "godzina": "01:00"
+        "godzina": "01:00",
+        "wynik": "129-108"
       },
       {
         "sport": "NBA",
@@ -761,10 +764,11 @@
         "mecz": "Chicago Bulls at New York Knicks",
         "typ": "New York Knicks (Zwycięzca)",
         "kurs": "1.50",
-        "analiza": "Knicks są zazwyczaj mocną drużyną na własnym parkiecie, wspieraną przez energiczną publiczność w Madison Square Garden. Ich solidna obrona i zorganizowany atak stanowią duże wyzwanie dla większości rywali. Bulls, pomimo momentów dobrej gry, często brakuje konsekwencji, by zagrozić czołowym zespołom w ich hali. Spodziewam się, że Knicks pewnie pokonają Bulls.",
-        "status": "oczekujący",
+        "analiza": "Knicks są zazwyczaj mocną drużyną na własnym parkiecie, wspieraną przez energiczną publiczność w Madison Square Garden. Ich solidna obrona i zorganizowany atak stanowią duże wyzwanie dla większości rywali. Bulls, pomimo momentów dobrej gry, często brakuje konsekwencji, by zagrozić czołowym zespołom w ich hali. Spodziewam się, że Knicks pewnie pokonają Bulls. [Wynik: 136-96]",
+        "status": "wygrana",
         "data": "3.04.2026",
-        "godzina": "01:30"
+        "godzina": "01:30",
+        "wynik": "136-96"
       },
       {
         "sport": "NBA",
@@ -772,10 +776,11 @@
         "mecz": "Boston Celtics at Milwaukee Bucks",
         "typ": "Powyżej 232.5 punktów",
         "kurs": "1.90",
-        "analiza": "To starcie dwóch ofensywnie usposobionych drużyn z czołówki ligi, które często generują wysokie wyniki. Zarówno Celtics, jak i Bucks posiadają w swoich składach zawodników zdolnych do seryjnego zdobywania punktów. Ich ostatnie bezpośrednie konfrontacje również wskazywały na tendencję do dynamicznej i punktowanej gry. Wysoki tempo i skuteczność rzutowa obu zespołów sugerują przekroczenie ustalonej linii punktowej.",
-        "status": "oczekujący",
+        "analiza": "To starcie dwóch ofensywnie usposobionych drużyn z czołówki ligi, które często generują wysokie wyniki. Zarówno Celtics, jak i Bucks posiadają w swoich składach zawodników zdolnych do seryjnego zdobywania punktów. Ich ostatnie bezpośrednie konfrontacje również wskazywały na tendencję do dynamicznej i punktowanej gry. Wysoki tempo i skuteczność rzutowa obu zespołów sugerują przekroczenie ustalonej linii punktowej. [Wynik: 101-133]",
+        "status": "przegrana",
         "data": "3.04.2026",
-        "godzina": "02:00"
+        "godzina": "02:00",
+        "wynik": "101-133"
       },
       {
         "sport": "NBA",
@@ -798,6 +803,66 @@
         "status": "oczekujący",
         "data": "3.04.2026",
         "godzina": "21:00"
+      }
+    ]
+  },
+  {
+    "data": "4.04.2026",
+    "mecze": [
+      {
+        "sport": "NBA",
+        "fixture_id": "401810984",
+        "mecz": "Washington Wizards at Miami Heat",
+        "typ": "Miami Heat -8.5 (Handicap)",
+        "kurs": "1.85",
+        "analiza": "Heat w tym kluczowym momencie sezonu regularnego walczą o lepszą pozycję w Play-In/Playoffs. Wizards natomiast od dawna są poza walką, a ich morale i rotacja są osłabione. Oczekujemy, że Heat wykorzystają przewagę własnego parkietu i zmotywują się, by wysoko pokonać słabszego rywala. Ich obrona powinna zatrzymać ofensywę Wizards, co pozwoli na komfortowe zwycięstwo.",
+        "status": "oczekujący",
+        "data": "4.04.2026",
+        "godzina": "21:00"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810987",
+        "mecz": "Toronto Raptors at Boston Celtics",
+        "typ": "Boston Celtics -12.5 (Handicap)",
+        "kurs": "1.90",
+        "analiza": "Celtics, liderzy konferencji, u siebie są praktycznie nie do pokonania, zwłaszcza przeciwko osłabionym drużynom. Raptors borykają się z kontuzjami kluczowych graczy i są w wyraźnym dołku formy. Biorąc pod uwagę ich dysproporcję w talentach i motywacji, przewidujemy, że Celtics zdominują to spotkanie od początku do końca. Wysoka wygrana gospodarzy jest bardzo prawdopodobna.",
+        "status": "oczekujący",
+        "data": "4.04.2026",
+        "godzina": "21:30"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810990",
+        "mecz": "Memphis Grizzlies at Milwaukee Bucks",
+        "typ": "Milwaukee Bucks -9.5 (Handicap)",
+        "kurs": "1.88",
+        "analiza": "Bucks wciąż walczą o czołową trójkę Wschodu i potrzebują każdego zwycięstwa. Grizzlies, pomimo swojej waleczności, od dłuższego czasu borykają się z poważnymi brakami kadrowymi, co mocno wpływa na ich wyniki. Przewaga talentu i doświadczenia po stronie Bucks, wspierana przez Giannisa Antetokounmpo na własnym parkiecie, powinna zaowocować wysokim zwycięstwem.",
+        "status": "oczekujący",
+        "data": "4.04.2026",
+        "godzina": "21:30"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810995",
+        "mecz": "Los Angeles Lakers at Dallas Mavericks",
+        "typ": "Dallas Mavericks Zwycięstwo (Moneyline)",
+        "kurs": "1.70",
+        "analiza": "Mavericks w ostatnich tygodniach prezentują znakomitą formę, zwłaszcza na własnym parkiecie, napędzani przez dynamiczny duet Doncic-Irving. Lakers z kolei mają problemy z utrzymaniem stabilności w grze i często tracą przewagę w kluczowych momentach. W bezpośrednim starciu, motywacja i przewaga parkietu faworyzują Dallas, którzy powinni wykorzystać momentum do zwycięstwa.",
+        "status": "oczekujący",
+        "data": "4.04.2026",
+        "godzina": "01:30"
+      },
+      {
+        "sport": "NBA",
+        "fixture_id": "401810997",
+        "mecz": "Houston Rockets at Golden State Warriors",
+        "typ": "Golden State Warriors -7.5 (Handicap)",
+        "kurs": "1.92",
+        "analiza": "Warriors wciąż dążą do zapewnienia sobie miejsca w fazie Play-In, a każde domowe spotkanie jest dla nich kluczowe. Rockets, mimo znaczącej poprawy w tym sezonie, często tracą koncentrację w meczach z bardziej doświadczonymi drużynami. Przewaga Curry'ego i spółki na własnym parkiecie, w połączeniu z ich doświadczeniem w grze pod presją, powinna zapewnić im komfortowe zwycięstwo.",
+        "status": "oczekujący",
+        "data": "4.04.2026",
+        "godzina": "04:00"
       }
     ]
   }
