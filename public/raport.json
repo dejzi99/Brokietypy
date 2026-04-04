@@ -2,44 +2,44 @@
   "mecze": [
     {
       "sport": "NBA",
+      "fixture_id": "401810987",
+      "mecz": "Toronto Raptors at Boston Celtics",
+      "typ": "Boston Celtics -8.5",
+      "kurs": "1.90",
+      "analiza": "Boston Celtics to jedna z najmocniejszych drużyn w lidze, szczególnie na własnym parkiecie, gdzie prezentują dominującą formę. Toronto Raptors prawdopodobnie będą w fazie przebudowy, a ich skład często nie jest w stanie dorównać elitarnym zespołom. Spodziewam się, że Celtics pewnie pokonają Raptors, pokrywając handicap dzięki głębi składu i konsekwentnej grze.",
+      "status": "oczekujący",
+      "data": "4.04.2026",
+      "godzina": "21:30"
+    },
+    {
+      "sport": "NBA",
+      "fixture_id": "401810986",
+      "mecz": "Detroit Pistons at Philadelphia 76ers",
+      "typ": "Philadelphia 76ers wygra",
+      "kurs": "1.25",
+      "analiza": "Philadelphia 76ers, nawet w przypadku rotacji składu, powinna bez problemu poradzić sobie ze słabymi Detroit Pistons u siebie. Pistons to zazwyczaj jedna z najgorszych drużyn w lidze, pozbawiona realnych szans w starciach z zespołami aspirującymi do play-offów. Bezpiecznym typem jest zwycięstwo 76ers w tym meczu, biorąc pod uwagę różnicę klas obu zespołów.",
+      "status": "oczekujący",
+      "data": "4.04.2026",
+      "godzina": "01:00"
+    },
+    {
+      "sport": "NBA",
       "fixture_id": "401810985",
       "mecz": "San Antonio Spurs at Denver Nuggets",
-      "typ": "Denver Nuggets -10.5",
+      "typ": "Powyżej 228.5 punktów",
       "kurs": "1.90",
-      "analiza": "Nuggets, jako aktualni lub niedawni mistrzowie, dominują u siebie, zwłaszcza przeciwko zespołom w fazie przebudowy jak Spurs. Ich gwiazdorska siła i zdyscyplinowana ofensywa powinny pozwolić im na pokrycie znaczącego handicapu. Spurs, mimo obiecujących młodych talentów, często zmagają się z konsekwencją i presją defensywną na wyjeździe przeciwko elitarnym zespołom. Spodziewam się komfortowego zwycięstwa gospodarzy.",
+      "analiza": "Denver Nuggets, prowadzeni przez Nikolę Jokicia, prezentują niezwykle skuteczną ofensywę, szczególnie na własnym boisku. San Antonio Spurs, mimo że znajdują się w fazie odbudowy, często grają w szybkim tempie, co sprzyja wysokim wynikom. Kombinacja ofensywnej siły Nuggets i tempa gry Spurs często prowadzi do przekroczenia linii punktowej, co czyni ten typ atrakcyjnym.",
       "status": "oczekujący",
       "data": "4.04.2026",
       "godzina": "21:00"
     },
     {
       "sport": "NBA",
-      "fixture_id": "401810987",
-      "mecz": "Toronto Raptors at Boston Celtics",
-      "typ": "Boston Celtics -7.5",
-      "kurs": "1.85",
-      "analiza": "Celtics, grający u siebie, powinni być jednym z czołowych zespołów ligi, znanym z silnej obrony i głębokiego składu. Raptors, choć waleczni, mogą nie mieć wystarczającej siły ognia, aby konsekwentnie rzucać wyzwanie drużynie z najwyższej półki na wyjeździe. Doświadczenie Bostonu i przewaga własnego parkietu powinny doprowadzić do komfortowego zwycięstwa.",
-      "status": "oczekujący",
-      "data": "4.04.2026",
-      "godzina": "21:30"
-    },
-    {
-      "sport": "NBA",
-      "fixture_id": "401810990",
-      "mecz": "Memphis Grizzlies at Milwaukee Bucks",
-      "typ": "Powyżej 230.5 punktów",
-      "kurs": "1.90",
-      "analiza": "Zarówno Bucks, jak i Grizzlies (zakładając pełny skład) to drużyny zdolne do zdobywania wielu punktów, zwłaszcza jeśli ich gwiazdy są w formie. Potężna ofensywa Bucks i szybkie tempo gry Grizzlies mogą prowadzić do otwartego meczu z wieloma posiadaniami piłki. Intensywność obrony może fluktuować, stwarzając obu drużynom wiele okazji do zdobywania punktów.",
-      "status": "oczekujący",
-      "data": "4.04.2026",
-      "godzina": "21:30"
-    },
-    {
-      "sport": "NBA",
       "fixture_id": "401810995",
       "mecz": "Los Angeles Lakers at Dallas Mavericks",
-      "typ": "Luka Dončić Powyżej 30.5 punktów",
-      "kurs": "1.85",
-      "analiza": "W meczach o wysoką stawkę przeciwko rywalom takim jak Lakers, Luka Dončić konsekwentnie podnosi swój poziom gry, często niosąc ofensywę Mavericks. Jest znany ze swojej zdolności do efektywnego zdobywania punktów przeciwko różnym obronom, szczególnie w kluczowych starciach. Biorąc pod uwagę potencjał na zacięty mecz, Dončić prawdopodobnie będzie agresywnie szukał swoich okazji do punktowania.",
+      "typ": "Dallas Mavericks wygra",
+      "kurs": "1.60",
+      "analiza": "Dallas Mavericks, z Luką Dončiciem na czele, są potężnym rywalem, szczególnie grając u siebie, gdzie często prezentują się najlepiej. Choć Lakers mają gwiazdy, ich forma na wyjazdach bywa zmienna i mniej stabilna. Mavericks zazwyczaj skutecznie bronią swojego parkietu przed rywalami z Konferencji Zachodniej, co czyni ich faworytem do zwycięstwa w tym starciu.",
       "status": "oczekujący",
       "data": "4.04.2026",
       "godzina": "01:30"
@@ -49,8 +49,8 @@
       "fixture_id": "401810997",
       "mecz": "Houston Rockets at Golden State Warriors",
       "typ": "Golden State Warriors -5.5",
-      "kurs": "1.90",
-      "analiza": "Golden State Warriors, grając u siebie, często wchodzą na wyższy poziom, szczególnie przeciwko młodszym, rozwijającym się zespołom. Ich doświadczenie i ruch piłki mogą być trudne do powstrzymania dla Rockets przez cztery kwarty. Chociaż Houston poczyniło postępy, ofensywna siła Warriors i ich weterani powinni pozwolić im kontrolować tempo i zapewnić zwycięstwo z komfortową przewagą.",
+      "kurs": "1.85",
+      "analiza": "Golden State Warriors, mimo potencjalnych wahań formy, nadal posiadają silną przewagę własnego parkietu i potrafią być ofensywnie wybuchowi. Przeciwko Houston Rockets, zespołowi w fazie przebudowy, szczególnie w meczu wyjazdowym, Warriors powinni dominować. Spodziewam się, że Warriors z łatwością pokryją ten umiarkowany handicap, wykorzystując swoje doświadczenie i przewagę talentu.",
       "status": "oczekujący",
       "data": "4.04.2026",
       "godzina": "04:00"
