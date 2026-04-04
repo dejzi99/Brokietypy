@@ -43,7 +43,6 @@ async function run() {
       const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`);
       const modelsData = await modelsRes.json();
       if (modelsData.models) {
-          // Pobiera tylko te modele, które potrafią generować tekst
           modeleDoTestu = modelsData.models
               .filter(m => m.supportedGenerationMethods?.includes("generateContent"))
               .map(m => m.name.replace('models/', ''));
@@ -53,7 +52,6 @@ async function run() {
       console.log("⚠️ Błąd pobierania listy modeli. Używam trybu awaryjnego.");
   }
   
-  // Jeśli Google nie odda listy, mamy spadochron
   if (modeleDoTestu.length === 0) {
       modeleDoTestu = ["gemini-pro", "gemini-1.0-pro"];
   }
@@ -64,84 +62,109 @@ async function run() {
     console.log("🔍 Sprawdzam wyniki oczekujących meczów w historii...");
     let historia = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
     let meczeDoOceny = [];
+    let pilkaIdsDoSprawdzenia = []; // Grupowanie piłki, żeby oszczędzać limit API!
 
     for (let dzien of historia) {
       if (!dzien.mecze) continue;
       for (let m of dzien.mecze) {
         const status = m.status ? m.status.toLowerCase() : '';
         if (status === 'oczekujący' || status === 'ns') {
-          try {
             const sportType = m.sport || 'Pilka_Nozna';
-            console.log(`⏱ Sprawdzam: ${m.mecz} (${sportType})`);
-
+            
             if (sportType === 'Pilka_Nozna' && m.fixture_id && m.fixture_id !== "0") {
-              const res = await fetchSports(`https://v3.football.api-sports.io/fixtures?id=${m.fixture_id}`, {
-                headers: { 'x-apisports-key': apiSportsKey }
-              });
-              const statusShort = res?.response?.[0]?.fixture?.status?.short;
-              if (['FT', 'AET', 'PEN'].includes(statusShort)) {
-                const f = res.response[0];
-                m.wynik = `${f.goals.home}-${f.goals.away}`;
-                meczeDoOceny.push(m);
-                console.log(`⚽ Znaleziono wynik piłki: ${m.wynik}`);
-              }
+                pilkaIdsDoSprawdzenia.push(m);
             } else if (sportType === 'NBA' && m.fixture_id && m.fixture_id !== "0") {
-              let dateQuery = "";
-              const parts = m.data.match(/\d+/g);
-              if (parts && parts.length >= 3) {
-                  const d = parts[0].padStart(2, '0');
-                  const mo = parts[1].padStart(2, '0');
-                  const y = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
-                  dateQuery = `${y}${mo}${d}`;
-              }
-              
-              if (dateQuery) {
-                  const dateObj = new Date(dateQuery.substring(0,4), parseInt(dateQuery.substring(4,6))-1, dateQuery.substring(6,8));
-                  const dateObjPrev = new Date(dateObj);
-                  dateObjPrev.setDate(dateObjPrev.getDate() - 1);
-                  const dateQueryPrev = `${dateObjPrev.getFullYear()}${String(dateObjPrev.getMonth()+1).padStart(2,'0')}${String(dateObjPrev.getDate()).padStart(2,'0')}`;
-                  dateObj.setDate(dateObj.getDate() + 1);
-                  const dateQueryNext = `${dateObj.getFullYear()}${String(dateObj.getMonth()+1).padStart(2,'0')}${String(dateObj.getDate()).padStart(2,'0')}`;
+              try {
+                console.log(`⏱ Sprawdzam NBA: ${m.mecz}`);
+                let dateQuery = "";
+                const parts = m.data.match(/\d+/g);
+                if (parts && parts.length >= 3) {
+                    const d = parts[0].padStart(2, '0');
+                    const mo = parts[1].padStart(2, '0');
+                    const y = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+                    dateQuery = `${y}${mo}${d}`;
+                }
+                
+                if (dateQuery) {
+                    const dateObj = new Date(dateQuery.substring(0,4), parseInt(dateQuery.substring(4,6))-1, dateQuery.substring(6,8));
+                    const dateObjPrev = new Date(dateObj);
+                    dateObjPrev.setDate(dateObjPrev.getDate() - 1);
+                    const dateQueryPrev = `${dateObjPrev.getFullYear()}${String(dateObjPrev.getMonth()+1).padStart(2,'0')}${String(dateObjPrev.getDate()).padStart(2,'0')}`;
+                    dateObj.setDate(dateObj.getDate() + 1);
+                    const dateQueryNext = `${dateObj.getFullYear()}${String(dateObj.getMonth()+1).padStart(2,'0')}${String(dateObj.getDate()).padStart(2,'0')}`;
 
-                  const [resPrev, res1, res2] = await Promise.all([
-                      fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryPrev}`),
-                      fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQuery}`),
-                      fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryNext}`)
-                  ]);
+                    const [resPrev, res1, res2] = await Promise.all([
+                        fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryPrev}`),
+                        fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQuery}`),
+                        fetchSports(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateQueryNext}`)
+                    ]);
 
-                  const getTeamKey = (teamStr) => {
-                      const words = teamStr.trim().split(' ');
-                      return words[words.length - 1].toLowerCase();
-                  };
+                    const getTeamKey = (teamStr) => {
+                        const words = teamStr.trim().split(' ');
+                        return words[words.length - 1].toLowerCase();
+                    };
 
-                  const isMatch = (e) => {
-                      if (String(e.id) === String(m.fixture_id)) return true;
-                      const n = e.name.toLowerCase();
-                      const matchParts = m.mecz.toLowerCase().replace(/at/g, 'vs').split('vs').map(p => p.trim());
-                      if (matchParts.length >= 2) {
-                          const t1 = getTeamKey(matchParts[0]);
-                          const t2 = getTeamKey(matchParts[1]);
-                          return n.includes(t1) && n.includes(t2);
-                      }
-                      return false;
-                  };
+                    const isMatch = (e) => {
+                        if (String(e.id) === String(m.fixture_id)) return true;
+                        const n = e.name.toLowerCase();
+                        const matchParts = m.mecz.toLowerCase().replace(/at/g, 'vs').split('vs').map(p => p.trim());
+                        if (matchParts.length >= 2) {
+                            return n.includes(getTeamKey(matchParts[0])) && n.includes(getTeamKey(matchParts[1]));
+                        }
+                        return false;
+                    };
 
-                  const allEvents = [...(resPrev?.events || []), ...(res1?.events || []), ...(res2?.events || [])];
-                  const event = allEvents.find(isMatch);
+                    const allEvents = [...(resPrev?.events || []), ...(res1?.events || []), ...(res2?.events || [])];
+                    const event = allEvents.find(isMatch);
 
-                  if (event && event.status.type.state === 'post') {
-                      const s = event.competitions[0].competitors;
-                      const homeScore = s.find(c => c.homeAway === 'home')?.score || s[0].score;
-                      const awayScore = s.find(c => c.homeAway === 'away')?.score || s[1].score;
-                      m.wynik = `${homeScore}-${awayScore}`;
-                      meczeDoOceny.push(m);
-                      console.log(`🏀 Znaleziono wynik NBA: ${m.wynik}`);
-                  }
-              }
+                    if (event && event.status.type.state === 'post') {
+                        const s = event.competitions[0].competitors;
+                        const homeScore = s.find(c => c.homeAway === 'home')?.score || s[0].score;
+                        const awayScore = s.find(c => c.homeAway === 'away')?.score || s[1].score;
+                        m.wynik = `${homeScore}-${awayScore}`;
+                        meczeDoOceny.push(m);
+                        console.log(`🏀 Znaleziono wynik NBA: ${m.wynik}`);
+                    }
+                }
+              } catch(e) { console.log(`⚠️ Błąd NBA ID ${m.fixture_id}:`, e.message); }
             }
-          } catch(e) { console.log(`⚠️ Błąd sprawdzania wyniku dla ID ${m.fixture_id}:`, e.message); }
         }
       }
+    }
+
+    // Zbiorcze sprawdzanie piłki nożnej (Oszczędzanie limitu 100 zapytań/dzień!)
+    if (pilkaIdsDoSprawdzenia.length > 0) {
+        console.log(`⚽ Sprawdzam zbiorczo ${pilkaIdsDoSprawdzenia.length} oczekujących meczów Piłki Nożnej...`);
+        const uniqueIds = [...new Set(pilkaIdsDoSprawdzenia.map(m => m.fixture_id))];
+        
+        // API-Sports pozwala sprawdzić do 20 ID naraz oddzielonych myślnikiem
+        for (let i = 0; i < uniqueIds.length; i += 20) {
+            const batchIds = uniqueIds.slice(i, i + 20).join('-');
+            try {
+                const res = await fetchSports(`https://v3.football.api-sports.io/fixtures?ids=${batchIds}`, {
+                    headers: { 'x-apisports-key': apiSportsKey }
+                });
+                
+                if (res && res.errors && Object.keys(res.errors).length > 0) {
+                    console.log("⚠️ BŁĄD API PIŁKI PRZY SPRAWDZANIU:", JSON.stringify(res.errors));
+                }
+
+                if (res && res.response) {
+                    res.response.forEach(f => {
+                        if (['FT', 'AET', 'PEN'].includes(f.fixture.status.short)) {
+                            // Aktualizacja przypisanych meczów
+                            pilkaIdsDoSprawdzenia.forEach(m => {
+                                if (String(m.fixture_id) === String(f.fixture.id)) {
+                                    m.wynik = `${f.goals.home}-${f.goals.away}`;
+                                    meczeDoOceny.push(m);
+                                    console.log(`⚽ Zakończono: ${m.mecz} (${m.wynik})`);
+                                }
+                            });
+                        }
+                    });
+                }
+            } catch (e) { console.log("Błąd zapytania zbiorczego o piłkę:", e.message); }
+        }
     }
 
     if (meczeDoOceny.length > 0) {
@@ -175,7 +198,7 @@ async function run() {
                         }
                     }
                 }
-                break; // Skoro ocenił poprawnie, przerywamy pętlę modeli
+                break; 
             }
           } catch(e) {}
       }
@@ -188,25 +211,43 @@ async function run() {
     }
   }
 
-  // Odpalamy sędziego zanim pobierzemy nowe mecze
+  // Odpalamy zoptymalizowanego sędziego
   await settleHistory();
 
   try {
     // --- 3. POBIERANIE PIŁKI I NBA NA DZIŚ ---
-    console.log("⚽ Pobieram Piłkę Nożną...");
+    console.log(`⚽ Pobieram dzisiejszą Piłkę Nożną (${dataDlaApiFootball})...`);
     const apiFootball = await fetchSports(`https://v3.football.api-sports.io/fixtures?date=${dataDlaApiFootball}&timezone=Europe/Warsaw`, {
       method: 'GET', headers: { 'x-apisports-key': apiSportsKey }
     });
 
+    if (apiFootball && apiFootball.errors && Object.keys(apiFootball.errors).length > 0) {
+        console.log("🕵️ DIAGNOSTYKA BŁĘDÓW API PIŁKI NA DZIŚ:", JSON.stringify(apiFootball.errors));
+    }
+
     if (apiFootball && apiFootball.response) {
+        console.log(`📊 API zwróciło łącznie ${apiFootball.response.length} wszystkich meczów piłkarskich na dziś.`);
         const szerokieLigi = [1, 2, 3, 4, 5, 9, 10, 15, 30, 32, 34, 39, 40, 61, 71, 78, 88, 94, 106, 135, 140, 203, 253, 468, 848];
-        let wybranePilka = apiFootball.response.filter(match => szerokieLigi.includes(match.league.id) && match.fixture.status.short === 'NS');
-        if (wybranePilka.length < 5) wybranePilka = apiFootball.response.filter(match => match.fixture.status.short === 'NS'); 
+        
+        // Złagodziłem filtr: "NS" (Not Started) oraz "TBD" (To Be Defined)
+        let wybranePilka = apiFootball.response.filter(match => 
+            szerokieLigi.includes(match.league.id) && 
+            ['NS', 'TBD'].includes(match.fixture.status.short)
+        );
+        
+        if (wybranePilka.length < 5) {
+            console.log("⚠️ Mało meczów w głównych ligach. Odblokowuję wyszukiwanie na wszystkie rozgrywki na świecie...");
+            wybranePilka = apiFootball.response.filter(match => ['NS', 'TBD'].includes(match.fixture.status.short));
+        }
+
+        console.log(`✅ Zostało ${wybranePilka.length} nierozpoczętych meczów do wyboru przez AI.`);
 
         listaPilka = wybranePilka.slice(0, 40).map(match => {
             const godzina = new Date(match.fixture.date).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
             return `ID: ${match.fixture.id} | ${godzina} | ${match.teams.home.name} vs ${match.teams.away.name} (${match.league.name})`;
         }).join('\n');
+    } else {
+        console.log("⚠️ Brak jakiejkolwiek odpowiedzi z API Piłki Nożnej.");
     }
 
     console.log(`🏀 Pobieram NBA z ESPN...`);
@@ -227,7 +268,7 @@ async function run() {
         }).join('\n');
     }
 
-    console.log("🧠 Wysyłam dane do analizy AI...");
+    console.log("🧠 Wysyłam zebrane dane do analizy AI...");
     const promptText = `Jesteś elitarnym analitykiem. Dzisiejsza data: ${dzisiajPl}. 
     Analizuj TYLKO mecze z list:
     PIŁKA: ${listaPilka || 'Brak'}
@@ -235,7 +276,7 @@ async function run() {
     
     ZASADY: 
     1. Wybierz dokładnie 3 mecze piłkarskie i 2 z NBA.
-    2. Jeśli na którejś liście jest "Brak", dobierz mecze z drugiej, tak by było ich łącznie 5.
+    2. Jeśli na którejś liście jest "Brak" lub jest mniej meczów, dobierz mecze z drugiej, tak by było ich łącznie 5.
     3. W polu "sport" MUSISZ wpisać dokładnie "Pilka_Nozna" dla piłki i "NBA" dla koszykówki.
     4. Podaj konkretny typ bukmacherski.
     5. Napisz 3-4 zdania uzasadnienia w polu "analiza".
@@ -244,7 +285,6 @@ async function run() {
 
     let zapisanoNowe = false;
 
-    // Próbujemy wszystkie dostępne modele po kolei
     for (const model of modeleDoTestu) {
         try {
             const generateUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
@@ -275,9 +315,9 @@ async function run() {
                 fs.writeFileSync(historyPath, JSON.stringify(historia.slice(-30), null, 2)); 
                 console.log(`✅ NOWE TYPY ZOSTAŁY ZAPISANE! (Sukces na modelu: ${model})`);
                 zapisanoNowe = true;
-                break; // Mamy to, wychodzimy z pętli!
+                break; 
             } else {
-                console.log(`❌ Model ${model} zawiódł, sprawdzam następny...`);
+                console.log(`❌ Model ${model} nie odpowiedział na prompt prawidłowo.`);
             }
         } catch (e) {
             console.log(`❌ Błąd połączenia z modelem ${model}...`);
