@@ -788,10 +788,11 @@
         "mecz": "Washington Wizards at Miami Heat",
         "typ": "Miami Heat (-8.5)",
         "kurs": "1.88",
-        "analiza": "Heat są zazwyczaj zespołem o silnej obronie i zdyscyplinowanym ataku, szczególnie skuteczni u siebie. Wizards, zmagający się z problemami kadrowymi i brakiem stabilności, rzadko stanowią realne zagrożenie dla czołowych drużyn na ich parkiecie. Spodziewam się, że Heat wykorzystają przewagę własnego boiska i słabości rywala, aby odnieść przekonujące zwycięstwo z pokryciem handicapu.",
-        "status": "oczekujący",
+        "analiza": "Heat są zazwyczaj zespołem o silnej obronie i zdyscyplinowanym ataku, szczególnie skuteczni u siebie. Wizards, zmagający się z problemami kadrowymi i brakiem stabilności, rzadko stanowią realne zagrożenie dla czołowych drużyn na ich parkiecie. Spodziewam się, że Heat wykorzystają przewagę własnego boiska i słabości rywala, aby odnieść przekonujące zwycięstwo z pokryciem handicapu. [Wynik: 152-136]",
+        "status": "wygrana",
         "data": "3.04.2026",
-        "godzina": "21:00"
+        "godzina": "21:00",
+        "wynik": "152-136"
       },
       {
         "sport": "NBA",
@@ -799,10 +800,11 @@
         "mecz": "San Antonio Spurs at Denver Nuggets",
         "typ": "Denver Nuggets (-11.5)",
         "kurs": "1.90",
-        "analiza": "Nuggets to jeden z głównych faworytów ligi, z dominującym Jokicem i mocnym składem. Na własnym parkiecie w Denver są szczególnie trudni do pokonania, często rozbijając słabszych rywali. Spurs, będący w fazie przebudowy, zazwyczaj nie mają argumentów, by skutecznie przeciwstawić się tak silnemu zespołowi. Oczekuję jednostronnego meczu i wysokiego zwycięstwa Nuggets.",
-        "status": "oczekujący",
+        "analiza": "Nuggets to jeden z głównych faworytów ligi, z dominującym Jokicem i mocnym składem. Na własnym parkiecie w Denver są szczególnie trudni do pokonania, często rozbijając słabszych rywali. Spurs, będący w fazie przebudowy, zazwyczaj nie mają argumentów, by skutecznie przeciwstawić się tak silnemu zespołowi. Oczekuję jednostronnego meczu i wysokiego zwycięstwa Nuggets. [Wynik: 136-134]",
+        "status": "przegrana",
         "data": "3.04.2026",
-        "godzina": "21:00"
+        "godzina": "21:00",
+        "wynik": "136-134"
       }
     ]
   },
@@ -826,10 +828,11 @@
         "mecz": "Detroit Pistons at Philadelphia 76ers",
         "typ": "Philadelphia 76ers wygra",
         "kurs": "1.25",
-        "analiza": "Philadelphia 76ers, nawet w przypadku rotacji składu, powinna bez problemu poradzić sobie ze słabymi Detroit Pistons u siebie. Pistons to zazwyczaj jedna z najgorszych drużyn w lidze, pozbawiona realnych szans w starciach z zespołami aspirującymi do play-offów. Bezpiecznym typem jest zwycięstwo 76ers w tym meczu, biorąc pod uwagę różnicę klas obu zespołów.",
-        "status": "oczekujący",
+        "analiza": "Philadelphia 76ers, nawet w przypadku rotacji składu, powinna bez problemu poradzić sobie ze słabymi Detroit Pistons u siebie. Pistons to zazwyczaj jedna z najgorszych drużyn w lidze, pozbawiona realnych szans w starciach z zespołami aspirującymi do play-offów. Bezpiecznym typem jest zwycięstwo 76ers w tym meczu, biorąc pod uwagę różnicę klas obu zespołów. [Wynik: 93-116]",
+        "status": "przegrana",
         "data": "4.04.2026",
-        "godzina": "01:00"
+        "godzina": "01:00",
+        "wynik": "93-116"
       },
       {
         "sport": "NBA",
@@ -837,10 +840,11 @@
         "mecz": "San Antonio Spurs at Denver Nuggets",
         "typ": "Powyżej 228.5 punktów",
         "kurs": "1.90",
-        "analiza": "Denver Nuggets, prowadzeni przez Nikolę Jokicia, prezentują niezwykle skuteczną ofensywę, szczególnie na własnym boisku. San Antonio Spurs, mimo że znajdują się w fazie odbudowy, często grają w szybkim tempie, co sprzyja wysokim wynikom. Kombinacja ofensywnej siły Nuggets i tempa gry Spurs często prowadzi do przekroczenia linii punktowej, co czyni ten typ atrakcyjnym.",
-        "status": "oczekujący",
+        "analiza": "Denver Nuggets, prowadzeni przez Nikolę Jokicia, prezentują niezwykle skuteczną ofensywę, szczególnie na własnym boisku. San Antonio Spurs, mimo że znajdują się w fazie odbudowy, często grają w szybkim tempie, co sprzyja wysokim wynikom. Kombinacja ofensywnej siły Nuggets i tempa gry Spurs często prowadzi do przekroczenia linii punktowej, co czyni ten typ atrakcyjnym. [Wynik: 136-134]",
+        "status": "przegrana",
         "data": "4.04.2026",
-        "godzina": "21:00"
+        "godzina": "21:00",
+        "wynik": "136-134"
       },
       {
         "sport": "NBA",
@@ -859,10 +863,11 @@
         "mecz": "Houston Rockets at Golden State Warriors",
         "typ": "Golden State Warriors -5.5",
         "kurs": "1.85",
-        "analiza": "Golden State Warriors, mimo potencjalnych wahań formy, nadal posiadają silną przewagę własnego parkietu i potrafią być ofensywnie wybuchowi. Przeciwko Houston Rockets, zespołowi w fazie przebudowy, szczególnie w meczu wyjazdowym, Warriors powinni dominować. Spodziewam się, że Warriors z łatwością pokryją ten umiarkowany handicap, wykorzystując swoje doświadczenie i przewagę talentu.",
-        "status": "oczekujący",
+        "analiza": "Golden State Warriors, mimo potencjalnych wahań formy, nadal posiadają silną przewagę własnego parkietu i potrafią być ofensywnie wybuchowi. Przeciwko Houston Rockets, zespołowi w fazie przebudowy, szczególnie w meczu wyjazdowym, Warriors powinni dominować. Spodziewam się, że Warriors z łatwością pokryją ten umiarkowany handicap, wykorzystując swoje doświadczenie i przewagę talentu. [Wynik: 140-106]",
+        "status": "wygrana",
         "data": "4.04.2026",
-        "godzina": "04:00"
+        "godzina": "04:00",
+        "wynik": "140-106"
       }
     ]
   }
