@@ -817,10 +817,11 @@
         "mecz": "Toronto Raptors at Boston Celtics",
         "typ": "Boston Celtics -8.5",
         "kurs": "1.90",
-        "analiza": "Boston Celtics to jedna z najmocniejszych drużyn w lidze, szczególnie na własnym parkiecie, gdzie prezentują dominującą formę. Toronto Raptors prawdopodobnie będą w fazie przebudowy, a ich skład często nie jest w stanie dorównać elitarnym zespołom. Spodziewam się, że Celtics pewnie pokonają Raptors, pokrywając handicap dzięki głębi składu i konsekwentnej grze.",
-        "status": "oczekujący",
+        "analiza": "Boston Celtics to jedna z najmocniejszych drużyn w lidze, szczególnie na własnym parkiecie, gdzie prezentują dominującą formę. Toronto Raptors prawdopodobnie będą w fazie przebudowy, a ich skład często nie jest w stanie dorównać elitarnym zespołom. Spodziewam się, że Celtics pewnie pokonają Raptors, pokrywając handicap dzięki głębi składu i konsekwentnej grze. [Wynik: 115-101]",
+        "status": "wygrana",
         "data": "4.04.2026",
-        "godzina": "21:30"
+        "godzina": "21:30",
+        "wynik": "115-101"
       },
       {
         "sport": "NBA",
@@ -852,10 +853,11 @@
         "mecz": "Los Angeles Lakers at Dallas Mavericks",
         "typ": "Dallas Mavericks wygra",
         "kurs": "1.60",
-        "analiza": "Dallas Mavericks, z Luką Dončiciem na czele, są potężnym rywalem, szczególnie grając u siebie, gdzie często prezentują się najlepiej. Choć Lakers mają gwiazdy, ich forma na wyjazdach bywa zmienna i mniej stabilna. Mavericks zazwyczaj skutecznie bronią swojego parkietu przed rywalami z Konferencji Zachodniej, co czyni ich faworytem do zwycięstwa w tym starciu.",
-        "status": "oczekujący",
+        "analiza": "Dallas Mavericks, z Luką Dončiciem na czele, są potężnym rywalem, szczególnie grając u siebie, gdzie często prezentują się najlepiej. Choć Lakers mają gwiazdy, ich forma na wyjazdach bywa zmienna i mniej stabilna. Mavericks zazwyczaj skutecznie bronią swojego parkietu przed rywalami z Konferencji Zachodniej, co czyni ich faworytem do zwycięstwa w tym starciu. [Wynik: 134-128]",
+        "status": "wygrana",
         "data": "4.04.2026",
-        "godzina": "01:30"
+        "godzina": "01:30",
+        "wynik": "134-128"
       },
       {
         "sport": "NBA",
